@@ -1,0 +1,28 @@
+# dependencies
+node_modules
+
+# sst
+.sst
+.build
+
+# opennext
+.open-next
+
+# misc
+.DS_Store
+
+# local env files
+.env*.local
+
+
+# svelte gitignore
+/packages/web/.DS_Store
+/packages/web/node_modules
+/packages/web/build
+/packages/web/.svelte-kit
+/packages/web/package
+/packages/web/.env
+/packages/web/.env.*
+/packages/web/!.env.example
+/packages/web/vite.config.js.timestamp-*
+/packages/web/vite.config.ts.timestamp-*

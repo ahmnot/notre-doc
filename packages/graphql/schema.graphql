@@ -1,0 +1,21 @@
+type Mutation {
+  addOrdonnance(patientID: String!, text: String!): Ordonnance!
+  createPatient(email: String!, numeroSecu: String!): Patient!
+}
+
+type Ordonnance {
+  id: ID!
+  text: String!
+}
+
+type Patient {
+  email: String!
+  id: ID!
+  numeroSecu: String!
+  ordonnances: [Ordonnance!]!
+}
+
+type Query {
+  patient(patientID: String!): Patient!
+  patients: [Patient!]!
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@notre-doc/core",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "sst bind vitest",
+    "typecheck": "tsc -noEmit",
+    "migrate": "sst bind tsx ./src/migrator.ts"
+  },
+  "devDependencies": {
+    "vitest": "^0.34.1",
+    "@types/node": "^20.4.10",
+    "sst": "^2.23.15",
+    "tsx": "^3.12.7"
+  },
+  "dependencies": {
+    "ulid": "^2.3.0",
+    "kysely": "0.25.0",
+    "kysely-data-api": "^0.2.1",
+    "aws-sdk": "^2.1435.0",
+    "@aws-sdk/client-rds-data": "^3.388.0"
+  }
+}
