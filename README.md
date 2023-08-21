@@ -11,7 +11,7 @@ Zod
 Vitest
 Playwright
 
-SST, with:
+And SST, with:
 PostGres
 graphql
 genql

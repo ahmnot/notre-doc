@@ -17,7 +17,6 @@ node_modules
 
 # svelte gitignore
 /packages/web/.DS_Store
-/packages/web/node_modules
 /packages/web/build
 /packages/web/.svelte-kit
 /packages/web/package

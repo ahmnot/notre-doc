@@ -30,14 +30,14 @@ export const actions: Actions = {
         let userid = String(cookies.get('userid'))
 
         const zfdSchema = zfd.formData({
-            nom: zfd.text(z.string({ required_error: "Nom obligatoire" }).min(1, { message: "Nom trop court" }).max(55, { message: "Nom trop long" }).regex(regexNom, { message: "Nom invalide" })),
-            prenom: zfd.text(z.string({ required_error: "Prénom obligatoire" }).min(1, { message: "Prénom trop court" }).max(14, { message: "Prénom trop long" }).regex(regexNom, { message: "Prénom invalide" })),
-            dateNaissance: zfd.text(z.string({ required_error: "Date obligatoire", invalid_type_error: "Date invalide" }).pipe(z.coerce.date({ invalid_type_error: "Date invalide" })
+            nom: zfd.text(z.string({ required_error: "Nom obligatoire" }).trim().min(1, { message: "Nom trop court" }).max(55, { message: "Nom trop long" }).regex(regexNom, { message: "Nom invalide" })),
+            prenom: zfd.text(z.string({ required_error: "Prénom obligatoire" }).trim().min(1, { message: "Prénom trop court" }).max(14, { message: "Prénom trop long" }).regex(regexNom, { message: "Prénom invalide" })),
+            dateNaissance: zfd.text(z.string({ required_error: "Date obligatoire", invalid_type_error: "Date invalide" }).trim().pipe(z.coerce.date({ invalid_type_error: "Date invalide" })
                 .min(new Date("1900-01-01"), { message: "Trop âgé" })
                 .max(new Date(), { message: "Trop jeune" }))
             ),
-            email: zfd.text(z.string({ required_error: "E-mail obligatoire" }).email({ message: "E-mail invalide" })),
-            numeroSecu: zfd.text(z.string({ required_error: "N° de sécu obligatoire" }).regex(regexSecu, { message: "N° invalide" }))
+            email: zfd.text(z.string({ required_error: "E-mail obligatoire" }).trim().email({ message: "E-mail invalide" })),
+            numeroSecu: zfd.text(z.string({ required_error: "N° de sécu obligatoire" }).trim().regex(regexSecu, { message: "N° invalide" }))
         })
 
         // This validates the form.
