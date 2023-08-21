@@ -14,7 +14,11 @@ export interface Ordonnance {
 
 export interface Patient {
   patientID: string;
+  nom: string;
+  prenom: string;
+  dateNaissance: Timestamp;
   email: string;
+  telephone: string;
   numeroSecu: string;
   created: Generated<Timestamp>;
 }
@@ -23,8 +27,8 @@ export interface RendezVous {
   rdvID: string;
   dateRdv: Timestamp;
   heureRdv: string;
-  patientID: string;
   created: Generated<Timestamp>;
+  patientID: string;
 }
 
 export interface Database {

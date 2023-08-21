@@ -9,12 +9,8 @@ export async function up(db) {
     .addColumn("rdvID", "text", (col) => col.primaryKey())
     .addColumn("dateRdv", "date", (col) => col.notNull())
     .addColumn("heureRdv", "time", (col) => col.notNull())
-    .addColumn("created", "timestamp", (col) =>
-      col
-        .notNull()
-        .defaultTo(sql`now()`)
-        .addColumn("patientID", "text", (col) => col.notNull())
-    )
+    .addColumn("created", "timestamp", (col) => col.notNull().defaultTo(sql`now()`))
+    .addColumn("patientID", "text", (col) => col.notNull())
     .execute()
 
   await db.schema.createIndex("idx_rdv_created").on("rendez_vous").column("created").execute()
