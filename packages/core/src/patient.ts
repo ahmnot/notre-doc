@@ -41,3 +41,21 @@ export function ordonnances(patientID: string) {
     .where("patientID", "=", patientID)
     .execute()
 }
+
+export function addRdv(patientID: string, dateRdv: string, heureRdv: string) {
+  return SQL.DB.insertInto("rendez_vous").values({
+    rdvID: ulid(),
+    dateRdv,
+    heureRdv,
+    patientID
+  })
+    .returningAll()
+    .executeTakeFirstOrThrow()
+}
+
+export function listRdv(patientID: string) {
+  return SQL.DB.selectFrom("rendez_vous")
+    .selectAll()
+    .where("patientID", "=", patientID)
+    .execute()
+}

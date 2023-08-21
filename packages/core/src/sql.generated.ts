@@ -19,7 +19,16 @@ export interface Patient {
   created: Generated<Timestamp>;
 }
 
+export interface RendezVous {
+  rdvID: string;
+  dateRdv: Timestamp;
+  heureRdv: string;
+  patientID: string;
+  created: Generated<Timestamp>;
+}
+
 export interface Database {
   ordonnance: Ordonnance;
   patient: Patient;
+  rendez_vous: RendezVous;
 }

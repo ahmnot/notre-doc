@@ -7,7 +7,11 @@ export async function up(db) {
   await db.schema
     .createTable("patient")
     .addColumn("patientID", "text", (col) => col.primaryKey())
+    .addColumn("nom", "text", (col) => col.notNull())
+    .addColumn("prenom", "text", (col) => col.notNull())
+    .addColumn("dateNaissance", "date", (col) => col.notNull())
     .addColumn("email", "text", (col) => col.notNull())
+    .addColumn("telephone", "text", (col) => col.notNull())
     .addColumn("numeroSecu", "text", (col) => col.notNull())
     .addColumn("created", "timestamp", (col) =>
       col.notNull().defaultTo(sql`now()`)
