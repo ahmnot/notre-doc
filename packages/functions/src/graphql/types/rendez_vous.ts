@@ -2,7 +2,7 @@ import { RendezVous } from "@notre-doc/core/rendez_vous"
 import { SQL } from "@notre-doc/core/sql"
 import { builder } from "../builder"
 
-const RendezVousType = builder.objectRef<SQL.Row["rendez_vous"]>("RendezVous").implement({
+export const RendezVousType = builder.objectRef<SQL.Row["rendez_vous"]>("RendezVous").implement({
     fields: (t) => ({
         id: t.exposeID("rdvID"),
         dateRdv: t.exposeString("dateRdv"),

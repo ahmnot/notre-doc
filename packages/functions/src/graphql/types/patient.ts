@@ -5,6 +5,7 @@
 // in the .mjs files in packages/core/migrations 
 // (for example, 1692131139968_patient.mjs)
 import { Patient } from "@notre-doc/core/patient"
+import { RendezVousType } from "./rendez_vous"
 import { SQL } from "@notre-doc/core/sql"
 import { builder } from "../builder"
 

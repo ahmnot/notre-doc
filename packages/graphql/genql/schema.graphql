@@ -1,6 +1,9 @@
 type Mutation {
   addOrdonnance(patientID: String!, text: String!): Ordonnance!
-  createPatient(email: String!, numeroSecu: String!): Patient!
+  addRdv(dateRdv: String!, heureRdv: String!, patientID: String!): RendezVous!
+  createPatient(dateNaissance: String!, email: String!, nom: String!, numeroSecu: String!, prenom: String!, telephone: String!): Patient!
+  updateDateRdv(newDate: String!, rdvID: String!): RendezVous!
+  updateHourRdv(newHour: String!, rdvID: String!): RendezVous!
 }
 
 type Ordonnance {
@@ -9,13 +12,24 @@ type Ordonnance {
 }
 
 type Patient {
+  dateNaissance: String!
   email: String!
   id: ID!
+  nom: String!
   numeroSecu: String!
   ordonnances: [Ordonnance!]!
+  prenom: String!
+  rendezVous: [RendezVous!]!
+  telephone: String!
 }
 
 type Query {
   patient(patientID: String!): Patient!
   patients: [Patient!]!
+}
+
+type RendezVous {
+  dateRdv: String!
+  heureRdv: String!
+  id: ID!
 }

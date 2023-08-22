@@ -11,7 +11,10 @@ export type Scalars = {
 
 export interface Mutation {
     addOrdonnance: Ordonnance
+    addRdv: RendezVous
     createPatient: Patient
+    updateDateRdv: RendezVous
+    updateHourRdv: RendezVous
     __typename: 'Mutation'
 }
 
@@ -22,10 +25,15 @@ export interface Ordonnance {
 }
 
 export interface Patient {
+    dateNaissance: Scalars['String']
     email: Scalars['String']
     id: Scalars['ID']
+    nom: Scalars['String']
     numeroSecu: Scalars['String']
     ordonnances: Ordonnance[]
+    prenom: Scalars['String']
+    rendezVous: RendezVous[]
+    telephone: Scalars['String']
     __typename: 'Patient'
 }
 
@@ -35,9 +43,19 @@ export interface Query {
     __typename: 'Query'
 }
 
+export interface RendezVous {
+    dateRdv: Scalars['String']
+    heureRdv: Scalars['String']
+    id: Scalars['ID']
+    __typename: 'RendezVous'
+}
+
 export interface MutationGenqlSelection{
     addOrdonnance?: (OrdonnanceGenqlSelection & { __args: {patientID: Scalars['String'], text: Scalars['String']} })
-    createPatient?: (PatientGenqlSelection & { __args: {email: Scalars['String'], numeroSecu: Scalars['String']} })
+    addRdv?: (RendezVousGenqlSelection & { __args: {dateRdv: Scalars['String'], heureRdv: Scalars['String'], patientID: Scalars['String']} })
+    createPatient?: (PatientGenqlSelection & { __args: {dateNaissance: Scalars['String'], email: Scalars['String'], nom: Scalars['String'], numeroSecu: Scalars['String'], prenom: Scalars['String'], telephone: Scalars['String']} })
+    updateDateRdv?: (RendezVousGenqlSelection & { __args: {newDate: Scalars['String'], rdvID: Scalars['String']} })
+    updateHourRdv?: (RendezVousGenqlSelection & { __args: {newHour: Scalars['String'], rdvID: Scalars['String']} })
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -50,10 +68,15 @@ export interface OrdonnanceGenqlSelection{
 }
 
 export interface PatientGenqlSelection{
+    dateNaissance?: boolean | number
     email?: boolean | number
     id?: boolean | number
+    nom?: boolean | number
     numeroSecu?: boolean | number
     ordonnances?: OrdonnanceGenqlSelection
+    prenom?: boolean | number
+    rendezVous?: RendezVousGenqlSelection
+    telephone?: boolean | number
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -61,6 +84,14 @@ export interface PatientGenqlSelection{
 export interface QueryGenqlSelection{
     patient?: (PatientGenqlSelection & { __args: {patientID: Scalars['String']} })
     patients?: PatientGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface RendezVousGenqlSelection{
+    dateRdv?: boolean | number
+    heureRdv?: boolean | number
+    id?: boolean | number
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -94,5 +125,13 @@ export interface QueryGenqlSelection{
     export const isQuery = (obj?: { __typename?: any } | null): obj is Query => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isQuery"')
       return Query_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const RendezVous_possibleTypes: string[] = ['RendezVous']
+    export const isRendezVous = (obj?: { __typename?: any } | null): obj is RendezVous => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isRendezVous"')
+      return RendezVous_possibleTypes.includes(obj.__typename)
     }
     
