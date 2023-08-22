@@ -17,4 +17,5 @@ And [SST](https://github.com/sst/sst), with:
 + [graphql](https://graphql.org/)
 + [genql](https://github.com/remorses/genql)
 + [Pothos](https://github.com/hayes/pothos)
-
++ [urql](https://github.com/hayes/pothos)
++ a personal rewrite of [@urql/svelte](https://formidable.com/open-source/urql/docs/basics/svelte) [queryStore](https://formidable.com/open-source/urql/docs/basics/svelte/#queries) and [mutationStore](https://formidable.com/open-source/urql/docs/basics/svelte/#mutations) making them typed
