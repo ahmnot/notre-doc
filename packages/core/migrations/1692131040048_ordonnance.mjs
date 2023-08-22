@@ -7,8 +7,8 @@ export async function up(db) {
   await db.schema
     .createTable("ordonnance")
     .addColumn("ordonnanceID", "text", (col) => col.primaryKey())
-    .addColumn("patientID", "text", (col) => col.notNull())
     .addColumn("text", "text", (col) => col.notNull())
+    .addColumn("patientID", "text", (col) => col.notNull())
     .execute()
 }
 

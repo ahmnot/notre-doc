@@ -3,30 +3,30 @@ export * as Patient from "./patient"
 import { ulid } from "ulid"
 import { SQL } from "./sql"
 
-export async function create(email: string, numeroSecu: string) {
-  const [result] = await SQL.DB.insertInto("patient")
-    .values({ patientID: ulid(), email, numeroSecu })
+export async function create(nom: string, prenom: string, dateNaissance: string, email: string, telephone: string, numeroSecu: string) {
+  const [result] = await SQL.DB.insertInto('patient')
+    .values({ patientID: ulid(), nom, prenom, dateNaissance, email, telephone, numeroSecu })
     .returningAll()
     .execute()
   return result
 }
 
 export function get(patientID: string) {
-  return SQL.DB.selectFrom("patient")
+  return SQL.DB.selectFrom('patient')
     .selectAll()
-    .where("patientID", "=", patientID)
+    .where('patientID', '=', patientID)
     .executeTakeFirst()
 }
 
 export function list() {
-  return SQL.DB.selectFrom("patient")
+  return SQL.DB.selectFrom('patient')
     .selectAll()
-    .orderBy("created", "desc")
+    .orderBy('created', 'desc')
     .execute()
 }
 
 export function addOrdonnance(patientID: string, text: string) {
-  return SQL.DB.insertInto("ordonnance").values({
+  return SQL.DB.insertInto('ordonnance').values({
     ordonnanceID: ulid(),
     patientID,
     text
@@ -36,14 +36,14 @@ export function addOrdonnance(patientID: string, text: string) {
 }
 
 export function ordonnances(patientID: string) {
-  return SQL.DB.selectFrom("ordonnance")
+  return SQL.DB.selectFrom('ordonnance')
     .selectAll()
-    .where("patientID", "=", patientID)
+    .where('patientID', '=', patientID)
     .execute()
 }
 
 export function addRdv(patientID: string, dateRdv: string, heureRdv: string) {
-  return SQL.DB.insertInto("rendez_vous").values({
+  return SQL.DB.insertInto('rendez_vous').values({
     rdvID: ulid(),
     dateRdv,
     heureRdv,
@@ -54,8 +54,9 @@ export function addRdv(patientID: string, dateRdv: string, heureRdv: string) {
 }
 
 export function listRdv(patientID: string) {
-  return SQL.DB.selectFrom("rendez_vous")
+  return SQL.DB.selectFrom('rendez_vous')
     .selectAll()
-    .where("patientID", "=", patientID)
+    .where('patientID', '=', patientID)
     .execute()
 }
+

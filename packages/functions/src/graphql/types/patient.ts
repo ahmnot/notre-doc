@@ -18,11 +18,19 @@ const OrdonnanceType = builder.objectRef<SQL.Row["ordonnance"]>("Ordonnance").im
 const PatientType = builder.objectRef<SQL.Row["patient"]>("Patient").implement({
   fields: (t) => ({
     id: t.exposeID("patientID"),
+    nom: t.exposeString("nom"),
+    prenom: t.exposeString("prenom"),
+    dateNaissance: t.exposeString("dateNaissance"),
     email: t.exposeString("email"),
+    telephone: t.exposeString("telephone"),
     numeroSecu: t.exposeString("numeroSecu"),
     ordonnances: t.field({
       type: [OrdonnanceType],
       resolve: (patient) => Patient.ordonnances(patient.patientID)
+    }),
+    rendezVous: t.field({
+      type: [RendezVousType],
+      resolve: (patient) => Patient.listRdv(patient.patientID)
     })
   }),
 })
@@ -58,10 +66,23 @@ builder.mutationFields((t) => ({
     },
     resolve: (_, args) => Patient.addOrdonnance(args.patientID, args.text),
   }),
+  addRdv: t.field({
+    type: RendezVousType,
+    args: {
+      patientID: t.arg.string({ required: true }),
+      dateRdv: t.arg.string({ required: true }),
+      heureRdv: t.arg.string({ required: true }),
+    },
+    resolve: (_, args) => Patient.addRdv(args.patientID, args.dateRdv, args.heureRdv),
+  }),
   createPatient: t.field({
     type: PatientType,
     args: {
+      nom: t.arg.string({ required: true }),
+      prenom: t.arg.string({ required: true }),
+      dateNaissance: t.arg.string({ required: true }),
       email: t.arg.string({ required: true }),
+      telephone: t.arg.string({ required: true }),
       numeroSecu: t.arg.string({ required: true }),
     },
     resolve: (_, args) => Patient.create(args.email, args.numeroSecu),
