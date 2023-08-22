@@ -3,7 +3,7 @@ This project is here to make a new website for a doctor.
 He needs a platform which is secured, modern and fast.
 
 For the moment it uses these:
-+ Typescript
++ [Typescript](https://www.typescriptlang.org/)
 + [Svelte](https://github.com/sveltejs/svelte) + [SvelteKit](https://github.com/sveltejs/kit)
 + Svelte Material UI (SMUI)
 + Sass
@@ -14,7 +14,7 @@ For the moment it uses these:
 
 And [SST](https://github.com/sst/sst), with:
 + [PostGres](https://www.postgresql.org/)
-+ graphql
++ [graphql](https://graphql.org/)
 + [genql](https://github.com/remorses/genql)
 + [Pothos](https://github.com/hayes/pothos)
 
