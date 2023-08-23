@@ -7,6 +7,7 @@
 		fetchExchange,
 		getContextClient
 	} from '@urql/svelte';
+	
 
 	import type { OperationResultStore } from '@urql/svelte';
 	import { typedMutationStore, typedQueryStore } from '@notre-doc/graphql/urql-svelte';

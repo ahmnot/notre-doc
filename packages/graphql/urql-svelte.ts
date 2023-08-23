@@ -45,23 +45,3 @@ export function typedMutationStore<
   }
   return executeMutation
 }
-
-// <script lang="ts">
-//     import { typedMutationStore } from './urql-svelte.ts';
-
-//     const { state, executeMutation } = typedMutationStore(/* your builder function */, /* optional context */);
-
-//     // To execute the mutation:
-//     function handleMutation() {
-//         executeMutation(/* your variables */);
-//     }
-// </script>
-
-// <!-- You can use the state like any Svelte store -->
-// {#if $state.fetching}
-//     Loading...
-// {:else if $state.error}
-//     {$state.error.message}
-// {:else}
-//     {JSON.stringify($state.data)}
-// {/if}

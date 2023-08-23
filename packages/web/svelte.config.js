@@ -10,8 +10,10 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		alias: {
-			'graphqlPath': '../graphql',
-			'genql': '../graphql/genql'
+			'genql': '../graphql/genql',
+			"@notre-doc/core/*": "../core/src/*",
+			"@notre-doc/functions/*": "../functions/src/*",
+			"@notre-doc/graphql/*": "../graphql/*",
 		}
 	}
 };

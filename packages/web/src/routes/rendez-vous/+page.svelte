@@ -35,7 +35,6 @@
 
 		return async ({ result, update }) => {
 			// this does something after the form submits.
-			console.log(result);
 			loading = false;
 
 			switch (result.type) {
