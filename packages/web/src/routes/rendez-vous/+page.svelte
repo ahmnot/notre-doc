@@ -20,14 +20,14 @@
 	let prenomFocus = false;
 	let dateNaissanceFocus = false;
 	let emailFocus = false;
-	let numeroSecuFocus = false;
+	let telephoneFocus = false;
 
 	let colorError = 'color : #b71c1c';
 
 	/**
 	 * this does something when the form submits.
 	 * It can be used to validate data before submission.
-	 * For example to see if the numéro de sécu is already taken.
+	 * For example to see if the numero de secu is already taken.
 	 */
 	const submitPatient: SubmitFunction = (input) => {
 		// this does something before the form submits.
@@ -55,7 +55,7 @@
 					prenomFocus = false;
 					dateNaissanceFocus = false;
 					emailFocus = false;
-					numeroSecuFocus = false;
+					telephoneFocus = false;
 
 					toast.error('Échec.', {
 						position: 'bottom-right',
@@ -187,23 +187,24 @@
 		<div class="columns">
 			<div>
 				<Textfield
-					value={form?.data?.numeroSecu ?? ''}
-					label="N° sécurité sociale"
-					input$name="numeroSecu"
-					input$maxlength={15}
+					value={form?.data?.telephone ?? ''}
+					label="Téléphone"
+					input$name="telephone"
+					input$maxlength={10}
 					disabled={loading}
-					on:focus={() => (numeroSecuFocus = true)}
+					type="tel"
+					on:focus={() => (telephoneFocus = true)}
 				>
 					<svelte:fragment slot="helper">
-						{#if form?.errors?.numeroSecu}
+						{#if form?.errors?.telephone}
 							<HelperText persistent style={colorError}>
-								{#if !numeroSecuFocus}
-									{form?.errors?.numeroSecu}
+								{#if !telephoneFocus}
+									{form?.errors?.telephone}
 								{/if}
 							</HelperText>
-							<CharacterCounter>0/15</CharacterCounter>
+							<CharacterCounter>0/10</CharacterCounter>
 						{:else}
-							<CharacterCounter>0/15</CharacterCounter>
+							<CharacterCounter>0/10</CharacterCounter>
 						{/if}
 					</svelte:fragment>
 				</Textfield>

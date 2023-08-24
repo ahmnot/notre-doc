@@ -18,7 +18,7 @@ type Patient {
   email: String!
   id: ID!
   nom: String!
-  numeroSecu: String!
+  numeroSecu: String
   ordonnances: [Ordonnance!]!
   prenom: String!
   rendezVous: [RendezVous!]!

@@ -21,10 +21,10 @@ const PatientType = builder.objectRef<SQL.Row["patient"]>("Patient").implement({
     id: t.exposeID("patientID"),
     nom: t.exposeString("nom"),
     prenom: t.exposeString("prenom"),
-    dateNaissance: t.field({type: 'Date', resolve: () => new Date()}),
+    dateNaissance: t.field({ type: 'Date', resolve: (patient) => patient.dateNaissance }),
     email: t.exposeString("email"),
     telephone: t.exposeString("telephone"),
-    numeroSecu: t.exposeString("numeroSecu"),
+    numeroSecu: t.exposeString("numeroSecu", { nullable: true }),
     ordonnances: t.field({
       type: [OrdonnanceType],
       resolve: (patient) => Patient.ordonnances(patient.patientID)

@@ -1,13 +1,7 @@
 <script lang="ts">
 	import DataTable, { Head, Body, Row, Cell } from '@smui/data-table';
 
-	import {
-		initContextClient,
-		cacheExchange,
-		fetchExchange,
-		getContextClient
-	} from '@urql/svelte';
-	
+	import { initContextClient, cacheExchange, fetchExchange, getContextClient } from '@urql/svelte';
 
 	import type { OperationResultStore } from '@urql/svelte';
 	import { typedMutationStore, typedQueryStore } from '@notre-doc/graphql/urql-svelte';
@@ -24,7 +18,11 @@
 		query: {
 			patients: {
 				id: true,
+				nom: true,
+				prenom: true,
+				dateNaissance: true,
 				email: true,
+				telephone: true,
 				numeroSecu: true
 			}
 		}
@@ -33,8 +31,11 @@
 	let resultStore: OperationResultStore;
 
 	interface PatientForm {
+		nom: string;
+		prenom: string;
+		dateNaissance: string;
 		email: string;
-		numeroSecu: string;
+		telephone: string;
 	}
 
 	const createPatientBuilder = (vars: PatientForm) => {
@@ -43,28 +44,36 @@
 				__args: {
 					...vars
 				},
-				id: true,
-				email: true,
-				numeroSecu: true
+				id: true
 			}
 		};
 	};
 
 	const executeCreatePatientMutation = typedMutationStore(client, createPatientBuilder);
 
-	const createPatient = async (email: string, numeroSecu: string) => {
-		resultStore = await executeCreatePatientMutation({ email, numeroSecu });
+	const createPatient = async (vars: PatientForm) => {
+		resultStore = await executeCreatePatientMutation(vars);
 	};
 
 </script>
 
 <div>&nbsp;</div>
 
-<button on:click={() => createPatient('tototatatutu@gmail.com', '666666666666666')}>Create Patient</button>
+<button
+	on:click={() =>
+		createPatient({
+			nom: 'toto',
+			prenom: 'tutu',
+			dateNaissance: '1990-07-25',
+			email: 'tototutu@gmail.com',
+			telephone: '0610530496'
+		})}>Create Patient</button
+>
+
 {#if $resultStore && $resultStore.fetching}
 	<p>Loading...</p>
 {:else if $resultStore && $resultStore.data}
-	<p>Patient Created: {$resultStore.data.createPatient.email}</p>
+	<p>Patient Created: {$resultStore.data.createPatient.id}</p>
 {:else if $resultStore && $resultStore.error}
 	<p>Error: {$resultStore.error.message}</p>
 {/if}
@@ -78,21 +87,23 @@
 		<Head>
 			<Row>
 				<Cell>id</Cell>
-				<!-- <Cell>Nom</Cell>
-			<Cell>Prénom</Cell>
-			<Cell>Date de naissance</Cell> -->
+				<Cell>Nom</Cell>
+				<Cell>Prénom</Cell>
+				<Cell>Date naissance</Cell>
 				<Cell>E-mail</Cell>
-				<Cell>Numéro de sécurité sociale</Cell>
+				<Cell>Téléphone</Cell>
+				<Cell>N° de sécu</Cell>
 			</Row>
 		</Head>
 		<Body>
 			{#each $patientsTQS.data.patients as patient}
 				<Row>
 					<Cell>{patient.id}</Cell>
-					<!-- <Cell>{patient.nom}</Cell>
-				<Cell>{patient.prenom}</Cell>
-				<Cell>{patient.dateNaissance}</Cell> -->
+					<Cell>{patient.nom}</Cell>
+					<Cell>{patient.prenom}</Cell>
+					<Cell>{patient.dateNaissance}</Cell>
 					<Cell>{patient.email}</Cell>
+					<Cell>{patient.telephone}</Cell>
 					<Cell>{patient.numeroSecu}</Cell>
 				</Row>
 			{/each}

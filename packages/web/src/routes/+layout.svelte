@@ -22,7 +22,7 @@
 	}
 
 	let icon = 'material-symbols-outlined';
-	let fillDuration = 80;
+	let fillDuration = 40;
 	let tweenParams = {
 		duration: fillDuration,
 		easing: expoOut,

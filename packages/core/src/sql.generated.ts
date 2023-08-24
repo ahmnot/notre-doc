@@ -19,7 +19,7 @@ export interface Patient {
   dateNaissance: Timestamp;
   email: string;
   telephone: string;
-  numeroSecu: string;
+  numeroSecu: string | null;
   created: Generated<Timestamp>;
 }
 

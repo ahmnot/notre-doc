@@ -30,7 +30,7 @@ export interface Patient {
     email: Scalars['String']
     id: Scalars['ID']
     nom: Scalars['String']
-    numeroSecu: Scalars['String']
+    numeroSecu: (Scalars['String'] | null)
     ordonnances: Ordonnance[]
     prenom: Scalars['String']
     rendezVous: RendezVous[]
