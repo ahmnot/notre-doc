@@ -6,7 +6,6 @@ import { z } from 'zod'
 import { zfd } from 'zod-form-data'
 import { ulid } from "ulid"
 
-
 export function load({ cookies }) {
     const id = cookies.get('userid')
 
@@ -41,26 +40,27 @@ export const actions: Actions = {
         })
 
         // This validates the form.
-        const result = zfdSchema.safeParse(formData)
+        const validation = zfdSchema.safeParse(formData)
 
         const donnees = Object.fromEntries(formData)
 
-        if (!result.success) {
+        if (!validation.success) {
             const data = {
                 data: donnees,
-                errors: result.error.flatten().fieldErrors
+                errors: validation.error.flatten().fieldErrors
             }
 
             return fail(400, data)
         }
 
-        try {
-            db.createPatient(userid, donnees)
-        } catch (error: any) {
-            return fail(422, error)
-        }
+        // try {
+        //     // db.createPatient(userid, donnees)
+        // } catch (error: any) {
+        //     return fail(422, error)
+        // }
 
-        throw redirect(303, '/admin')
+        return { success: true, data: donnees }
+        // throw redirect(303, '/admin')
     },
 
     delete: async ({ cookies, request }) => {

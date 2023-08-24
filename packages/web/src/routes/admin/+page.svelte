@@ -1,32 +1,12 @@
 <script lang="ts">
 	import DataTable, { Head, Body, Row, Cell } from '@smui/data-table';
+	import { typedQueryStore } from '@notre-doc/graphql/urql-svelte';
 
-	import { initContextClient, cacheExchange, fetchExchange, getContextClient } from '@urql/svelte';
-
+	import { getContextClient } from '@urql/svelte';
 	import type { OperationResultStore } from '@urql/svelte';
-	import { typedMutationStore, typedQueryStore } from '@notre-doc/graphql/urql-svelte';
-
-	initContextClient({
-		url: import.meta.env.VITE_GRAPHQL_URL,
-		exchanges: [cacheExchange, fetchExchange]
-	});
+	import { typedMutationStore } from '@notre-doc/graphql/urql-svelte';
 
 	let client = getContextClient();
-
-	const patientsTQS = typedQueryStore({
-		client: getContextClient(),
-		query: {
-			patients: {
-				id: true,
-				nom: true,
-				prenom: true,
-				dateNaissance: true,
-				email: true,
-				telephone: true,
-				numeroSecu: true
-			}
-		}
-	});
 
 	let resultStore: OperationResultStore;
 
@@ -55,11 +35,25 @@
 		resultStore = await executeCreatePatientMutation(vars);
 	};
 
+	const patientsTQS = typedQueryStore({
+		client: getContextClient(),
+		query: {
+			patients: {
+				id: true,
+				nom: true,
+				prenom: true,
+				dateNaissance: true,
+				email: true,
+				telephone: true,
+				numeroSecu: true
+			}
+		}
+	});
 </script>
 
 <div>&nbsp;</div>
 
-<button
+<!-- <button
 	on:click={() =>
 		createPatient({
 			nom: 'toto',
@@ -76,7 +70,7 @@
 	<p>Patient Created: {$resultStore.data.createPatient.id}</p>
 {:else if $resultStore && $resultStore.error}
 	<p>Error: {$resultStore.error.message}</p>
-{/if}
+{/if} -->
 
 {#if $patientsTQS.fetching}
 	<p>Loading...</p>

@@ -10,6 +10,13 @@
 	import { expoOut } from 'svelte/easing';
 	import { interpolateNumber } from 'd3-interpolate';
 
+	import { initContextClient, cacheExchange, fetchExchange } from '@urql/svelte';
+
+	initContextClient({
+		url: import.meta.env.VITE_GRAPHQL_URL,
+		exchanges: [cacheExchange, fetchExchange]
+	});
+
 	let topAppBar: TopAppBar;
 
 	let barWidth = 1800;

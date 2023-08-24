@@ -12,6 +12,40 @@
 
 	import toast from 'svelte-french-toast';
 
+	import { getContextClient } from '@urql/svelte';
+	import type { OperationResultStore } from '@urql/svelte';
+	import { typedMutationStore } from '@notre-doc/graphql/urql-svelte';
+
+	let client = getContextClient();
+
+	let resultStore: OperationResultStore;
+
+	interface PatientForm {
+		nom: string;
+		prenom: string;
+		dateNaissance: string;
+		email: string;
+		telephone: string;
+	}
+
+	const createPatientBuilder = (vars: PatientForm) => {
+		return {
+			createPatient: {
+				__args: {
+					...vars
+				},
+				id: true
+			}
+		};
+	};
+
+	const executeCreatePatientMutation = typedMutationStore(client, createPatientBuilder);
+
+	const createPatient = async (vars: PatientForm) => {
+		resultStore = await executeCreatePatientMutation(vars);
+	};
+
+
 	export let form: ActionData;
 
 	let loading = false;
@@ -23,6 +57,7 @@
 	let telephoneFocus = false;
 
 	let colorError = 'color : #b71c1c';
+
 
 	/**
 	 * this does something when the form submits.
@@ -39,14 +74,19 @@
 
 			switch (result.type) {
 				case 'success':
-					toast.success('Succès !', {
-						position: 'bottom-center',
-						style: 'border: 1px solid #6299D2; padding: 16px; color: #6299D2;',
-						iconTheme: {
-							primary: '#A52A2A',
-							secondary: '#fff'
-						}
-					});
+					if (result.data) {
+						await createPatient(result.data.data as PatientForm);
+
+						toast.success('Succès !', {
+							position: 'bottom-center',
+							style: 'border: 1px solid #6299D2; padding: 16px; color: #6299D2;',
+							iconTheme: {
+								primary: '#A52A2A',
+								secondary: '#fff'
+							}
+						});
+					}
+
 					await update();
 					break;
 				case 'failure':
