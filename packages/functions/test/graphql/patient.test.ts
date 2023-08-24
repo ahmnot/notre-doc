@@ -1,17 +1,14 @@
 import { Api } from "sst/node/api"
 import { expect, it } from "vitest"
 import { createClient } from "@notre-doc/graphql/genql"
-import { typedMutationStore, typedQueryStore } from '@notre-doc/graphql/urql-svelte'
+import { typedMutation, typedMutationStore, typedQuery, typedQueryStore } from '@notre-doc/graphql/urql-svelte'
 
 import {
-  Client,
+  Client, debugExchange,
   cacheExchange,
   fetchExchange,
   OperationResultStore
 } from '@urql/svelte'
-
-import { get } from 'svelte/store'
-
 
 import { Patient } from "@notre-doc/core/src/patient"
 import { ulid } from "ulid"
@@ -26,7 +23,7 @@ it("should create a patient", async () => {
   interface PatientForm {
     nom: string
     prenom: string
-    dateNaissance: string
+    dateNaissance: Date
     email: string
     telephone: string
     numeroSecu: string
@@ -38,29 +35,57 @@ it("should create a patient", async () => {
         __args: {
           ...vars
         },
-        id: true
+        id: true,
       }
     }
   }
 
-  const executeCreatePatientMutation = typedMutationStore(client, createPatientBuilder)
+  const lengthBefore = (await Patient.list()).length
 
-  let resultStore: OperationResultStore
+  const nomNewPatient = "titi"
+  const prenomNewPatient = "toto"
+  const dateNaissanceNewPatient = "1990-07-25"
+  const emailNewPatient = "tototiti@gmail.com"
+  const telephoneNewPatient = "0636333333"
+  const numeroSecuNewPatient = "111222333444555"
 
-  const createPatient = async (vars) => {
-    resultStore = await executeCreatePatientMutation(vars)
-  }
+  let result = await typedMutation(client, createPatientBuilder, {
+    nom: nomNewPatient,
+    prenom: prenomNewPatient,
+    dateNaissance: dateNaissanceNewPatient,
+    email: emailNewPatient,
+    telephone: telephoneNewPatient,
+    numeroSecu: numeroSecuNewPatient
+  })
 
-  await createPatient({ nom: "toto", prenom: "titi", dateNaissance: "25-07-1990", email: "toto@gmail.com", telephone: "0636333333", numeroSecu: "111222333444555" })
+  expect(result.error).toBe(undefined)
 
-  const list = await Patient.list()
+  let listePatients = await Patient.list()
 
-  console.log("list=")
-  console.log(list)
+  let lengthAfter = listePatients.length
 
-  expect(list.length).not.to.equal(0)
+  expect(lengthAfter).not.to.equal(0)
+  expect(lengthAfter).to.equal(lengthBefore + 1)
+
+  const ulidRegex = /[0-7][0-9A-HJKMNP-TV-Z]{25}/gm
+
+  expect(ulidRegex.test(result.data.createPatient.id)).toBe(true)
+
+  const leNewPatientSQL = await Patient.get(result.data.createPatient.id)
+
   expect(
-    list.find((a) => a.patientID === patient.createPatient.id)
-  ).not.toBeNull()
-
+    leNewPatientSQL.patientID
+  ).to.be.equal(result.data.createPatient.id)
+  expect(leNewPatientSQL.nom)
+    .to.be.equal(nomNewPatient)
+  expect(leNewPatientSQL.prenom)
+    .to.be.equal(prenomNewPatient)
+  expect(leNewPatientSQL.dateNaissance)
+    .to.be.equal(dateNaissanceNewPatient)
+  expect(leNewPatientSQL.email)
+    .to.be.equal(emailNewPatient)
+  expect(leNewPatientSQL.telephone)
+    .to.be.equal(telephoneNewPatient)
+  expect(leNewPatientSQL.numeroSecu)
+    .to.be.equal(numeroSecuNewPatient)
 })

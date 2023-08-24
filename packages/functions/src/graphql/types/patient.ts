@@ -21,7 +21,7 @@ const PatientType = builder.objectRef<SQL.Row["patient"]>("Patient").implement({
     id: t.exposeID("patientID"),
     nom: t.exposeString("nom"),
     prenom: t.exposeString("prenom"),
-    dateNaissance: t.exposeString("dateNaissance"),
+    dateNaissance: t.field({type: 'Date', resolve: () => new Date()}),
     email: t.exposeString("email"),
     telephone: t.exposeString("telephone"),
     numeroSecu: t.exposeString("numeroSecu"),
@@ -81,11 +81,11 @@ builder.mutationFields((t) => ({
     args: {
       nom: t.arg.string({ required: true }),
       prenom: t.arg.string({ required: true }),
-      dateNaissance: t.arg.string({ required: true }),
+      dateNaissance: t.arg({ type: 'Date', required: true }),
       email: t.arg.string({ required: true }),
       telephone: t.arg.string({ required: true }),
       numeroSecu: t.arg.string({ required: true }),
     },
-    resolve: (_, args) => Patient.create(args.email, args.numeroSecu),
+    resolve: (_, args) => Patient.create(args.nom, args.prenom, args.dateNaissance, args.email, args.telephone, args.numeroSecu),
   }),
 }))

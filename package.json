@@ -27,6 +27,7 @@
     "graphql": "16.5.0"
   },
   "dependencies": {
-    "@urql/svelte": "^4.0.4"
+    "@urql/svelte": "^4.0.4",
+    "graphql-scalars": "^1.22.2"
   }
 }

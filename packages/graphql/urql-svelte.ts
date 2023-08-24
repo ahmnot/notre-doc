@@ -10,14 +10,12 @@ import {
   generateQueryOp,
   generateMutationOp,
 } from "./genql"
-import { get } from 'svelte/store'
-
 
 export function typedQueryStore<Query extends QueryGenqlSelection>(opts: {
-  client: Client
-  query: Query
-  pause?: boolean
-  requestPolicy?: RequestPolicy
+  client: Client,
+  query: Query,
+  pause?: boolean,
+  requestPolicy?: RequestPolicy,
   context?: Partial<OperationContext>
 }) {
   const { query, variables } = generateQueryOp(opts.query)
@@ -35,13 +33,30 @@ export function typedMutationStore<
 >(
   client: Client,
   builder: (vars: Variables) => Mutation,
-  opts?: Partial<OperationContext>,
+  context?: Partial<OperationContext>,
 ) {
-  const executeMutation = async (vars?: Variables, context?: Partial<OperationContext>) => {
+  const executeMutation = async (vars?: Variables) => {
     const built = builder(vars || ({} as Variables))
     const { query, variables } = generateMutationOp(built)
 
-    return mutationStore<Data, Variables>({ client, query, variables: variables as Variables, ...opts, ...context })
+    return mutationStore<Data, Variables>({ client, query, variables: variables as Variables, ...context })
   }
   return executeMutation
+}
+
+export async function typedMutation<
+  Variables extends Record<string, any>,
+  Mutation extends MutationGenqlSelection,
+  Data extends MutationResult<Mutation>
+>(
+  client: Client,
+  builder: (vars: Variables) => Mutation,
+  vars: Variables,
+  context?: Partial<OperationContext>,
+) {
+
+  const built = builder(vars || ({} as Variables))
+  const { query, variables } = generateMutationOp(built)
+
+  return client.mutation<Data, Variables>(query, variables as Variables, context)
 }

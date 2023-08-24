@@ -1,7 +1,9 @@
+scalar Date
+
 type Mutation {
   addOrdonnance(patientID: String!, text: String!): Ordonnance!
   addRdv(dateRdv: String!, heureRdv: String!, patientID: String!): RendezVous!
-  createPatient(dateNaissance: String!, email: String!, nom: String!, numeroSecu: String!, prenom: String!, telephone: String!): Patient!
+  createPatient(dateNaissance: Date!, email: String!, nom: String!, numeroSecu: String!, prenom: String!, telephone: String!): Patient!
   updateDateRdv(newDate: String!, rdvID: String!): RendezVous!
   updateHourRdv(newHour: String!, rdvID: String!): RendezVous!
 }
@@ -12,7 +14,7 @@ type Ordonnance {
 }
 
 type Patient {
-  dateNaissance: String!
+  dateNaissance: Date!
   email: String!
   id: ID!
   nom: String!
