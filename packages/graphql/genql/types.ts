@@ -54,8 +54,7 @@ export default {
                         "String!"
                     ],
                     "numeroSecu": [
-                        2,
-                        "String!"
+                        2
                     ],
                     "prenom": [
                         2,

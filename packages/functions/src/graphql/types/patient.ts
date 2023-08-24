@@ -84,7 +84,7 @@ builder.mutationFields((t) => ({
       dateNaissance: t.arg({ type: 'Date', required: true }),
       email: t.arg.string({ required: true }),
       telephone: t.arg.string({ required: true }),
-      numeroSecu: t.arg.string({ required: true }),
+      numeroSecu: t.arg.string({ required: false }),
     },
     resolve: (_, args) => Patient.create(args.nom, args.prenom, args.dateNaissance, args.email, args.telephone, args.numeroSecu),
   }),

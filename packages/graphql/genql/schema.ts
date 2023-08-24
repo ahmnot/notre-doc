@@ -54,7 +54,7 @@ export interface RendezVous {
 export interface MutationGenqlSelection{
     addOrdonnance?: (OrdonnanceGenqlSelection & { __args: {patientID: Scalars['String'], text: Scalars['String']} })
     addRdv?: (RendezVousGenqlSelection & { __args: {dateRdv: Scalars['String'], heureRdv: Scalars['String'], patientID: Scalars['String']} })
-    createPatient?: (PatientGenqlSelection & { __args: {dateNaissance: Scalars['Date'], email: Scalars['String'], nom: Scalars['String'], numeroSecu: Scalars['String'], prenom: Scalars['String'], telephone: Scalars['String']} })
+    createPatient?: (PatientGenqlSelection & { __args: {dateNaissance: Scalars['Date'], email: Scalars['String'], nom: Scalars['String'], numeroSecu?: (Scalars['String'] | null), prenom: Scalars['String'], telephone: Scalars['String']} })
     updateDateRdv?: (RendezVousGenqlSelection & { __args: {newDate: Scalars['String'], rdvID: Scalars['String']} })
     updateHourRdv?: (RendezVousGenqlSelection & { __args: {newHour: Scalars['String'], rdvID: Scalars['String']} })
     __typename?: boolean | number
