@@ -17,7 +17,7 @@ export function load({ cookies }) {
 }
 
 const nomRegex = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ-]+$/i
-const telephoneRegex = /^\d{10}$/
+const telephoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g
 
 export const actions: Actions = {
     submitPatient: async ({ cookies, request }) => {
@@ -36,7 +36,7 @@ export const actions: Actions = {
                 .max(new Date(), { message: "Trop jeune" }))
             ),
             email: zfd.text(z.string({ required_error: "E-mail obligatoire" }).trim().email({ message: "E-mail invalide" })),
-            telephone: zfd.text(z.string({ required_error: "N° de tél obligatoire" }).trim().regex(telephoneRegex, { message: "N° invalide" }))
+            telephone: zfd.text(z.string({ required_error: "N° de tél obligatoire" }).trim().min(9, { message: "N° de tél trop court" }).max(15, { message: "N° de tél trop long" }).regex(telephoneRegex, { message: "N° invalide" }))
         })
 
         // This validates the form.

@@ -23,7 +23,6 @@
 
 	let maxTailleBoutons;
 
-
 	function fillIcon(node: any, fillingIcon: Tweened<number>) {
 		node.addEventListener('click', () => fillingIcon.set(1));
 	}
@@ -155,7 +154,7 @@
 
 	.centeredContent {
 		display: flex;
-		flex-wrap: wrap;
-		align-content: center;
+		align-items: center;
+		justify-content: center;
 	}
 </style>
