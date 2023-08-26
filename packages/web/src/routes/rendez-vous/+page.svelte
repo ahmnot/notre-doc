@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Button from '@smui/button';
 	import { Label, Icon } from '@smui/common';
-	import CharacterCounter from '@smui/textfield/character-counter';
 	import Textfield from '@smui/textfield';
 	import HelperText from '@smui/textfield/helper-text';
 	import CircularProgress from '@smui/circular-progress';
@@ -17,8 +16,17 @@
 	import { getContextClient } from '@urql/svelte';
 	import type { OperationResultStore } from '@urql/svelte';
 	import { typedMutationStore } from '@notre-doc/graphql/urql-svelte';
-	import { writable } from 'svelte/store';
-	import { onMount } from 'svelte';
+
+	export let form: ActionData;
+
+	$: formStep = form?.step || 1;
+	$: formSoFar = form?.data || {
+		nom: '',
+		prenom: '',
+		dateNaissance: '',
+		email: '',
+		telephone: ''
+	};
 
 	let client = getContextClient();
 
@@ -49,20 +57,6 @@
 		resultatCreation = await executeCreatePatientMutation(vars);
 	};
 
-	let currentStep = writable(1);
-
-	function nextStep() {
-		if ($currentStep === 1) {
-			// if (form?.data?.telephone !== '' && form?.data?.email !== '') {
-			$currentStep++;
-			// }
-		} else if ($currentStep > 1 && $currentStep < 4) {
-			$currentStep++;
-		}
-	}
-
-	export let form: ActionData;
-
 	let nomFocus = false;
 	let prenomFocus = false;
 	let dateNaissanceFocus = false;
@@ -78,11 +72,25 @@
 	 * It can be used to validate data before submission.
 	 * For example to see if the numero de secu is already taken.
 	 */
-	const submitPatient: SubmitFunction = (input) => {
+	const handleEnhance: SubmitFunction = ({ formData, action }) => {
+		console.log('               ');
+		console.log('---------------');
 		// this does something before the form submits.
+		const { search } = action;
 		loading = true;
 
-		console.log('coucou');
+		console.log('formStep in client before = ' + formStep);
+		console.log(search);
+		console.log('form in client before = ');
+		console.log(form);
+		console.log('Object.fromEntries(formData) in client before = ');
+		console.log(Object.fromEntries(formData));
+
+		nomFocus = false;
+		prenomFocus = false;
+		dateNaissanceFocus = false;
+		emailFocus = false;
+		telephoneFocus = false;
 
 		return async ({ result, update }) => {
 			// this does something after the form submits.
@@ -90,28 +98,53 @@
 
 			switch (result.type) {
 				case 'success':
-					if (result.data) {
+					console.log('A');
+					if (result.data && search === '?/final') {
+						console.log('B');
+						formSoFar = {
+							nom: '',
+							prenom: '',
+							dateNaissance: '',
+							email: '',
+							telephone: ''
+						};
 						await createPatient(result.data.data as PatientForm);
 
 						toast.success('Succès !', {
 							position: 'bottom-center',
 							style: 'border: 1px solid #6299D2; padding: 16px; color: #6299D2;',
 							iconTheme: {
-								primary: '#A52A2A',
+								primary: '#32CD32',
 								secondary: '#fff'
 							}
 						});
+
+						await update();
+						console.log('C');
 					}
 
-					await update();
+					if (search !== '?/final') {
+						console.log('D');
+						formSoFar = Object.fromEntries(formData);
+						if (search.includes('back')) {
+							nomFocus = true;
+							prenomFocus = true;
+							dateNaissanceFocus = true;
+							emailFocus = true;
+							telephoneFocus = true;
+							console.log('E');
+							formStep--;
+						} else {
+							formStep++;
+							console.log('F');
+						}
+					}
+
 					break;
 				case 'failure':
 				case 'error':
-					nomFocus = false;
-					prenomFocus = false;
-					dateNaissanceFocus = false;
-					emailFocus = false;
-					telephoneFocus = false;
+					formSoFar = Object.fromEntries(formData);
+					console.log('G');
 
 					toast.error('Échec.', {
 						position: 'bottom-right',
@@ -121,41 +154,64 @@
 							secondary: '#fff'
 						}
 					});
+
 					await update();
+					
 					break;
 				default:
 					await update();
 			}
+
+			console.log('form in client after= ');
+			console.log(form);
+			console.log('Object.fromEntries(formData) in client after = ');
+			console.log(Object.fromEntries(formData));
 		};
 	};
 </script>
 
 <h1 class="centered">Notre Doc</h1>
+<p>{formStep}</p>
+<p>{nomFocus}</p>
+<p>{prenomFocus}</p>
+<p>{dateNaissanceFocus}</p>
+<p>{telephoneFocus}</p>
+<p>{emailFocus}</p>
+<p>{JSON.stringify(form)}</p>
+
 <div class="centered">
 	<Paper style="width: 940px; height: 600px;">
 		<Title>Prise de rendez-vous</Title>
-		<Subtitle><small style="opacity:0.45">Veuillez renseigner les champs suivants.</small></Subtitle>
+		<Subtitle><small style="opacity:0.45">Veuillez renseigner les champs suivants.</small></Subtitle
+		>
 		<Content>
-			<form method="POST" action="?/submitPatient" use:enhance={submitPatient} novalidate>
+			<form method="POST" 
+			use:enhance={handleEnhance} 
+			novalidate>
 				<div>
-					<div style:display={$currentStep === 1 ? '' : 'none'}>
+					<div style:display={formStep === 1 ? '' : 'none'}>
 						<div class="columns">
 							<div>
 								<Textfield
 									value={form?.data?.telephone ?? ''}
 									label="Téléphone"
 									input$name="telephone"
+									input$maxlength={18}
 									disabled={loading}
 									type="tel"
 									on:focus={() => (telephoneFocus = true)}
 								>
-									{#if form?.errors?.telephone}
-										<HelperText persistent style={colorError}>
-											{#if !telephoneFocus}
-												{form?.errors?.telephone}
-											{/if}
-										</HelperText>
-									{/if}
+									<svelte:fragment slot="helper">
+										{#if form?.errors?.telephone}
+											<HelperText persistent style={colorError}>
+												{#if !telephoneFocus}
+													{form?.errors?.telephone}
+												{/if}
+											</HelperText>
+										{:else}
+											<HelperText />
+										{/if}
+									</svelte:fragment>
 								</Textfield>
 							</div>
 						</div>
@@ -188,23 +244,30 @@
 
 						<span class="right">
 							<Button
-								type="button"
+								formaction="?/step1"
 								variant="raised"
 								color="secondary"
 								style="display: flex; justify-content: stretch;"
-								on:click={nextStep}
 							>
-								<Label>Suivant</Label>
-								<Icon
-									class="material-symbols-outlined"
-									style="font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 200, 'opsz' 40"
-									>arrow_forward</Icon
-								>
+								{#if !loading}
+									<Label>Suivant</Label>
+									<Icon
+										class="material-symbols-outlined"
+										style="font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 200, 'opsz' 40"
+										>arrow_forward</Icon
+									>
+								{:else}
+									<CircularProgress
+										class="my-colored-circle"
+										style="height: 24px; width: 92.15px;"
+										indeterminate
+									/>
+								{/if}
 							</Button>
 						</span>
 					</div>
 
-					<div style:display={$currentStep === 2 ? '' : 'none'}>
+					<div style:display={formStep === 2 ? '' : 'none'}>
 						<div class="columns">
 							<div>
 								<Textfield
@@ -212,7 +275,7 @@
 									label="Nom"
 									input$name="nom"
 									disabled={loading}
-									on:focus={() => (nomFocus = true)}
+									on:focusin={() => (nomFocus = true)}
 								>
 									<svelte:fragment slot="helper">
 										{#if form?.errors?.nom}
@@ -235,7 +298,7 @@
 									label="Prénom"
 									input$name="prenom"
 									disabled={loading}
-									on:focus={() => (prenomFocus = true)}
+									on:focusin={() => (prenomFocus = true)}
 								>
 									<svelte:fragment slot="helper">
 										{#if form?.errors?.prenom}
@@ -261,7 +324,7 @@
 									helperLine$style="width: 100%"
 									type="date"
 									disabled={loading}
-									on:focus={() => (dateNaissanceFocus = true)}
+									on:focusin={() => (dateNaissanceFocus = true)}
 								>
 									<svelte:fragment slot="helper">
 										{#if form?.errors?.dateNaissance}
@@ -289,19 +352,17 @@
 									style="font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 200, 'opsz' 40"
 									class="material-symbols-outlined"
 									size="button"
-									on:click={() => {
-										$currentStep--;
-									}}
 									touch
+									on:click={() => (formStep = 1)}
 								>
 									arrow_back
 								</IconButton>
 							</span>
 							<span class="right">
 								<Button
+									formaction="?/final"
 									type="submit"
 									variant="raised"
-									formaction="?/submitPatient"
 									aria-busy={loading}
 									color="secondary"
 									style="display: flex; justify-content: stretch;"
@@ -333,10 +394,6 @@
 <br />
 
 <style>
-	.sized {
-		width: 500px;
-	}
-
 	.columns {
 		display: flex;
 		flex-wrap: wrap;
