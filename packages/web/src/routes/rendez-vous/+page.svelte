@@ -203,7 +203,9 @@
 								>
 									<svelte:fragment slot="helper">
 										{#if form?.errors?.telephone}
-											<HelperText persistent style={colorError}>
+											<HelperText 
+											
+											persistent style={colorError}>
 												{#if !telephoneFocus}
 													{form?.errors?.telephone}
 												{/if}
@@ -275,6 +277,7 @@
 									label="Nom"
 									input$name="nom"
 									disabled={loading}
+									type="text"
 									on:focusin={() => (nomFocus = true)}
 								>
 									<svelte:fragment slot="helper">
@@ -347,7 +350,6 @@
 							<span class="left">
 								<IconButton
 									type="button"
-									variant="outlined"
 									color="secondary"
 									style="font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 200, 'opsz' 40"
 									class="material-symbols-outlined"
