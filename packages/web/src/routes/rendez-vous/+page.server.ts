@@ -56,14 +56,14 @@ function goToStep(target: number, zodSchema?: {}): {} {
             const zfdSchema = zfd.formData(zodSchema)
 
             // This validates the form.
-            const validation = zfdSchema.safeParse(formData)
+            const validation = await zfdSchema.spa(formData)
 
             if (!validation.success) {
 
                 const flatFieldErrors = validation.error.flatten().fieldErrors
 
                 return fail(400, {
-                    step: target === -1 ? target : (target - 1),
+                    step: target === -1 ? finalStep : (target - 1),
                     data: fields,
                     errors: flatFieldErrors
                 })

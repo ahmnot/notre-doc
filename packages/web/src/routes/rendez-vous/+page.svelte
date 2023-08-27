@@ -1,6 +1,4 @@
 <script lang="ts">
-
-
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import type { ActionData } from './$types';
@@ -150,7 +148,7 @@
 					});
 
 					await update();
-					
+
 					break;
 				default:
 					await update();
@@ -162,26 +160,144 @@
 			console.log(Object.fromEntries(formData));
 		};
 	};
+
+	let inputClasses = 'field label border';
 </script>
 
-<h1 class="centered">Notre Doc</h1>
-<p>{formStep}</p>
-<p>{nomFocus}</p>
-<p>{prenomFocus}</p>
-<p>{dateNaissanceFocus}</p>
-<p>{telephoneFocus}</p>
-<p>{emailFocus}</p>
-<p>{JSON.stringify(form)}</p>
+<article class="fill">
+	<h5 class="center-align">Prise de rendez-vous</h5>
+	<p class="center-align">
+		<small style="opacity:0.45"> Veuillez renseigner les champs suivants</small>
+	</p>
+	<form method="POST" use:enhance={handleEnhance} novalidate>
+		<div style:display={formStep === 1 ? '' : 'none'}>
+			<div
+				class={form?.errors?.telephone && !telephoneFocus
+					? inputClasses + ' invalid'
+					: inputClasses}
+			>
+				<input
+					value={form?.data?.telephone ?? ''}
+					name="telephone"
+					type="tel"
+					minlength={5}
+					maxlength={18}
+					disabled={loading}
+					on:focus={() => (telephoneFocus = true)}
+				/>
+				<label for="telephone">Téléphone</label>
+				<i>phone</i>
+				{#if form?.errors?.telephone}
+					<span class="error">
+						{#if !telephoneFocus}
+							{form?.errors?.telephone}
+						{/if}
+					</span>
+				{/if}
+			</div>
+			<div class={form?.errors?.email && !emailFocus ? inputClasses + ' invalid' : inputClasses}>
+				<input
+					value={form?.data?.email ?? ''}
+					name="email"
+					type="email"
+					disabled={loading}
+					on:focus={() => (emailFocus = true)}
+				/>
+				<label for="email">E-mail</label>
+				{#if form?.errors?.email}
+					<span class="error">
+						{#if !emailFocus}
+							{form?.errors?.email}
+						{/if}
+					</span>
+				{/if}
+			</div>
+			<nav>
+				<div class="max" />
+				<button class="right-align" formaction="?/step1">
+					Suivant
+					<i>arrow_forward</i>
+				</button>
+			</nav>
+		</div>
+		<div style:display={formStep === 2 ? '' : 'none'}>
+			<div class={form?.errors?.nom && !nomFocus ? inputClasses + ' invalid' : inputClasses}>
+				<input
+					value={form?.data?.nom ?? ''}
+					name="nom"
+					type="text"
+					disabled={loading}
+					on:focus={() => (nomFocus = true)}
+				/>
+				<label for="nom">Nom</label>
+				{#if form?.errors?.nom}
+					<span class="error">
+						{#if !nomFocus}
+							{form?.errors?.nom}
+						{/if}
+					</span>
+				{/if}
+			</div>
+			<div class={form?.errors?.prenom && !prenomFocus ? inputClasses + ' invalid' : inputClasses}>
+				<input
+					value={form?.data?.prenom ?? ''}
+					name="prenom"
+					type="text"
+					disabled={loading}
+					on:focus={() => (prenomFocus = true)}
+				/>
+				<label for="prenom">Prénom</label>
+				{#if form?.errors?.prenom}
+					<span class="error">
+						{#if !prenomFocus}
+							{form?.errors?.prenom}
+						{/if}
+					</span>
+				{/if}
+			</div>
+			<div
+				class={form?.errors?.dateNaissance && !dateNaissanceFocus
+					? inputClasses + ' invalid'
+					: inputClasses}
+			>
+				<input
+					value={form?.data?.dateNaissance ?? ''}
+					name="dateNaissance"
+					type="date"
+					disabled={loading}
+					on:focus={() => (dateNaissanceFocus = true)}
+				/>
+				<label for="dateNaissance">Date de naissance</label>
+				<i>today</i>
+				{#if form?.errors?.dateNaissance}
+					<span class="error">
+						{#if !dateNaissanceFocus}
+							{form?.errors?.dateNaissance}
+						{/if}
+					</span>
+				{/if}
+			</div>
+			<nav>
+				<button type="button" class="circle transparent" on:click={() => (formStep = 1)}>
+					<i>arrow_back</i>
+				</button>
+				<div class="max" />
+				<button class="right-align" formaction="?/final" type="submit">
+					Envoyer
+					<i>send</i>
+				</button>
+			</nav>
+		</div>
+	</form>
+</article>
 
-<div class="centered">
+<!-- <div class="centered">
 	<Paper style="width: 940px; height: 600px;">
 		<Title>Prise de rendez-vous</Title>
 		<Subtitle><small style="opacity:0.45">Veuillez renseigner les champs suivants.</small></Subtitle
 		>
 		<Content>
-			<form method="POST" 
-			use:enhance={handleEnhance} 
-			novalidate>
+			<form method="POST" use:enhance={handleEnhance} novalidate>
 				<div>
 					<div style:display={formStep === 1 ? '' : 'none'}>
 						<div class="columns">
@@ -383,29 +499,9 @@
 			</form>
 		</Content>
 	</Paper>
-</div>
+</div> -->
 
 <br />
 
 <style>
-	.columns {
-		display: flex;
-		flex-wrap: wrap;
-	}
-
-	.centered {
-		display: flex;
-		justify-content: center;
-	}
-
-	.right {
-		float: right;
-	}
-
-	.left {
-		float: left;
-	}
-	/* .valid {
-		color: greenyellow;
-	} */
 </style>
