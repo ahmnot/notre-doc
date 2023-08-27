@@ -12,13 +12,6 @@
 	export let form: ActionData;
 
 	$: formStep = form?.step || 1;
-	$: formSoFar = form?.data || {
-		nom: '',
-		prenom: '',
-		dateNaissance: '',
-		email: '',
-		telephone: ''
-	};
 
 	let client = getContextClient();
 
@@ -65,18 +58,9 @@
 	 * For example to see if the numero de secu is already taken.
 	 */
 	const handleEnhance: SubmitFunction = ({ formData, action }) => {
-		console.log('               ');
-		console.log('---------------');
 		// this does something before the form submits.
 		const { search } = action;
 		loading = true;
-
-		console.log('formStep in client before = ' + formStep);
-		console.log(search);
-		console.log('form in client before = ');
-		console.log(form);
-		console.log('Object.fromEntries(formData) in client before = ');
-		console.log(Object.fromEntries(formData));
 
 		nomFocus = false;
 		prenomFocus = false;
@@ -90,16 +74,7 @@
 
 			switch (result.type) {
 				case 'success':
-					console.log('A');
 					if (result.data && search === '?/final') {
-						console.log('B');
-						formSoFar = {
-							nom: '',
-							prenom: '',
-							dateNaissance: '',
-							email: '',
-							telephone: ''
-						};
 						await createPatient(result.data.data as PatientForm);
 
 						toast.success('Succès !', {
@@ -112,32 +87,24 @@
 						});
 
 						await update();
-						console.log('C');
 					}
 
 					if (search !== '?/final') {
-						console.log('D');
-						formSoFar = Object.fromEntries(formData);
 						if (search.includes('back')) {
 							nomFocus = true;
 							prenomFocus = true;
 							dateNaissanceFocus = true;
 							emailFocus = true;
 							telephoneFocus = true;
-							console.log('E');
 							formStep--;
 						} else {
 							formStep++;
-							console.log('F');
 						}
 					}
 
 					break;
 				case 'failure':
 				case 'error':
-					formSoFar = Object.fromEntries(formData);
-					console.log('G');
-
 					toast.error('Échec.', {
 						position: 'bottom-right',
 						style: 'border: 1px solid #6299D2; padding: 16px; color: #6299D2;',
@@ -153,11 +120,6 @@
 				default:
 					await update();
 			}
-
-			console.log('form in client after= ');
-			console.log(form);
-			console.log('Object.fromEntries(formData) in client after = ');
-			console.log(Object.fromEntries(formData));
 		};
 	};
 
