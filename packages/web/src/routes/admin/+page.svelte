@@ -1,5 +1,4 @@
 <script lang="ts">
-	import DataTable, { Head, Body, Row, Cell } from '@smui/data-table';
 	import { typedQueryStore } from '@notre-doc/graphql/urql-svelte';
 
 	import { getContextClient } from '@urql/svelte';

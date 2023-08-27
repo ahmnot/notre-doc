@@ -1,11 +1,5 @@
 <script lang="ts">
-	import Button from '@smui/button';
-	import { Label, Icon } from '@smui/common';
-	import Textfield from '@smui/textfield';
-	import HelperText from '@smui/textfield/helper-text';
-	import CircularProgress from '@smui/circular-progress';
-	import IconButton from '@smui/icon-button';
-	import Paper, { Title, Subtitle, Content } from '@smui/paper';
+
 
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';

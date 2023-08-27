@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { PageData } from '../about/$types';
-	import Paper, { Title, Subtitle, Content } from '@smui/paper';
 
 	// export let data: PageData;
 </script>

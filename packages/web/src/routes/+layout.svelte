@@ -1,7 +1,4 @@
 <script lang="ts">
-	import Button, { Label, Icon } from '@smui/button';
-	import TopAppBar, { Row, Section, Title, AutoAdjust } from '@smui/top-app-bar';
-	import IconButton from '@smui/icon-button';
 	import { page } from '$app/stores';
 
 	import { Toaster } from 'svelte-french-toast';
@@ -143,7 +140,6 @@
 
 <style>
 	/* Hide everything above this component. */
-	:global(#smui-app),
 	:global(body),
 	:global(html) {
 		display: block !important;
