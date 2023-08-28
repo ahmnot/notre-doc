@@ -60,3 +60,10 @@ export function listRdv(patientID: string) {
     .execute()
 }
 
+export function deletePatient(patientID: string) {
+  return SQL.DB.deleteFrom('patient')
+    .where('patientID', '=', patientID)
+    .returning('patientID')
+    .executeTakeFirstOrThrow()
+}
+

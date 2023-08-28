@@ -66,6 +66,15 @@ export default {
                     ]
                 }
             ],
+            "deletePatient": [
+                5,
+                {
+                    "id": [
+                        2,
+                        "String!"
+                    ]
+                }
+            ],
             "updateDateRdv": [
                 7,
                 {

@@ -1,5 +1,4 @@
 import { fail, redirect } from '@sveltejs/kit'
-import * as db from '$lib/server/database'
 import { sleep } from '$lib/utils'
 import type { Actions } from './$types'
 import { z } from 'zod'
@@ -13,7 +12,7 @@ export function load({}) {
 const nomRegex = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ-]+$/i
 const telephoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g
 
-const zodStep1 = {
+const zodSchemaStep1 = {
     email: zfd.text(z.string({ required_error: "E-mail obligatoire" })
         .trim()
         .email({ message: "E-mail invalide" })),
@@ -24,7 +23,7 @@ const zodStep1 = {
         .regex(telephoneRegex, { message: "N° invalide" }))
 }
 
-const zodStep2 = {
+const zodSchemaStep2 = {
     nom: zfd.text(z.string({ required_error: "Nom obligatoire" })
         .trim()
         .min(1, { message: "Nom trop court" })
@@ -76,7 +75,7 @@ function goToStep(target: number, zodSchema?: {}): {} {
 }
 
 export const actions: Actions = {
-    step1: goToStep(finalStep, zodStep1),
-    final: goToStep(-1, { ...zodStep1, ...zodStep2 }),
+    step1: goToStep(finalStep, zodSchemaStep1),
+    final: goToStep(-1, { ...zodSchemaStep1, ...zodSchemaStep2 }),
 }
 

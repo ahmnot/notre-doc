@@ -57,7 +57,7 @@
 	 * It can be used to validate data before submission.
 	 * For example to see if the numero de secu is already taken.
 	 */
-	const handleEnhance: SubmitFunction = ({ formData, action }) => {
+	const handleEnhance: SubmitFunction = ({ action }) => {
 		// this does something before the form submits.
 		const { search } = action;
 		loading = true;
@@ -77,33 +77,26 @@
 					if (result.data && search === '?/final') {
 						await createPatient(result.data.data as PatientForm);
 
+						console.log($resultatCreation);
+
 						snackbarClass = 'snackbar success green active';
 						snackbarMessage = 'Succès !';
 
-						setTimeout(() => (snackbarClass = 'snackbar error'), 4000);
+						setTimeout(() => (snackbarClass = 'snackbar error'), 2000);
 
 						await update();
 					}
 
 					if (search !== '?/final') {
-						if (search.includes('back')) {
-							nomFocus = true;
-							prenomFocus = true;
-							dateNaissanceFocus = true;
-							emailFocus = true;
-							telephoneFocus = true;
-							formStep--;
-						} else {
-							formStep++;
-						}
+						formStep++;
 					}
 
 					break;
 				case 'failure':
 				case 'error':
 					snackbarClass = 'snackbar error active';
-
-					setTimeout(() => (snackbarClass = 'snackbar error'), 4000);
+					snackbarMessage = 'Échec.';
+					setTimeout(() => (snackbarClass = 'snackbar error'), 2000);
 					await update();
 					break;
 				default:
@@ -111,6 +104,13 @@
 			}
 		};
 	};
+
+	function stepBack() {
+		formStep = 1
+		emailFocus = true
+		telephoneFocus = true
+	}
+	
 </script>
 
 <article class="fill">
@@ -161,6 +161,8 @@
 					</span>
 				{/if}
 			</div>
+			<div class="large-space" />
+			<div class="small-space" />
 			<nav>
 				<div class="max" />
 				<button class="right-align" formaction="?/step1">
@@ -227,7 +229,7 @@
 				{/if}
 			</div>
 			<nav>
-				<button type="button" class="circle transparent" on:click={() => (formStep = 1)}>
+				<button type="button" class="circle transparent" on:click={stepBack}>
 					<i>arrow_back</i>
 				</button>
 				<div class="max" />

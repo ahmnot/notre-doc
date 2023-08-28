@@ -88,4 +88,12 @@ builder.mutationFields((t) => ({
     },
     resolve: (_, args) => Patient.create(args.nom, args.prenom, args.dateNaissance, args.email, args.telephone, args.numeroSecu),
   }),
+  deletePatient: t.field({
+    type: PatientType,
+    nullable: true,
+    args: {
+      id: t.arg.string({ required: true }),
+    },
+    resolve: (_, args) => Patient.deletePatient(args.id),
+  })
 }))

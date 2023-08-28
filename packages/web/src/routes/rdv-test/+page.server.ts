@@ -1,5 +1,4 @@
 import { fail, redirect } from '@sveltejs/kit'
-import * as db from '$lib/server/database'
 import { sleep } from '$lib/utils'
 import type { Actions } from './$types'
 import { z } from 'zod'

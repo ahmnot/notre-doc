@@ -1,14 +1,38 @@
 <script lang="ts">
-	import { fly, slide } from 'svelte/transition';
-
 	import { enhance } from '$app/forms';
+	import type { SubmitFunction } from '@sveltejs/kit';
 
-	import { typedQueryStore } from '@notre-doc/graphql/urql-svelte';
+	import {
+		typedQueryStore,
+		typedMutationStore,
+		typedMutation
+	} from '@notre-doc/graphql/urql-svelte';
 
 	import { getContextClient } from '@urql/svelte';
 
+	import { fly, slide } from 'svelte/transition';
+
+	let loading = false;
+
+	let client = getContextClient();
+
+	interface IdForm {
+		id: string;
+	}
+
+	const deletePatientBuilder = (vars: IdForm) => {
+		return {
+			deletePatient: {
+				__args: {
+					...vars
+				},
+				id: true
+			}
+		};
+	};
+
 	const patientsTQS = typedQueryStore({
-		client: getContextClient(),
+		client: client,
 		query: {
 			patients: {
 				id: true,
@@ -21,6 +45,49 @@
 			}
 		}
 	});
+
+	let snackbarClass = 'snackbar error';
+	let snackbarMessage = 'Échec.';
+
+	const enhanceDelete: SubmitFunction = ({}) => {
+		loading = true;
+
+		return async ({ result, update }) => {
+			// this does something after the form submits.
+			loading = false;
+			switch (result.type) {
+				case 'success':
+					if (result.data) {
+						await typedMutation(client, deletePatientBuilder, 
+						{ id: result.data.id }).then(
+							(result) => {
+								if (result.error) {
+									snackbarClass = 'snackbar error active';
+									snackbarMessage = 'Échec de la suppression.';
+									console.error(result.error);
+								} else {
+									snackbarClass = 'snackbar success primary active';
+									snackbarMessage = 'Patient supprimé.';
+								}
+								
+							}
+						);
+
+						await update();
+					}
+					break;
+				case 'failure':
+				case 'error':
+					snackbarClass = 'snackbar error active';
+					snackbarMessage = 'Échec de la suppression.';
+
+					await update();
+					break;
+				default:
+					await update();
+			}
+		};
+	};
 </script>
 
 <div>&nbsp;</div>
@@ -66,7 +133,7 @@
 								<i>edit</i>
 							</a>
 
-							<form method="POST" action="?/deletePatient" use:enhance>
+							<form method="POST" action="?/deletePatient" use:enhance={enhanceDelete}>
 								<button class="circle transparent">
 									<i>delete</i>
 								</button>
@@ -79,6 +146,8 @@
 		</tbody>
 	</table>
 {/if}
+
+<div class={snackbarClass}>{snackbarMessage}</div>
 
 <style>
 </style>
