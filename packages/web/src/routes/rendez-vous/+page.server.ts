@@ -56,7 +56,7 @@ function goToStep(target: number, zodSchema?: {}): {} {
             const zfdSchema = zfd.formData(zodSchema)
 
             // This validates the form.
-            const validation = zfdSchema.safeParse(formData)
+            const validation = await zfdSchema.spa(formData)
 
             if (!validation.success) {
 

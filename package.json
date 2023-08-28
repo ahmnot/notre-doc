@@ -21,7 +21,10 @@
     "typescript": "^5.1.6"
   },
   "workspaces": [
-    "packages/*"
+    "packages/core",
+    "packages/functions",
+    "packages/graphql",
+    "packages/web"
   ],
   "overrides": {
     "graphql": "16.5.0"

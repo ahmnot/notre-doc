@@ -2,27 +2,15 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
-		<!-- SMUI Styles -->
-		<link rel="stylesheet" href="/smui.css" />
-		<!-- Hint where we get fonts from. -->
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-		<!-- Material Icons, Roboto, and Roboto Mono fonts -->
 		<link
-			href="https://fonts.googleapis.com/css2?family=Material+Icons&Roboto+Mono:ital@0;1&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+			href="https://cdn.jsdelivr.net/npm/beercss@3.3.2/dist/cdn/beer.min.css"
 			rel="stylesheet"
 		/>
+		<script
+			type="module"
+			src="https://cdn.jsdelivr.net/npm/beercss@3.3.2/dist/cdn/beer.min.js"
+		></script>
 
-		<link
-			href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
-			rel="stylesheet"
-		/>
-
-		<!-- THE MOST MODERN ONE (MATERIAL 3) -->
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-		
 		<meta name="viewport" content="width=device-width" />
 		%sveltekit.head%
 	</head>
@@ -31,3 +19,51 @@
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
 </html>
+
+<style>
+	:root,
+	body.light {
+		--primary: #0061a4;
+		--on-primary: #ffffff;
+		--primary-container: #d1e4ff;
+		--on-primary-container: #001d36;
+		--secondary: #535f70;
+		--on-secondary: #ffffff;
+		--secondary-container: #d7e3f7;
+		--on-secondary-container: #101c2b;
+		--tertiary: #6b5778;
+		--on-tertiary: #ffffff;
+		--tertiary-container: #f2daff;
+		--on-tertiary-container: #251431;
+		--error: #ba1a1a;
+		--on-error: #ffffff;
+		--error-container: #ffdad6;
+		--on-error-container: #410002;
+		--background: #fdfcff;
+		--on-background: #1a1c1e;
+		--surface: #fdfcff;
+		--on-surface: #1a1c1e;
+		--surface-variant: #dfe2eb;
+		--on-surface-variant: #43474e;
+		--outline: #73777f;
+		--outline-variant: #c3c7cf;
+		--scrim: #000000;
+		--inverse-surface: #2f3033;
+		--inverse-on-surface: #f1f0f4;
+		--inverse-primary: #9ecaff;
+
+		--shadow: #000000;
+		--active: rgba(0, 0, 0, 0.1);
+		--overlay: rgba(0, 0, 0, 0.5);
+		--elevate1: 0 0.125rem 0.125rem 0 rgb(0 0 0 / 0.32);
+		--elevate2: 0 0.25rem 0.5rem 0 rgb(0 0 0 / 0.4);
+		--elevate3: 0 0.375rem 0.75rem 0 rgb(0 0 0 / 0.48);
+		--size: 16px;
+		--font: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
+		--font-icon: 'Material Symbols Outlined';
+		--speed1: 0.1s;
+		--speed2: 0.2s;
+		--speed3: 0.3s;
+		--speed4: 0.4s;
+	}
+</style>
