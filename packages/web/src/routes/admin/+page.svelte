@@ -1,4 +1,8 @@
 <script lang="ts">
+	import { fly, slide } from 'svelte/transition';
+
+	import { enhance } from '$app/forms';
+
 	import { typedQueryStore } from '@notre-doc/graphql/urql-svelte';
 
 	import { getContextClient } from '@urql/svelte';
@@ -29,7 +33,7 @@
 	<table class="border" aria-label="Liste des patients">
 		<thead>
 			<tr>
-				<th></th>
+				<th />
 				<th>id</th>
 				<th>Nom</th>
 				<th>Prénom</th>
@@ -37,12 +41,12 @@
 				<th>E-mail</th>
 				<th>Téléphone</th>
 				<th>N° sécu</th>
-				<th></th>
+				<th />
 			</tr>
 		</thead>
 		<tbody>
 			{#each $patientsTQS.data.patients as patient}
-				<tr>
+				<tr in:fly={{ y: 20 }} out:slide>
 					<td>
 						<label class="checkbox">
 							<input type="checkbox" />
@@ -61,9 +65,13 @@
 							<a>
 								<i>edit</i>
 							</a>
-							<a>
-								<i>delete</i>
-							</a>
+
+							<form method="POST" action="?/deletePatient" use:enhance>
+								<button class="circle transparent">
+									<i>delete</i>
+								</button>
+								<input type="hidden" name="id" value={patient.id} />
+							</form>
 						</nav>
 					</td>
 				</tr>
