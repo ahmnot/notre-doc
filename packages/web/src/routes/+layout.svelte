@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { Toaster } from 'svelte-french-toast';
-
 	import { initContextClient, cacheExchange, fetchExchange } from '@urql/svelte';
 
 	initContextClient({
@@ -30,8 +28,6 @@
 <h1 class="center-align">Notre Doc</h1>
 
 <slot />
-
-<Toaster />
 
 <style>
 	/* Hide everything above this component. */

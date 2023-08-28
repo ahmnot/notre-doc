@@ -3,8 +3,6 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import type { ActionData } from './$types';
 
-	import toast from 'svelte-french-toast';
-
 	import { getContextClient } from '@urql/svelte';
 	import type { OperationResultStore } from '@urql/svelte';
 	import { typedMutationStore } from '@notre-doc/graphql/urql-svelte';
@@ -52,7 +50,7 @@
 
 	let inputClasses = 'field label border';
 	let snackbarClass = 'snackbar error';
-	let snackbarMessage = "Échec."
+	let snackbarMessage = 'Échec.';
 
 	/**
 	 * this does something when the form submits.
@@ -80,9 +78,9 @@
 						await createPatient(result.data.data as PatientForm);
 
 						snackbarClass = 'snackbar success green active';
-						snackbarMessage = 'Succès !'
+						snackbarMessage = 'Succès !';
 
-						setTimeout(() => snackbarClass = 'snackbar error', 4000)
+						setTimeout(() => (snackbarClass = 'snackbar error'), 4000);
 
 						await update();
 					}
@@ -105,7 +103,7 @@
 				case 'error':
 					snackbarClass = 'snackbar error active';
 
-					setTimeout(() => snackbarClass = 'snackbar error', 4000)
+					setTimeout(() => (snackbarClass = 'snackbar error'), 4000);
 					await update();
 					break;
 				default:
@@ -243,5 +241,6 @@
 </article>
 
 <div class={snackbarClass}>{snackbarMessage}</div>
+
 <style>
 </style>
