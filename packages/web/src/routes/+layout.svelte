@@ -1,26 +1,33 @@
 <script lang="ts">
 	import { initContextClient, cacheExchange, fetchExchange } from '@urql/svelte';
+	import { page } from '$app/stores';
 
 	initContextClient({
 		url: import.meta.env.VITE_GRAPHQL_URL,
 		exchanges: [cacheExchange, fetchExchange]
 	});
 
-	let barWidth = 1800;
 </script>
 
 <header class="fill">
-	<nav bind:clientWidth={barWidth}>
+	<nav>
 		<a class="circle transparent" href="/">
-			<i class="primary-text">favorite</i>
+			<i class="primary-text" class:fill={$page.url.pathname === '/'}>favorite</i>
 		</a>
+		<!-- <h5 class="center-align">Notre Doc</h5> -->
+		<div class="max"></div>
 		<div class="max center-align">
 			<a href="/rendez-vous"
-				><button class="small-elevate"><i>event</i><span>Prendre rendez-vous</span></button></a
+				><button class="small-elevate"
+					><i class:fill={$page.url.pathname === '/rendez-vous'}>event</i><span
+						>Prendre rendez-vous</span
+					></button
+				></a
 			>
 		</div>
-		<a class="circle transparent" href="/admin">
-			<i class="primary-text">key</i>
+		<div class="max"></div>
+		<a class="circle" href="/admin">
+			<i class="primary-text" class:fill={$page.url.pathname === '/admin'}>key</i>
 		</a>
 	</nav>
 </header>

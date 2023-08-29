@@ -171,16 +171,11 @@
 	};
 
 	let idPatientUpdating = '';
+	let isDialogActive = false;
 
 	function openEdit(patientID: string) {
 		idPatientUpdating = patientID;
-		toggleDialog();
-	}
-
-	function toggleDialog() {
-		classDialog.includes('active')
-			? (classDialog = classDialog.replace(' active', ''))
-			: (classDialog += ' active');
+		isDialogActive = true;
 	}
 </script>
 
@@ -245,15 +240,16 @@
 {/if}
 
 <dialog
-	class={classDialog}
+	class="right"
+	class:active={isDialogActive}
 	use:clickoutside
-	on:clickoutside|stopPropagation={() => (classDialog = classDialog.replace(' active', ''))}
+	on:clickoutside|stopPropagation={() => (isDialogActive = false)}
 >
 	<h5>Édition Patient</h5>
 	<small style="opacity:0.45">id : {idPatientUpdating}</small>
 	<form method="POST" use:enhance={updateEnhance} novalidate>
 		<input value={idPatientUpdating} name="id" style:display="none" />
-		<div class={form?.errors?.nom && !nomFocus ? inputClasses + ' invalid' : inputClasses}>
+		<div class={inputClasses} class:invalid={form?.errors?.nom && !nomFocus}>
 			<input
 				value={form?.data?.nom ?? ''}
 				name="nom"
@@ -270,7 +266,7 @@
 				</span>
 			{/if}
 		</div>
-		<div class={form?.errors?.prenom && !prenomFocus ? inputClasses + ' invalid' : inputClasses}>
+		<div class={inputClasses} class:invalid={form?.errors?.prenom && !prenomFocus}>
 			<input
 				value={form?.data?.prenom ?? ''}
 				name="prenom"
@@ -287,11 +283,7 @@
 				</span>
 			{/if}
 		</div>
-		<div
-			class={form?.errors?.dateNaissance && !dateNaissanceFocus
-				? inputClasses + ' invalid'
-				: inputClasses}
-		>
+		<div class={inputClasses} class:invalid={form?.errors?.dateNaissance && !dateNaissanceFocus}>
 			<input
 				value={form?.data?.dateNaissance ?? ''}
 				name="dateNaissance"
@@ -310,7 +302,8 @@
 			{/if}
 		</div>
 		<div
-			class={form?.errors?.telephone && !telephoneFocus ? inputClasses + ' invalid' : inputClasses}
+			class={inputClasses}
+			class:invalid={form?.errors?.telephone && !telephoneFocus}
 		>
 			<input
 				value={form?.data?.telephone ?? ''}
@@ -331,7 +324,8 @@
 				</span>
 			{/if}
 		</div>
-		<div class={form?.errors?.email && !emailFocus ? inputClasses + ' invalid' : inputClasses}>
+		<div class={inputClasses}
+		class:invalid={form?.errors?.email && !emailFocus}>
 			<input
 				value={form?.data?.email ?? ''}
 				name="email"
@@ -349,9 +343,8 @@
 			{/if}
 		</div>
 		<div
-			class={form?.errors?.numeroSecu && !numeroSecuFocus
-				? inputClasses + ' invalid'
-				: inputClasses}
+			class={inputClasses}
+			class:invalid={form?.errors?.numeroSecu && !numeroSecuFocus}
 		>
 			<input
 				value={form?.data?.numeroSecu ?? ''}

@@ -106,11 +106,10 @@
 	};
 
 	function stepBack() {
-		formStep = 1
-		emailFocus = true
-		telephoneFocus = true
+		formStep = 1;
+		emailFocus = true;
+		telephoneFocus = true;
 	}
-	
 </script>
 
 <article class="fill">
@@ -120,11 +119,7 @@
 	</p>
 	<form method="POST" use:enhance={handleEnhance} novalidate>
 		<div style:display={formStep === 1 ? '' : 'none'}>
-			<div
-				class={form?.errors?.telephone && !telephoneFocus
-					? inputClasses + ' invalid'
-					: inputClasses}
-			>
+			<div class={inputClasses} class:invalid={form?.errors?.telephone && !telephoneFocus}>
 				<input
 					value={form?.data?.telephone ?? ''}
 					name="telephone"
@@ -144,7 +139,7 @@
 					</span>
 				{/if}
 			</div>
-			<div class={form?.errors?.email && !emailFocus ? inputClasses + ' invalid' : inputClasses}>
+			<div class={inputClasses} class:invalid={form?.errors?.email && !emailFocus}>
 				<input
 					value={form?.data?.email ?? ''}
 					name="email"
@@ -172,7 +167,7 @@
 			</nav>
 		</div>
 		<div style:display={formStep === 2 ? '' : 'none'}>
-			<div class={form?.errors?.nom && !nomFocus ? inputClasses + ' invalid' : inputClasses}>
+			<div class={inputClasses} class:invalid={form?.errors?.nom && !nomFocus}>
 				<input
 					value={form?.data?.nom ?? ''}
 					name="nom"
@@ -189,7 +184,7 @@
 					</span>
 				{/if}
 			</div>
-			<div class={form?.errors?.prenom && !prenomFocus ? inputClasses + ' invalid' : inputClasses}>
+			<div class={inputClasses} class:invalid={form?.errors?.prenom && !prenomFocus}>
 				<input
 					value={form?.data?.prenom ?? ''}
 					name="prenom"
@@ -206,10 +201,8 @@
 					</span>
 				{/if}
 			</div>
-			<div
-				class={form?.errors?.dateNaissance && !dateNaissanceFocus
-					? inputClasses + ' invalid'
-					: inputClasses}
+			<div class={inputClasses} 
+				class:invalid={form?.errors?.dateNaissance && !dateNaissanceFocus}
 			>
 				<input
 					value={form?.data?.dateNaissance ?? ''}
