@@ -86,7 +86,21 @@ builder.mutationFields((t) => ({
       telephone: t.arg.string({ required: true }),
       numeroSecu: t.arg.string({ required: false }),
     },
-    resolve: (_, args) => Patient.create(args.nom, args.prenom, args.dateNaissance, args.email, args.telephone, args.numeroSecu),
+    resolve: (_, args) => Patient.createPatient(args.nom, args.prenom, args.dateNaissance, args.email, args.telephone, args.numeroSecu),
+  }),
+  updatePatient: t.field({
+    type: PatientType,
+    nullable: true,
+    args: {
+      id: t.arg.string({ required: true }),
+      nom: t.arg.string({ required: false }),
+      prenom: t.arg.string({ required: false }),
+      dateNaissance: t.arg({ type: 'Date', required: false }),
+      email: t.arg.string({ required: false }),
+      telephone: t.arg.string({ required: false }),
+      numeroSecu: t.arg.string({ required: false }),
+    },
+    resolve: (_, args) => Patient.updatePatient(args.id, args.nom, args.prenom, args.dateNaissance, args.email, args.telephone, args.numeroSecu),
   }),
   deletePatient: t.field({
     type: PatientType,

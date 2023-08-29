@@ -101,6 +101,33 @@ export default {
                     ]
                 }
             ],
+            "updatePatient": [
+                5,
+                {
+                    "dateNaissance": [
+                        0
+                    ],
+                    "email": [
+                        2
+                    ],
+                    "id": [
+                        2,
+                        "String!"
+                    ],
+                    "nom": [
+                        2
+                    ],
+                    "numeroSecu": [
+                        2
+                    ],
+                    "prenom": [
+                        2
+                    ],
+                    "telephone": [
+                        2
+                    ]
+                }
+            ],
             "__typename": [
                 2
             ]

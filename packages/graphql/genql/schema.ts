@@ -17,6 +17,7 @@ export interface Mutation {
     deletePatient: (Patient | null)
     updateDateRdv: RendezVous
     updateHourRdv: RendezVous
+    updatePatient: (Patient | null)
     __typename: 'Mutation'
 }
 
@@ -59,6 +60,7 @@ export interface MutationGenqlSelection{
     deletePatient?: (PatientGenqlSelection & { __args: {id: Scalars['String']} })
     updateDateRdv?: (RendezVousGenqlSelection & { __args: {newDate: Scalars['String'], rdvID: Scalars['String']} })
     updateHourRdv?: (RendezVousGenqlSelection & { __args: {newHour: Scalars['String'], rdvID: Scalars['String']} })
+    updatePatient?: (PatientGenqlSelection & { __args: {dateNaissance?: (Scalars['Date'] | null), email?: (Scalars['String'] | null), id: Scalars['String'], nom?: (Scalars['String'] | null), numeroSecu?: (Scalars['String'] | null), prenom?: (Scalars['String'] | null), telephone?: (Scalars['String'] | null)} })
     __typename?: boolean | number
     __scalar?: boolean | number
 }

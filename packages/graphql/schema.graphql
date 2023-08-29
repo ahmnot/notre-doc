@@ -7,6 +7,7 @@ type Mutation {
   deletePatient(id: String!): Patient
   updateDateRdv(newDate: String!, rdvID: String!): RendezVous!
   updateHourRdv(newHour: String!, rdvID: String!): RendezVous!
+  updatePatient(dateNaissance: Date, email: String, id: String!, nom: String, numeroSecu: String, prenom: String, telephone: String): Patient
 }
 
 type Ordonnance {
