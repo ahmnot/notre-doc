@@ -244,9 +244,13 @@
 	</table>
 {/if}
 
-<dialog class={classDialog} use:clickoutside on:clickoutside={toggleDialog}>
+<dialog
+	class={classDialog}
+	use:clickoutside
+	on:clickoutside|stopPropagation={() => (classDialog = classDialog.replace(' active', ''))}
+>
 	<h5>Édition Patient</h5>
-
+	<small style="opacity:0.45">id : {idPatientUpdating}</small>
 	<form method="POST" use:enhance={updateEnhance} novalidate>
 		<input value={idPatientUpdating} name="id" style:display="none" />
 		<div class={form?.errors?.nom && !nomFocus ? inputClasses + ' invalid' : inputClasses}>
