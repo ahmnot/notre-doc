@@ -7,6 +7,8 @@
 	import type { OperationResultStore } from '@urql/svelte';
 	import { typedMutationStore } from '@notre-doc/graphql/urql-svelte';
 
+	import { activateSnackbar } from '$lib/snackbar';
+
 	export let form: ActionData;
 
 	$: formStep = form?.step || 1;
@@ -76,14 +78,7 @@
 				case 'success':
 					if (result.data && search === '?/final') {
 						await createPatient(result.data.data as PatientForm);
-
-						console.log($resultatCreation);
-
-						snackbarClass = 'snackbar success green active';
-						snackbarMessage = 'Succès !';
-
-						setTimeout(() => (snackbarClass = 'snackbar error'), 2000);
-
+						activateSnackbar('Succès !', 'success');
 						await update();
 					}
 
@@ -94,9 +89,7 @@
 					break;
 				case 'failure':
 				case 'error':
-					snackbarClass = 'snackbar error active';
-					snackbarMessage = 'Échec.';
-					setTimeout(() => (snackbarClass = 'snackbar error'), 2000);
+					activateSnackbar('Échec.', 'error');
 					await update();
 					break;
 				default:
@@ -109,10 +102,6 @@
 		formStep = 1;
 		emailFocus = true;
 		telephoneFocus = true;
-	}
-
-	function activateSnackbar() {
-		setTimeout(() => (snackbarClass = 'snackbar error'), 2000);	
 	}
 </script>
 
@@ -205,9 +194,7 @@
 					</span>
 				{/if}
 			</div>
-			<div class={inputClasses} 
-				class:invalid={form?.errors?.dateNaissance && !dateNaissanceFocus}
-			>
+			<div class={inputClasses} class:invalid={form?.errors?.dateNaissance && !dateNaissanceFocus}>
 				<input
 					value={form?.data?.dateNaissance ?? ''}
 					name="dateNaissance"
@@ -238,8 +225,6 @@
 		</div>
 	</form>
 </article>
-
-<div class={snackbarClass}>{snackbarMessage}</div>
 
 <style>
 </style>

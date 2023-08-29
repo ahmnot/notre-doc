@@ -5,11 +5,9 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { clickoutside } from '@svelte-put/clickoutside';
 
-	import {
-		typedQueryStore,
-		typedMutationStore,
-		typedMutation
-	} from '@notre-doc/graphql/urql-svelte';
+	import { activateSnackbar } from '$lib/snackbar';
+
+	import { typedQueryStore, typedMutation } from '@notre-doc/graphql/urql-svelte';
 
 	import { getContextClient } from '@urql/svelte';
 
@@ -73,7 +71,6 @@
 	});
 
 	let inputClasses = 'field label border';
-	let snackbarMessage = '';
 
 	let nomFocus = false;
 	let prenomFocus = false;
@@ -81,16 +78,6 @@
 	let emailFocus = false;
 	let telephoneFocus = false;
 	let numeroSecuFocus = false;
-
-	let isError = true;
-	let isSnackbarActive = false;
-
-	function activateSnackbar(message: string, type: string) {
-		snackbarMessage = message;
-		isError = type === 'error';
-		isSnackbarActive = true;
-		setTimeout(() => (isSnackbarActive = false), 2000);
-	}
 
 	const deleteEnhance: SubmitFunction = ({}) => {
 		loading = true;
@@ -369,16 +356,6 @@
 		</nav>
 	</form>
 </dialog>
-
-<div
-	class="snackbar"
-	class:error={isError}
-	class:green={!isError}
-	class:primary={!isError}
-	class:active={isSnackbarActive}
->
-	{snackbarMessage}
-</div>
 
 <style>
 </style>
