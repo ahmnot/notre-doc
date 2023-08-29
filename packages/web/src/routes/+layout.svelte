@@ -39,8 +39,8 @@
 <div
 	class="snackbar"
 	class:error={$snackbar.type === 'error'}
-	class:green={$snackbar.type !== 'error'}
-	class:primary={$snackbar.type !== 'error'}
+	class:green={$snackbar.type === 'success'}
+	class:primary={$snackbar.type === 'primary'}
 	class:active={$snackbar.active}
 >
 	{$snackbar.message}

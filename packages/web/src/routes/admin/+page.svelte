@@ -88,7 +88,7 @@
 			switch (result.type) {
 				case 'success':
 					if (result.data) {
-						await typedMutation(client, deletePatientBuilder, { id: result.data.id }).then(
+						await typedMutation(client, deletePatientBuilder, { id: result.data.data.id }).then(
 							(result) => {
 								if (result.error) {
 									activateSnackbar('Échec de la suppression.', 'error');
@@ -105,7 +105,6 @@
 				case 'failure':
 				case 'error':
 					activateSnackbar('Échec de la suppression.', 'error');
-
 					await update();
 					break;
 				default:

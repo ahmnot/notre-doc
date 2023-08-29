@@ -11,7 +11,7 @@
 
 	export let form: ActionData;
 
-	$: formStep = form?.step || 1;
+	let formStep = 1;
 
 	let client = getContextClient();
 
@@ -59,7 +59,7 @@
 	 * It can be used to validate data before submission.
 	 * For example to see if the numero de secu is already taken.
 	 */
-	const handleEnhance: SubmitFunction = ({ action }) => {
+	const createEnhance: SubmitFunction = ({ action }) => {
 		// this does something before the form submits.
 		const { search } = action;
 		loading = true;
@@ -110,7 +110,7 @@
 	<p class="center-align">
 		<small style="opacity:0.45"> Veuillez renseigner les champs suivants</small>
 	</p>
-	<form method="POST" use:enhance={handleEnhance} novalidate>
+	<form method="POST" use:enhance={createEnhance} novalidate>
 		<div style:display={formStep === 1 ? '' : 'none'}>
 			<div class={inputClasses} class:invalid={form?.errors?.telephone && !telephoneFocus}>
 				<input
