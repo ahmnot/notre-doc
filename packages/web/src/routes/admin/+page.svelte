@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
 	import type { ActionData } from './$types';
 
 	import type { SubmitFunction } from '@sveltejs/kit';
@@ -14,8 +14,6 @@
 	import { getContextClient } from '@urql/svelte';
 
 	import { fly, slide } from 'svelte/transition';
-
-	let classDialog = 'right';
 
 	let loading = false;
 
@@ -75,8 +73,7 @@
 	});
 
 	let inputClasses = 'field label border';
-	let snackbarClass = 'snackbar error';
-	let snackbarMessage = 'Échec.';
+	let snackbarMessage = '';
 
 	let nomFocus = false;
 	let prenomFocus = false;
@@ -84,6 +81,16 @@
 	let emailFocus = false;
 	let telephoneFocus = false;
 	let numeroSecuFocus = false;
+
+	let isError = true;
+	let isSnackbarActive = false;
+
+	function activateSnackbar(message: string, type: string) {
+		snackbarMessage = message;
+		isError = type === 'error';
+		isSnackbarActive = true;
+		setTimeout(() => (isSnackbarActive = false), 2000);
+	}
 
 	const deleteEnhance: SubmitFunction = ({}) => {
 		loading = true;
@@ -97,12 +104,10 @@
 						await typedMutation(client, deletePatientBuilder, { id: result.data.id }).then(
 							(result) => {
 								if (result.error) {
-									snackbarClass = 'snackbar error active';
-									snackbarMessage = 'Échec de la suppression.';
+									activateSnackbar('Échec de la suppression.', 'error');
 									console.error(result.error);
 								} else {
-									snackbarClass = 'snackbar success primary active';
-									snackbarMessage = 'Patient supprimé.';
+									activateSnackbar('Patient supprimé.', 'success');
 								}
 							}
 						);
@@ -112,8 +117,7 @@
 					break;
 				case 'failure':
 				case 'error':
-					snackbarClass = 'snackbar error active';
-					snackbarMessage = 'Échec de la suppression.';
+					activateSnackbar('Échec de la suppression.', 'error');
 
 					await update();
 					break;
@@ -145,22 +149,20 @@
 							result.data.data as PatientFullForm
 						).then((result) => {
 							if (result.error) {
-								snackbarClass = 'snackbar error active';
-								snackbarMessage = 'Échec de la mise à jour.';
+								activateSnackbar('Échec de la mise à jour.', 'error');
 								console.error(result.error);
 							} else {
-								snackbarClass = 'snackbar success primary active';
-								snackbarMessage = 'Patient mis à jour.';
+								activateSnackbar('Patient mis à jour.', 'success');
 							}
 						});
 
+						await applyAction(result);
 						await update();
 					}
 					break;
 				case 'failure':
 				case 'error':
-					snackbarClass = 'snackbar error active';
-					snackbarMessage = 'Échec de la mise à jour.';
+					activateSnackbar('Échec de la mise à jour.', 'error');
 
 					await update();
 					break;
@@ -301,10 +303,7 @@
 				</span>
 			{/if}
 		</div>
-		<div
-			class={inputClasses}
-			class:invalid={form?.errors?.telephone && !telephoneFocus}
-		>
+		<div class={inputClasses} class:invalid={form?.errors?.telephone && !telephoneFocus}>
 			<input
 				value={form?.data?.telephone ?? ''}
 				name="telephone"
@@ -324,8 +323,7 @@
 				</span>
 			{/if}
 		</div>
-		<div class={inputClasses}
-		class:invalid={form?.errors?.email && !emailFocus}>
+		<div class={inputClasses} class:invalid={form?.errors?.email && !emailFocus}>
 			<input
 				value={form?.data?.email ?? ''}
 				name="email"
@@ -342,10 +340,7 @@
 				</span>
 			{/if}
 		</div>
-		<div
-			class={inputClasses}
-			class:invalid={form?.errors?.numeroSecu && !numeroSecuFocus}
-		>
+		<div class={inputClasses} class:invalid={form?.errors?.numeroSecu && !numeroSecuFocus}>
 			<input
 				value={form?.data?.numeroSecu ?? ''}
 				name="numeroSecu"
@@ -375,7 +370,15 @@
 	</form>
 </dialog>
 
-<div class={snackbarClass}>{snackbarMessage}</div>
+<div
+	class="snackbar"
+	class:error={isError}
+	class:green={!isError}
+	class:primary={!isError}
+	class:active={isSnackbarActive}
+>
+	{snackbarMessage}
+</div>
 
 <style>
 </style>

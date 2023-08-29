@@ -110,6 +110,10 @@
 		emailFocus = true;
 		telephoneFocus = true;
 	}
+
+	function activateSnackbar() {
+		setTimeout(() => (snackbarClass = 'snackbar error'), 2000);	
+	}
 </script>
 
 <article class="fill">
