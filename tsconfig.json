@@ -10,7 +10,9 @@
     "plugins",
     "public"
   ],
-  "paths": {
-    "@notre-doc/graphql/*": ["../graphql/*"]
+  "compilerOptions": {
+    "paths": {
+      "@notre-doc/graphql/*": ["../graphql/*"]
+    }
   }
 }
