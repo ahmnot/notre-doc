@@ -1,10 +1,9 @@
 import { fail } from '@sveltejs/kit'
 import { z } from 'zod'
 import { zfd } from 'zod-form-data'
-import { ulid } from "ulid"
 
 const nomRegex = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ-]+$/i
-const telephoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g
+const telephoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/g
 
 export const zodSchemaId = {
     id: zfd.text(z.string({ required_error: "Identifiant non fourni" })
@@ -41,7 +40,7 @@ export const zodSchemaStep2 = {
     ),
 }
 
-export function validate(zodSchema: any) {
+export function validate(zodSchema: object) {
     return async ({ request }) => {
 
         const formData = await request.formData()
