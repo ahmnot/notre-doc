@@ -1,5 +1,6 @@
+// @ts-checkcheck
 import { fail } from '@sveltejs/kit'
-import { z } from 'zod'
+import { z, ZodRawShape } from 'zod'
 import { zfd } from 'zod-form-data'
 
 const nomRegex = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ-]+$/i
@@ -40,7 +41,7 @@ export const zodSchemaStep2 = {
     ),
 }
 
-export function validate(zodSchema: object) {
+export function validate(zodSchema: ZodRawShape) {
     return async ({ request }) => {
 
         const formData = await request.formData()
