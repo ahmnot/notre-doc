@@ -51,8 +51,6 @@
 	let loading = false;
 
 	let inputClasses = 'field label border';
-	let snackbarClass = 'snackbar error';
-	let snackbarMessage = 'Échec.';
 
 	/**
 	 * this does something when the form submits.

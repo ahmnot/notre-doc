@@ -1,6 +1,14 @@
 {
   "extends": "@tsconfig/node16/tsconfig.json",
-  "exclude": ["packages"],
+  "include": [
+    "src",
+    "global.d.ts",
+  ],
+  "exclude": [
+    "node_modules",
+    "plugins",
+    "public"
+  ],
   "compilerOptions": {
     "moduleResolution": "node"
   },
