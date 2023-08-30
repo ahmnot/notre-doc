@@ -3,5 +3,6 @@
     "**/.sst": true
   },
   "editor.wordWrap": "wordWrapColumn",
-  "markdown.validate.enabled": true
+  "markdown.validate.enabled": true,
+  "editor.suggest.localityBonus": true
 }

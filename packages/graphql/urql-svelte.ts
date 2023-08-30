@@ -1,12 +1,12 @@
 // typedMutationStore.ts
 import { writable } from 'svelte/store'
-import { OperationContext, CombinedError, RequestPolicy, } from "urql"
-import { Client, OperationResultStore, mutationStore, queryStore, } from '@urql/svelte'
+import type { OperationContext, CombinedError, RequestPolicy, } from "urql"
+import { Client, type OperationResultStore, mutationStore, queryStore, } from '@urql/svelte'
 import {
-  QueryResult,
-  QueryGenqlSelection,
-  MutationResult,
-  MutationGenqlSelection,
+  type QueryResult,
+  type QueryGenqlSelection,
+  type MutationResult,
+  type MutationGenqlSelection,
   generateQueryOp,
   generateMutationOp,
 } from "./genql"

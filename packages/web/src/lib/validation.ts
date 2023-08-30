@@ -1,6 +1,6 @@
 // @ts-checkcheck
-import { fail } from '@sveltejs/kit'
-import { z, ZodRawShape } from 'zod'
+import { fail, type RequestEvent } from '@sveltejs/kit'
+import { z, type ZodRawShape } from 'zod'
 import { zfd } from 'zod-form-data'
 
 const nomRegex = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ-]+$/i
@@ -8,7 +8,7 @@ const telephoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/g
 
 export const zodSchemaId = {
     id: zfd.text(z.string({ required_error: "Identifiant non fourni" })
-        .ulid({ invalid_type_error: "ULID invalide" }))
+        .ulid({ message: "ULID invalide" }))
 }
 
 export const zodSchemaStep1 = {
@@ -42,7 +42,7 @@ export const zodSchemaStep2 = {
 }
 
 export function validate(zodSchema: ZodRawShape) {
-    return async ({ request }) => {
+    return async ({ request }: RequestEvent) => {
 
         const formData = await request.formData()
 
@@ -50,7 +50,7 @@ export function validate(zodSchema: ZodRawShape) {
 
         // This validates the form.
         const validation = await zfdSchema.spa(formData)
-        
+
         const fields = Object.fromEntries(formData)
 
         if (!validation.success) {
