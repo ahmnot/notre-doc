@@ -1,7 +1,8 @@
 {
   "extends": "@tsconfig/node18/tsconfig.json",
   "include": [
-    "packages/**/*", "stacks/**/*",
+    "packages/**/*",
+    "stacks/**/*",
     "global.d.ts",
   ],
   "exclude": [
@@ -12,7 +13,9 @@
   ],
   "compilerOptions": {
     "paths": {
-      "@notre-doc/graphql/*": ["../graphql/*"]
+      "@notre-doc/graphql/*": [
+        "../graphql/*"
+      ]
     }
   }
 }

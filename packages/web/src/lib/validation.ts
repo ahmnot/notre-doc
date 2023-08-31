@@ -1,4 +1,3 @@
-// @ts-checkcheck
 import { fail, type RequestEvent } from '@sveltejs/kit'
 import { z, type ZodRawShape } from 'zod'
 import { zfd } from 'zod-form-data'
