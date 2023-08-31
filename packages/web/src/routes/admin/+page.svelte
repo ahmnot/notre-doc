@@ -133,10 +133,10 @@
 							client,
 							updatePatientBuilder,
 							result.data.data as PatientFullForm
-						).then((result) => {
-							if (result.error) {
+						).then((resultat) => {
+							if (resultat.error) {
 								activateSnackbar('Échec de la mise à jour.', 'error');
-								console.error(result.error);
+								console.error(resultat.error);
 							} else {
 								activateSnackbar('Patient mis à jour.', 'success');
 							}
@@ -148,6 +148,7 @@
 					break;
 				case 'failure':
 				case 'error':
+					console.error(result);
 					activateSnackbar('Échec de la mise à jour.', 'error');
 
 					await update();
@@ -158,11 +159,31 @@
 		};
 	};
 
-	let idPatientUpdating = '';
+	let patientUpdating: PatientFullForm = {
+		id: '',
+		nom: '',
+		prenom: '',
+		dateNaissance: '',
+		email: '',
+		telephone: '',
+		numeroSecu: ''
+	};
 	let isDialogActive = false;
 
-	function openEdit(patientID: string) {
-		idPatientUpdating = patientID;
+	function convertPatientGenql(patientGenql: any): PatientFullForm {
+		return {
+			id: patientGenql.id,
+			nom: patientGenql.nom,
+			prenom: patientGenql.prenom,
+			dateNaissance: patientGenql.dateNaissance,
+			email: patientGenql.email,
+			telephone: patientGenql.telephone,
+			numeroSecu: patientGenql.numeroSecu
+		};
+	}
+
+	function openEdit(patient: PatientFullForm) {
+		patientUpdating = patient;
 		isDialogActive = true;
 	}
 </script>
@@ -208,7 +229,7 @@
 						<nav class="right-align">
 							<button
 								class="circle transparent"
-								on:click|stopPropagation={() => openEdit(patient.id)}
+								on:click|stopPropagation={() => openEdit(convertPatientGenql(patient))}
 							>
 								<i>edit</i>
 							</button>
@@ -234,12 +255,12 @@
 	on:clickoutside|stopPropagation={() => (isDialogActive = false)}
 >
 	<h5>Édition Patient</h5>
-	<small style="opacity:0.45">id : {idPatientUpdating}</small>
+	<small style="opacity:0.45">id : {patientUpdating.id}</small>
 	<form method="POST" use:enhance={updateEnhance} novalidate>
-		<input value={idPatientUpdating} name="id" style:display="none" />
+		<input value={patientUpdating.id} name="id" style:display="none" />
 		<div class={inputClasses} class:invalid={form?.errors?.nom && !nomFocus}>
 			<input
-				value={form?.data?.nom ?? ''}
+				value={form?.data?.nom ?? patientUpdating.nom}
 				name="nom"
 				type="text"
 				disabled={loading}
@@ -256,7 +277,7 @@
 		</div>
 		<div class={inputClasses} class:invalid={form?.errors?.prenom && !prenomFocus}>
 			<input
-				value={form?.data?.prenom ?? ''}
+				value={form?.data?.prenom ?? patientUpdating.prenom}
 				name="prenom"
 				type="text"
 				disabled={loading}
@@ -273,7 +294,7 @@
 		</div>
 		<div class={inputClasses} class:invalid={form?.errors?.dateNaissance && !dateNaissanceFocus}>
 			<input
-				value={form?.data?.dateNaissance ?? ''}
+				value={form?.data?.dateNaissance ?? patientUpdating.dateNaissance}
 				name="dateNaissance"
 				type="date"
 				disabled={loading}
@@ -291,7 +312,7 @@
 		</div>
 		<div class={inputClasses} class:invalid={form?.errors?.telephone && !telephoneFocus}>
 			<input
-				value={form?.data?.telephone ?? ''}
+				value={form?.data?.telephone ?? patientUpdating.telephone}
 				name="telephone"
 				type="tel"
 				minlength={5}
@@ -311,7 +332,7 @@
 		</div>
 		<div class={inputClasses} class:invalid={form?.errors?.email && !emailFocus}>
 			<input
-				value={form?.data?.email ?? ''}
+				value={form?.data?.email ?? patientUpdating.email}
 				name="email"
 				type="email"
 				disabled={loading}
@@ -328,7 +349,7 @@
 		</div>
 		<div class={inputClasses} class:invalid={form?.errors?.numeroSecu && !numeroSecuFocus}>
 			<input
-				value={form?.data?.numeroSecu ?? ''}
+				value={form?.data?.numeroSecu ?? patientUpdating.numeroSecu}
 				name="numeroSecu"
 				type="number"
 				minlength={15}
