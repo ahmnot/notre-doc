@@ -135,21 +135,20 @@
 							result.data.data as PatientFullForm
 						).then((resultat) => {
 							if (resultat.error) {
-								activateSnackbar('Échec de la mise à jour.', 'error');
+								activateSnackbar('Échec de la modification.', 'error');
 								console.error(resultat.error);
 							} else {
-								activateSnackbar('Patient mis à jour.', 'success');
+								activateSnackbar('Patient modifié.', 'success');
 							}
 						});
 
-						// await applyAction(result);
 						await update();
 					}
 					break;
 				case 'failure':
 				case 'error':
 					console.error(result);
-					activateSnackbar('Échec de la mise à jour.', 'error');
+					activateSnackbar('Échec de la modification.', 'error');
 
 					await update();
 					break;
@@ -260,7 +259,7 @@
 		<input value={patientUpdating.id} name="id" style:display="none" />
 		<div class={inputClasses} class:invalid={form?.errors?.nom && !nomFocus}>
 			<input
-				value={form?.data?.nom ?? patientUpdating.nom}
+				value={patientUpdating.nom}
 				name="nom"
 				type="text"
 				disabled={loading}
@@ -277,7 +276,7 @@
 		</div>
 		<div class={inputClasses} class:invalid={form?.errors?.prenom && !prenomFocus}>
 			<input
-				value={form?.data?.prenom ?? patientUpdating.prenom}
+				value={patientUpdating.prenom}
 				name="prenom"
 				type="text"
 				disabled={loading}
@@ -294,7 +293,7 @@
 		</div>
 		<div class={inputClasses} class:invalid={form?.errors?.dateNaissance && !dateNaissanceFocus}>
 			<input
-				value={form?.data?.dateNaissance ?? patientUpdating.dateNaissance}
+				value={patientUpdating.dateNaissance}
 				name="dateNaissance"
 				type="date"
 				disabled={loading}
@@ -312,7 +311,7 @@
 		</div>
 		<div class={inputClasses} class:invalid={form?.errors?.telephone && !telephoneFocus}>
 			<input
-				value={form?.data?.telephone ?? patientUpdating.telephone}
+				value={patientUpdating.telephone}
 				name="telephone"
 				type="tel"
 				minlength={5}
@@ -332,7 +331,7 @@
 		</div>
 		<div class={inputClasses} class:invalid={form?.errors?.email && !emailFocus}>
 			<input
-				value={form?.data?.email ?? patientUpdating.email}
+				value={patientUpdating.email}
 				name="email"
 				type="email"
 				disabled={loading}
@@ -349,7 +348,7 @@
 		</div>
 		<div class={inputClasses} class:invalid={form?.errors?.numeroSecu && !numeroSecuFocus}>
 			<input
-				value={form?.data?.numeroSecu ?? patientUpdating.numeroSecu}
+				value={patientUpdating.numeroSecu}
 				name="numeroSecu"
 				type="number"
 				minlength={15}
