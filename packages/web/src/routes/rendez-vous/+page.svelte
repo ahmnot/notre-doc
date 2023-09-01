@@ -87,6 +87,7 @@
 					break;
 				case 'failure':
 				case 'error':
+					console.error(result);
 					activateSnackbar('Échec.', 'error');
 					await update();
 					break;

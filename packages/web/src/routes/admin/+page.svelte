@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { applyAction, enhance } from '$app/forms';
+	import { enhance } from '$app/forms';
 	import type { ActionData } from './$types';
 
 	import type { SubmitFunction } from '@sveltejs/kit';
@@ -104,6 +104,7 @@
 					break;
 				case 'failure':
 				case 'error':
+					console.error(result);
 					activateSnackbar('Échec de la suppression.', 'error');
 					await update();
 					break;

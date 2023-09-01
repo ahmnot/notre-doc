@@ -4,9 +4,11 @@ import { zfd } from 'zod-form-data'
 
 const nomRegex = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ-]+$/i
 const telephoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/g
+const numeroSecuRegex = /[12][0-9]{2}(0[1-9]|1[0-2])(2[AB]|[0-9]{2})[0-9]{3}[0-9]{3}([0-9]{2})/
 
 export const zodSchemaId = {
     id: zfd.text(z.string({ required_error: "Identifiant non fourni" })
+        .trim()
         .ulid({ message: "ULID invalide" }))
 }
 
@@ -38,6 +40,15 @@ export const zodSchemaStep2 = {
             .min(new Date("1900-01-01"), { message: "Trop âgé" })
             .max(new Date(), { message: "Trop jeune" }))
     ),
+}
+
+export const zodSchemaSecu = {
+    id: zfd.text(z.string({ required_error: "Identifiant non fourni" })
+        .trim()
+        .min(15, { message: "N° trop long" })
+        .max(15, { message: "N° trop court" })
+        .regex(numeroSecuRegex, { message: "N° invalide" }).nullish()
+        .or(z.literal(""))),
 }
 
 export function validate(zodSchema: ZodRawShape) {
