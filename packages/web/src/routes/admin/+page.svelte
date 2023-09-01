@@ -142,7 +142,7 @@
 							}
 						});
 
-						await applyAction(result);
+						// await applyAction(result);
 						await update();
 					}
 					break;
@@ -251,7 +251,7 @@
 <dialog
 	class="right"
 	class:active={isDialogActive}
-	use:clickoutside
+	use:clickoutside={{ event: 'mousedown' }}
 	on:clickoutside|stopPropagation={() => (isDialogActive = false)}
 >
 	<h5>Édition Patient</h5>
