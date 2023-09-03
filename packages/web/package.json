@@ -39,7 +39,6 @@
 	"type": "module",
 	"dependencies": {
 		"@urql/svelte": "^4.0.4",
-		"beercss": "^3.3.2",
 		"d3-interpolate": "^3.0.1",
 		"graphql": "^16.8.0",
 		"svelte-email": "^0.0.4",
