@@ -2,26 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { z } from "zod";
 import { zodSchemaId, zodSchemaStep1, zodSchemaStep2, zodSchemaSecu } from '$lib/validation'
 
-const Form = z.object({
-  name: z.string(),
-  //             
-  phoneNumber: z.string().optional(),
-  //                    
-  email: z.string(),
-  //              
-  website: z.string().optional(),
-  //                
-});
-
-export const validateFormInput = (values: unknown) => {
-  const parsedData = Form.parse(values);
-
-  return parsedData;
-};
-
 it("Should fail if you pass a phone number with too few characters", async () => {
-	expect(() =>
-	  validateFormInput({
+	expect(async () =>
+	await z.object(zodSchemaId).spa(({
 		name: "Matt",
 		email: "matt@example.com",
 		phoneNumber: "1",

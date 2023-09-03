@@ -2,46 +2,52 @@ import { fail, type RequestEvent } from '@sveltejs/kit'
 import { z, type ZodRawShape } from 'zod'
 
 const nomRegex = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ-]+$/i
-const telephoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/g
+const telephoneRegex = /^\+?0?0?[0-9][0-9]{5,15}$/g
 const numeroSecuRegex = /[12][0-9]{2}(0[1-9]|1[0-2])(2[AB]|[0-9]{2})[0-9]{3}[0-9]{3}([0-9]{2})/
 
 export const zodSchemaId = {
     id: z.string({ required_error: "Identifiant non fourni" })
         .trim()
+        .nonempty({ message: "Identifiant non fourni" })
         .ulid({ message: "ULID invalide" })
 }
 
 export const zodSchemaStep1 = {
-    email: z.string({ required_error: "E-mail obligatoire" })
-        .trim()
-        .email({ message: "E-mail invalide" }),
     telephone: z.string({ required_error: "N° obligatoire" })
         .trim()
-        .min(9, { message: "N° trop court" })
-        .max(18, { message: "N° trop long" })
-        .regex(telephoneRegex, { message: "N° invalide" })
+        .nonempty({ message: "N° obligatoire" })
+        .min(9, { message: "Trop court" })
+        .max(18, { message: "Trop long" })
+        .regex(telephoneRegex, { message: "N° invalide" }),
+    email: z.string({ required_error: "E-mail obligatoire" })
+        .trim()
+        .nonempty({ message: "E-mail obligatoire" })
+        .email({ message: "E-mail invalide" }),
 }
 
 export const zodSchemaStep2 = {
     nom: z.string({ required_error: "Nom obligatoire" })
         .trim()
-        .min(1, { message: "Nom trop court" })
-        .max(55, { message: "Nom trop long" })
+        .nonempty({ message: "Nom obligatoire" })
+        .min(1, { message: "Trop court" })
+        .max(55, { message: "Trop long" })
         .regex(nomRegex, { message: "Nom invalide" }),
     prenom: z.string({ required_error: "Prénom obligatoire" })
         .trim()
-        .min(1, { message: "Prénom trop court" })
-        .max(14, { message: "Prénom trop long" })
+        .nonempty({ message: "Prénom obligatoire" })
+        .min(1, { message: "Trop court" })
+        .max(14, { message: "Trop long" })
         .regex(nomRegex, { message: "Prénom invalide" }),
     dateNaissance: z.string({ required_error: "Date obligatoire", invalid_type_error: "Date invalide" })
         .trim()
+        .nonempty({ message: "Date obligatoire" })
         .pipe(z.coerce.date({ invalid_type_error: "Date invalide" })
             .min(new Date("1900-01-01"), { message: "Trop âgé" })
             .max(new Date(), { message: "Trop jeune" }))
 }
 
 export const zodSchemaSecu = {
-    id: z.string({ required_error: "Identifiant non fourni" })
+    numeroSecu: z.string({ required_error: "N° de sécurité sociale non fourni" })
         .trim()
         .min(15, { message: "N° trop long" })
         .max(15, { message: "N° trop court" })
@@ -55,13 +61,14 @@ export function validate(zodSchema: ZodRawShape) {
         const formData = await request.formData()
         const fields = Object.fromEntries(formData)
 
-        const zodSchemaObject = z.object(zodSchema)
-
         // This validates the form.
-        const validation = await zodSchemaObject.spa(fields)
+        const validation = await z.object(zodSchema).spa(fields)
 
         if (!validation.success) {
-            const flatFieldErrors = validation.error.flatten().fieldErrors
+            const flatFieldErrors = adjustErrors(validation.error.flatten().fieldErrors)
+
+            console.log(flatFieldErrors)
+
 
             return fail(400, {
                 data: fields,
@@ -73,3 +80,15 @@ export function validate(zodSchema: ZodRawShape) {
 
     }
 }
+
+/**
+ * This formats the final error messages
+ * @param input 
+ * @returns 
+ */
+const adjustErrors = (input: Object) =>
+    Object.fromEntries(
+        Object.entries(input).map(
+            ([key, messages]) => [key, messages.slice(0, 1)]
+        )
+    );
