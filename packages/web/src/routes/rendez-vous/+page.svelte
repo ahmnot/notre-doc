@@ -9,11 +9,11 @@
 
 	import { activateSnackbar } from '$lib/snackbar';
 
+	let client = getContextClient();
+
 	export let form: ActionData;
 
 	let formStep = 1;
-
-	let client = getContextClient();
 
 	let resultatCreation: OperationResultStore;
 

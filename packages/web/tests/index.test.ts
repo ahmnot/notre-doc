@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { z } from "zod";
+import { zodSchemaId, zodSchemaStep1, zodSchemaStep2, zodSchemaSecu } from '$lib/validation'
 
 const Form = z.object({
   name: z.string(),
@@ -17,12 +18,6 @@ export const validateFormInput = (values: unknown) => {
 
   return parsedData;
 };
-
-describe('sum test', () => {
-	it('adds 1 + 2 to equal 3', () => {
-		expect(1 + 2).toBe(3);
-	});
-});
 
 it("Should fail if you pass a phone number with too few characters", async () => {
 	expect(() =>

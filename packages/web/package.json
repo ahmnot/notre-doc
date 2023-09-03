@@ -43,7 +43,6 @@
 		"d3-interpolate": "^3.0.1",
 		"graphql": "^16.8.0",
 		"svelte-email": "^0.0.4",
-		"zod": "^3.21.4",
-		"zod-form-data": "^2.0.1"
+		"zod": "^3.21.4"
 	}
 }

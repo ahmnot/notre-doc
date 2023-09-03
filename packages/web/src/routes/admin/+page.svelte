@@ -12,10 +12,41 @@
 	import { getContextClient } from '@urql/svelte';
 
 	import { fly, slide } from 'svelte/transition';
+	import { ulid } from 'ulid';
 
 	let loading = false;
 
 	let client = getContextClient();
+
+	let patientsMock: PatientFullForm[] = [
+		{
+			id: ulid(),
+			nom: 'Titi',
+			prenom: 'Tata',
+			dateNaissance: '1999-06-21',
+			email: 'titi-toto@gmail.com',
+			telephone: '0606323232',
+			numeroSecu: '154072A44809794'
+		},
+		{
+			id: ulid(),
+			nom: 'Toto',
+			prenom: 'Tutu',
+			dateNaissance: '2003-12-21',
+			email: 'toto-tutu@hotmail.fr',
+			telephone: '0665323240',
+			numeroSecu: '125107969899450'
+		},
+		{
+			id: ulid(),
+			nom: 'Antoine',
+			prenom: 'Pichard',
+			dateNaissance: '1956-12-01',
+			email: 'antoinepichard@yahoo.fr',
+			telephone: '004964523240',
+			numeroSecu: '183102A27593049'
+		}
+	];
 
 	export let form: ActionData;
 
