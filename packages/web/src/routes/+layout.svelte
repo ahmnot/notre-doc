@@ -17,8 +17,8 @@
 		<!-- <h5 class="center-align">Notre Doc</h5> -->
 		<div class="max" />
 		<div class="max center-align">
-			<a href="/rendez-vous"
-				><button class="small-elevate"
+			<a href="/rendez-vous">
+				<button class="small-elevate"
 					><i class:fill={$page.url.pathname === '/rendez-vous'}>event</i><span
 						>Prendre rendez-vous</span
 					></button
@@ -32,9 +32,12 @@
 	</nav>
 </header>
 
-<h1 class="center-align">Notre Doc</h1>
+<main class="responsive min">
+	<h1 class="center-align">Notre Doc</h1>
 
-<slot />
+	<slot />
+</main>
+
 
 <div
 	class="snackbar"

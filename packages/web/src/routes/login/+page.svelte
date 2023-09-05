@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { ActionData } from './$types';
+	import { clickoutside } from '@svelte-put/clickoutside';
 
 	export let form: ActionData;
 
@@ -19,9 +20,17 @@
 		formStep = 1;
 		telephonemailFocus = true;
 	}
+
+	let isDialogActive = false;
 </script>
 
-<article class="fill">
+<button on:click={() => isDialogActive = true}>open dialog</button>
+
+<div class="overlay" class:active={isDialogActive}></div>
+
+<dialog class:active={isDialogActive} class="round large-width"
+use:clickoutside={{ event: 'mousedown' }}
+on:clickoutside|stopPropagation={() => (isDialogActive = false)}>
 	<h5 class="center-align">Prise de rendez-vous</h5>
 	<p class="center-align">
 		<small style="opacity:0.45">Veuillez renseigner les champs suivants</small>
@@ -183,4 +192,4 @@
 			</nav>
 		</div>
 	</form>
-</article>
+</dialog>
