@@ -67,9 +67,6 @@ export function validate(zodSchema: ZodRawShape) {
         if (!validation.success) {
             const flatFieldErrors = adjustErrors(validation.error.flatten().fieldErrors)
 
-            console.log(flatFieldErrors)
-
-
             return fail(400, {
                 data: fields,
                 errors: flatFieldErrors
@@ -77,7 +74,6 @@ export function validate(zodSchema: ZodRawShape) {
         }
 
         return { success: true, data: fields }
-
     }
 }
 

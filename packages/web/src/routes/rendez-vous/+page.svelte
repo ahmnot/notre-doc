@@ -107,7 +107,7 @@
 <article class="fill">
 	<h5 class="center-align">Prise de rendez-vous</h5>
 	<p class="center-align">
-		<small style="opacity:0.45"> Veuillez renseigner les champs suivants</small>
+		<small style="opacity:0.45">Veuillez renseigner les champs suivants</small>
 	</p>
 	<form method="POST" use:enhance={createEnhance} novalidate>
 		<div style:display={formStep === 1 ? '' : 'none'}>
