@@ -6,7 +6,7 @@
 
 	let loading = false;
 
-	let inputClasses = 'field label border';
+	let inputClasses = 'field label border medium-margin';
 
 	let telephonemailFocus = false;
 	let passwordFocus = false;
@@ -24,19 +24,31 @@
 	let isDialogActive = false;
 </script>
 
-<button on:click={() => isDialogActive = true}>open dialog</button>
+<button on:click={() => (isDialogActive = true)}>open dialog</button>
 
-<div class="overlay" class:active={isDialogActive}></div>
+<div class="overlay" class:active={isDialogActive} />
 
-<dialog class:active={isDialogActive} class="round large-width"
-use:clickoutside={{ event: 'mousedown' }}
-on:clickoutside|stopPropagation={() => (isDialogActive = false)}>
-	<h5 class="center-align">Prise de rendez-vous</h5>
-	<p class="center-align">
-		<small style="opacity:0.45">Veuillez renseigner les champs suivants</small>
-	</p>
+<dialog
+	class:active={isDialogActive}
+	class="round large-width"
+	use:clickoutside={{ event: 'mousedown' }}
+	on:clickoutside|stopPropagation={() => (isDialogActive = false)}
+>
+	<h4 class="center-align">Prendre rendez-vous</h4>
+	<nav class="scroll">
+		<button class="circle small" on:click={() => (formStep = 1)} disabled={false}>1</button>
+		<div class="max divider" />
+
+		<div class="center-align">
+			<button class="circle small" disabled={formStep < 2}>2</button>
+			<div class="small-margin">Connexion</div>
+		</div>
+		<div class="max divider" />
+		<button class="circle small" disabled={formStep < 3}>3</button>
+	</nav>
+	<div class="small-space" />
 	<form method="POST" novalidate>
-		<div style:display={formStep === 1 ? '' : 'none'}>
+		<div class="page" class:active={formStep === 1}>
 			<div class={inputClasses} class:invalid={form?.errors?.telephonemail && !telephonemailFocus}>
 				<input
 					value={form?.data?.telephonemail ?? ''}
@@ -46,7 +58,6 @@ on:clickoutside|stopPropagation={() => (isDialogActive = false)}>
 					on:focus={() => (telephonemailFocus = true)}
 				/>
 				<label for="telephonemail">Saisissez votre e-mail ou n° de téléphone</label>
-				<i>phone</i>
 				{#if form?.errors?.telephonemail}
 					<span class="error">
 						{#if !telephonemailFocus}
@@ -63,7 +74,7 @@ on:clickoutside|stopPropagation={() => (isDialogActive = false)}>
 				</button>
 			</nav>
 		</div>
-		<div style:display={formStep === 2 ? '' : 'none'}>
+		<div class="page right" class:active={formStep === 2}>
 			<h6 class="center-align">Vous avez déjà utilisé ce service ?</h6>
 			<div class={inputClasses} class:invalid={form?.errors?.telephonemail && !telephonemailFocus}>
 				<input
@@ -73,8 +84,7 @@ on:clickoutside|stopPropagation={() => (isDialogActive = false)}>
 					disabled={loading}
 					on:focus={() => (telephonemailFocus = true)}
 				/>
-				<label for="telephonemail">Saisissez votre e-mail ou n° de téléphone</label>
-				<i>phone</i>
+				<label for="telephonemail">E-mail ou n° de téléphone</label>
 				{#if form?.errors?.telephonemail}
 					<span class="error">
 						{#if !telephonemailFocus}
@@ -83,7 +93,7 @@ on:clickoutside|stopPropagation={() => (isDialogActive = false)}>
 					</span>
 				{/if}
 			</div>
-			<div class={inputClasses} class:invalid={form?.errors?.password && !passwordFocus}>
+			<div class={inputClasses + ""} class:invalid={form?.errors?.password && !passwordFocus}>
 				<input
 					value={form?.data?.password ?? ''}
 					name="password"
@@ -101,15 +111,21 @@ on:clickoutside|stopPropagation={() => (isDialogActive = false)}>
 					</span>
 				{/if}
 			</div>
-			<button class="responsive" formaction="?/connexion">Connexion</button>
-			<div class="small-space" />
+			<label class="checkbox medium-margin no-margin-top">
+				<input type="checkbox" />
+				<span>Se souvenir de moi</span>
+			</label>
+			<button class="responsive" formaction="?/connexion"
+				><p class="large-text">Connexion</p></button
+			>
 			<p class="center-align">
-				<a href="">Code confidentiel oublié ?</a>
+				<a class="link" href="">Code confidentiel oublié ?</a>
 			</p>
-			<h6 class="center-align">C'est votre première visite ?</h6>
+			<h6 class="center-align">Première visite ?</h6>
 			<button type="button" class="responsive" on:click={() => formStep++}
-				>Je crée mon compte
+				><p class="large-text">Je crée mon compte</p>
 			</button>
+			<div class="small-space" />
 		</div>
 		<div style:display={formStep === 3 ? '' : 'none'}>
 			<div class="field middle-align">
@@ -193,3 +209,9 @@ on:clickoutside|stopPropagation={() => (isDialogActive = false)}>
 		</div>
 	</form>
 </dialog>
+
+<style>
+	.no-margin-top {
+		margin-top: 0!important;
+	}
+</style>
