@@ -82,7 +82,7 @@ export function validate(zodSchema: ZodRawShape) {
  * @param input 
  * @returns 
  */
-const adjustErrors = (input: Object) =>
+const adjustErrors = (input: object) =>
     Object.fromEntries(
         Object.entries(input).map(
             ([key, messages]) => [key, messages.slice(0, 1)]

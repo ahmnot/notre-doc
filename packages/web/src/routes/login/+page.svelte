@@ -9,8 +9,16 @@
 
 	let telephonemailFocus = false;
 	let passwordFocus = false;
+	let nomFocus = false;
+	let prenomFocus = false;
+	let dateNaissanceFocus = false;
 
 	let formStep = 1;
+
+	function stepBack() {
+		formStep = 1;
+		telephonemailFocus = true;
+	}
 </script>
 
 <article class="fill">
@@ -84,13 +92,95 @@
 					</span>
 				{/if}
 			</div>
-			<button class="responsive" formaction="?/connexion"> Connexion </button>
+			<button class="responsive" formaction="?/connexion">Connexion</button>
 			<div class="small-space" />
 			<p class="center-align">
 				<a href="">Code confidentiel oublié ?</a>
 			</p>
 			<h6 class="center-align">C'est votre première visite ?</h6>
-			<button class="responsive" formaction="?/signup"> Je crée mon compte </button>
+			<button type="button" class="responsive" on:click={() => formStep++}
+				>Je crée mon compte
+			</button>
+		</div>
+		<div style:display={formStep === 3 ? '' : 'none'}>
+			<div class="field middle-align">
+				<nav>
+					<label class="radio">
+						<input type="radio" name="genre" />
+						<span>Homme</span>
+					</label>
+					<label class="radio">
+						<input type="radio" name="genre" />
+						<span>Femme</span>
+					</label>
+					<label class="radio">
+						<input type="radio" name="genre" />
+						<span>n.c.</span>
+					</label>
+				</nav>
+			</div>
+			<div class={inputClasses} class:invalid={form?.errors?.nom && !nomFocus}>
+				<input
+					value={form?.data?.nom ?? ''}
+					name="nom"
+					type="text"
+					disabled={loading}
+					on:focus={() => (nomFocus = true)}
+				/>
+				<label for="nom">Nom</label>
+				{#if form?.errors?.nom}
+					<span class="error">
+						{#if !nomFocus}
+							{form?.errors?.nom}
+						{/if}
+					</span>
+				{/if}
+			</div>
+			<div class={inputClasses} class:invalid={form?.errors?.prenom && !prenomFocus}>
+				<input
+					value={form?.data?.prenom ?? ''}
+					name="prenom"
+					type="text"
+					disabled={loading}
+					on:focus={() => (prenomFocus = true)}
+				/>
+				<label for="prenom">Prénom</label>
+				{#if form?.errors?.prenom}
+					<span class="error">
+						{#if !prenomFocus}
+							{form?.errors?.prenom}
+						{/if}
+					</span>
+				{/if}
+			</div>
+			<div class={inputClasses} class:invalid={form?.errors?.dateNaissance && !dateNaissanceFocus}>
+				<input
+					value={form?.data?.dateNaissance ?? ''}
+					name="dateNaissance"
+					type="date"
+					disabled={loading}
+					on:focus={() => (dateNaissanceFocus = true)}
+				/>
+				<label for="dateNaissance">Date de naissance</label>
+				<i>today</i>
+				{#if form?.errors?.dateNaissance}
+					<span class="error">
+						{#if !dateNaissanceFocus}
+							{form?.errors?.dateNaissance}
+						{/if}
+					</span>
+				{/if}
+			</div>
+			<nav>
+				<button type="button" class="circle transparent" on:click={stepBack}>
+					<i>arrow_back</i>
+				</button>
+				<div class="max" />
+				<button class="right-align" formaction="?/final" type="submit">
+					Suivant
+					<i>send</i>
+				</button>
+			</nav>
 		</div>
 	</form>
 </article>
