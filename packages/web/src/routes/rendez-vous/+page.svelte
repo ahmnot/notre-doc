@@ -17,15 +17,29 @@
 	let nomFocus = false;
 	let prenomFocus = false;
 	let dateNaissanceFocus = false;
+    let emailFocus = false;
+	let telephoneFocus = false;
 
 	let formStep = 1;
 
+	let isAccountKnown = true;
+
 	let transition = 'right';
+
+	function checkAccountKnown() {
+		if (isAccountKnown) {
+			stepForward();
+		} else {
+			choseStep(3);
+		}
+	}
 
 	function choseStep(goingTo: number) {
 		const comingFrom = formStep;
 		if (goingTo + 1 === comingFrom) {
 			transition = 'left';
+		} else if (goingTo > comingFrom) {
+			transition = 'right';
 		} else {
 			transition = '';
 		}
@@ -70,19 +84,21 @@
 					</span>
 				{/if}
 			</div>
-
 			<nav>
 				<div class="max" />
-				<button type="button" class="right-align" on:click={stepForward}>
+				<button type="button" class="right-align" on:click={checkAccountKnown}>
 					Suivant
 					<i>arrow_forward</i>
 				</button>
 			</nav>
 		</div>
-
 		<div class="page {transition}" class:active={formStep === 2}>
-            <div class="small-space" />
-			<h6 class="center-align">Vous avez déjà un compte ?</h6>
+			<!-- <nav>
+                <div class="max"></div>
+                <div class="small-divider max"></div>
+                <div class="max"></div>
+            </nav> -->
+			<h6 class="h6-margin-top center-align">Vous avez déjà un compte ?</h6>
 			<div class={inputClasses} class:invalid={form?.errors?.telephonemail && !telephonemailFocus}>
 				<input
 					value={form?.data?.telephonemail ?? ''}
@@ -136,91 +152,173 @@
 			</button>
 			<div class="small-space" />
 		</div>
-		<div class="page {transition}" class:active={formStep === 3}>
-			<nav class="scroll">
-				<button class="circle small" on:click={() => choseStep(3)} disabled={false}>1</button>
-				<div class="max divider" />
 
-				<button class="circle small" on:click={() => choseStep(4)} disabled={formStep < 4}>2</button
+		<div class="page h6-margin-top {transition}" class:active={formStep >= 3}>
+			<nav class="scroll" style:display={formStep >= 3 ? '' : 'none'}>
+				<button type="button" class="circle small" on:click={() => choseStep(3)} disabled={false}
+					>1</button
 				>
 				<div class="max divider" />
-				<button class="circle small" on:click={() => choseStep(5)} disabled={formStep < 5}>3</button
+
+				<button
+					type="button"
+					class="circle small"
+					on:click={() => choseStep(4)}
+					disabled={formStep < 4}>2</button
+				>
+				<div class="max divider" />
+				<button
+					type="button"
+					class="circle small"
+					on:click={() => choseStep(5)}
+					disabled={formStep < 5}>3</button
 				>
 			</nav>
 			<h6 class="center-align">Création d'un compte</h6>
-			<p class="medium-margin large-text">Sexe à l'état civil :</p>
-			<nav class="medium-margin">
-				<label class="radio">
-					<input type="radio" name="genre" />
-					<span>Homme</span>
+			<div class="page h6-margin-top {transition}" class:active={formStep === 3}>
+				<p class="medium-margin large-text">Sexe à l'état civil :</p>
+				<nav class="medium-margin">
+					<label class="radio">
+						<input type="radio" name="genre" />
+						<span>Homme</span>
+					</label>
+					<label class="radio">
+						<input type="radio" name="genre" />
+						<span>Femme</span>
+					</label>
+				</nav>
+				<div class={inputClasses} class:invalid={form?.errors?.nom && !nomFocus}>
+					<input
+						value={form?.data?.nom ?? ''}
+						name="nom"
+						type="text"
+						disabled={loading}
+						on:focus={() => (nomFocus = true)}
+					/>
+					<label for="nom">Nom</label>
+					{#if form?.errors?.nom}
+						<span class="error">
+							{#if !nomFocus}
+								{form?.errors?.nom}
+							{/if}
+						</span>
+					{/if}
+				</div>
+				<div class={inputClasses} class:invalid={form?.errors?.prenom && !prenomFocus}>
+					<input
+						value={form?.data?.prenom ?? ''}
+						name="prenom"
+						type="text"
+						disabled={loading}
+						on:focus={() => (prenomFocus = true)}
+					/>
+					<label for="prenom">Prénom</label>
+					{#if form?.errors?.prenom}
+						<span class="error">
+							{#if !prenomFocus}
+								{form?.errors?.prenom}
+							{/if}
+						</span>
+					{/if}
+				</div>
+				<div
+					class={inputClasses}
+					class:invalid={form?.errors?.dateNaissance && !dateNaissanceFocus}
+				>
+					<input
+						value={form?.data?.dateNaissance ?? ''}
+						name="dateNaissance"
+						type="date"
+						disabled={loading}
+						on:focus={() => (dateNaissanceFocus = true)}
+					/>
+					<label for="dateNaissance">Date de naissance</label>
+					<i>today</i>
+					{#if form?.errors?.dateNaissance}
+						<span class="error">
+							{#if !dateNaissanceFocus}
+								{form?.errors?.dateNaissance}
+							{/if}
+						</span>
+					{/if}
+				</div>
+				<label class="checkbox medium-margin no-margin-top">
+					<input name="termsOfUse" type="checkbox" />
+					<span>J'accepte les&nbsp;<a class="link" href="#">conditions d'utilisation.</a></span>
 				</label>
-				<label class="radio">
-					<input type="radio" name="genre" />
-					<span>Femme</span>
-				</label>
-			</nav>
-			<div class={inputClasses} class:invalid={form?.errors?.nom && !nomFocus}>
-				<input
-					value={form?.data?.nom ?? ''}
-					name="nom"
-					type="text"
-					disabled={loading}
-					on:focus={() => (nomFocus = true)}
-				/>
-				<label for="nom">Nom</label>
-				{#if form?.errors?.nom}
-					<span class="error">
-						{#if !nomFocus}
-							{form?.errors?.nom}
-						{/if}
-					</span>
-				{/if}
+				<nav>
+					<button type="button" class="circle transparent" title="Retour" on:click={stepBack}>
+						<i>arrow_back</i>
+					</button>
+					<div class="max" />
+					<button type="button" class="right-align" on:click={stepForward}>
+						Suivant
+						<i>arrow_forward</i>
+					</button>
+				</nav>
 			</div>
-			<div class={inputClasses} class:invalid={form?.errors?.prenom && !prenomFocus}>
-				<input
-					value={form?.data?.prenom ?? ''}
-					name="prenom"
-					type="text"
-					disabled={loading}
-					on:focus={() => (prenomFocus = true)}
-				/>
-				<label for="prenom">Prénom</label>
-				{#if form?.errors?.prenom}
-					<span class="error">
-						{#if !prenomFocus}
-							{form?.errors?.prenom}
-						{/if}
-					</span>
-				{/if}
+			<div class="page h6-margin-top {transition}" class:active={formStep === 4}>
+				<p class="medium-margin large-text">Êtes-vous déjà venu ?</p>
+				<nav class="medium-margin">
+					<label class="radio">
+						<input type="radio" name="habitue" />
+						<span>Oui</span>
+					</label>
+					<label class="radio">
+						<input type="radio" name="habitue" />
+						<span>Non</span>
+					</label>
+				</nav>
+				<p class="medium-margin large-text">Comment pouvons-nous vous contacter ?</p>
+				<div class={inputClasses + " prefix"} class:invalid={form?.errors?.telephone && !telephoneFocus}>
+					<i>phone</i>
+					<input
+						value={form?.data?.telephone ?? ''}
+						name="telephone"
+						type="tel"
+						minlength={5}
+						maxlength={18}
+						disabled={loading}
+						on:focus={() => (telephoneFocus = true)}
+					/>
+					<label for="telephone">Téléphone</label>
+					{#if form?.errors?.telephone}
+						<span class="error">
+							{#if !telephoneFocus}
+								{form?.errors?.telephone}
+							{/if}
+						</span>
+					{/if}
+				</div>
+				<div class={inputClasses + " prefix"} class:invalid={form?.errors?.email && !emailFocus}>
+                    <i>email</i>
+					<input
+						value={form?.data?.email ?? ''}
+						name="email"
+						type="email"
+						disabled={loading}
+						on:focus={() => (emailFocus = true)}
+					/>
+					<label for="email">E-mail</label>
+					{#if form?.errors?.email}
+						<span class="error">
+							{#if !emailFocus}
+								{form?.errors?.email}
+							{/if}
+						</span>
+					{/if}
+				</div>
+				<nav>
+					<button type="button" class="circle transparent" title="Retour" on:click={stepBack}>
+						<i>arrow_back</i>
+					</button>
+					<div class="max" />
+					<button type="button" class="right-align" on:click={stepForward}>
+						Suivant
+						<i>arrow_forward</i>
+					</button>
+				</nav>
 			</div>
-			<div class={inputClasses} class:invalid={form?.errors?.dateNaissance && !dateNaissanceFocus}>
-				<input
-					value={form?.data?.dateNaissance ?? ''}
-					name="dateNaissance"
-					type="date"
-					disabled={loading}
-					on:focus={() => (dateNaissanceFocus = true)}
-				/>
-				<label for="dateNaissance">Date de naissance</label>
-				<i>today</i>
-				{#if form?.errors?.dateNaissance}
-					<span class="error">
-						{#if !dateNaissanceFocus}
-							{form?.errors?.dateNaissance}
-						{/if}
-					</span>
-				{/if}
-			</div>
-			<nav>
-				<button type="button" class="circle transparent" title="Retour" on:click={stepBack}>
-					<i>arrow_back</i>
-				</button>
-				<div class="max" />
-				<button class="right-align" formaction="?/final" type="submit">
-					Suivant
-					<i>arrow_forward</i>
-				</button>
-			</nav>
 		</div>
 	</form>
 </article>
@@ -228,5 +326,9 @@
 <style>
 	.no-margin-top {
 		margin-top: 0 !important;
+	}
+
+	.h6-margin-top {
+		margin-top: 1rem !important;
 	}
 </style>

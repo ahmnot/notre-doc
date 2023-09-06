@@ -12,17 +12,25 @@ export const zodSchemaId = {
         .ulid({ message: "ULID invalide" })
 }
 
-export const zodSchemaStep1 = {
+export const zodSchemaTel = {
     telephone: z.string({ required_error: "N° obligatoire" })
         .trim()
         .nonempty({ message: "N° obligatoire" })
         .min(9, { message: "Trop court" })
         .max(18, { message: "Trop long" })
         .regex(telephoneRegex, { message: "N° invalide" }),
+}
+
+export const zodSchemaEmail = {
     email: z.string({ required_error: "E-mail obligatoire" })
         .trim()
         .nonempty({ message: "E-mail obligatoire" })
         .email({ message: "E-mail invalide" }),
+}
+
+export const zodSchemaStep1 = {
+    ...zodSchemaTel,
+    ...zodSchemaEmail,
 }
 
 export const zodSchemaStep2 = {
