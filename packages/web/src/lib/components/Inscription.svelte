@@ -3,6 +3,7 @@
 	import { clickoutside } from '@svelte-put/clickoutside';
 
 	export let form: ActionData;
+	export let isDialogActive = false;
 
 	let loading = false;
 
@@ -14,17 +15,14 @@
 	let prenomFocus = false;
 	let dateNaissanceFocus = false;
 
-	let formStep = 1;
+	let formStep = 3;
 
 	function stepBack() {
-		formStep = 1;
+		formStep--;
 		telephonemailFocus = true;
 	}
 
-	let isDialogActive = false;
 </script>
-
-<button on:click={() => (isDialogActive = true)}>open dialog</button>
 
 <div class="overlay" class:active={isDialogActive} />
 
@@ -32,17 +30,14 @@
 	class:active={isDialogActive}
 	class="round large-width"
 	use:clickoutside={{ event: 'mousedown' }}
-	on:clickoutside|stopPropagation={() => (isDialogActive = false)}
+	on:clickoutside|stopPropagation
 >
 	<h4 class="center-align">Prendre rendez-vous</h4>
 	<nav class="scroll">
 		<button class="circle small" on:click={() => (formStep = 1)} disabled={false}>1</button>
 		<div class="max divider" />
 
-		<div class="center-align">
-			<button class="circle small" disabled={formStep < 2}>2</button>
-			<div class="small-margin">Connexion</div>
-		</div>
+		<button class="circle small" disabled={formStep < 2}>2</button>
 		<div class="max divider" />
 		<button class="circle small" disabled={formStep < 3}>3</button>
 	</nav>
@@ -75,7 +70,7 @@
 			</nav>
 		</div>
 		<div class="page right" class:active={formStep === 2}>
-			<h6 class="center-align">Vous avez déjà utilisé ce service ?</h6>
+			<h6 class="center-align">Vous avez déjà un compte ?</h6>
 			<div class={inputClasses} class:invalid={form?.errors?.telephonemail && !telephonemailFocus}>
 				<input
 					value={form?.data?.telephonemail ?? ''}
@@ -93,7 +88,7 @@
 					</span>
 				{/if}
 			</div>
-			<div class={inputClasses + ""} class:invalid={form?.errors?.password && !passwordFocus}>
+			<div class={inputClasses + ''} class:invalid={form?.errors?.password && !passwordFocus}>
 				<input
 					value={form?.data?.password ?? ''}
 					name="password"
@@ -123,13 +118,13 @@
 			</p>
 			<h6 class="center-align">Première visite ?</h6>
 			<button type="button" class="responsive" on:click={() => formStep++}
-				><p class="large-text">Je crée mon compte</p>
+				><p class="large-text">S'inscrire</p>
 			</button>
 			<div class="small-space" />
 		</div>
 		<div style:display={formStep === 3 ? '' : 'none'}>
-			<div class="field middle-align">
-				<nav>
+			<p class="medium-margin large-text">Sexe à l'état civil</p>
+				<nav class="medium-margin">
 					<label class="radio">
 						<input type="radio" name="genre" />
 						<span>Homme</span>
@@ -138,12 +133,7 @@
 						<input type="radio" name="genre" />
 						<span>Femme</span>
 					</label>
-					<label class="radio">
-						<input type="radio" name="genre" />
-						<span>n.c.</span>
-					</label>
 				</nav>
-			</div>
 			<div class={inputClasses} class:invalid={form?.errors?.nom && !nomFocus}>
 				<input
 					value={form?.data?.nom ?? ''}
@@ -197,13 +187,13 @@
 				{/if}
 			</div>
 			<nav>
-				<button type="button" class="circle transparent" on:click={stepBack}>
+				<button type="button" class="circle transparent" title="Retour" on:click={stepBack}>
 					<i>arrow_back</i>
 				</button>
 				<div class="max" />
 				<button class="right-align" formaction="?/final" type="submit">
 					Suivant
-					<i>send</i>
+					<i>arrow_forward</i>
 				</button>
 			</nav>
 		</div>
@@ -212,6 +202,6 @@
 
 <style>
 	.no-margin-top {
-		margin-top: 0!important;
+		margin-top: 0 !important;
 	}
 </style>

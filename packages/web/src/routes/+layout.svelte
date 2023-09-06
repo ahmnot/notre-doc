@@ -3,6 +3,10 @@
 	import { page } from '$app/stores';
 	import { snackbar } from '$lib/snackbar';
 
+	import Inscription from '$lib/components/Inscription.svelte';
+
+	let isDialogActive = false;
+
 	initContextClient({
 		url: import.meta.env.VITE_GRAPHQL_URL,
 		exchanges: [cacheExchange, fetchExchange]
@@ -12,17 +16,15 @@
 <header class="fill">
 	<nav>
 		<a class="circle transparent" href="/">
-			<i class="primary-text" class:fill={$page.url.pathname === '/'}>favorite</i>
+			<i class="primary-text" class:fill={$page.url.pathname === '/' && !isDialogActive}>favorite</i>
 		</a>
 		<!-- <h5 class="center-align">Notre Doc</h5> -->
 		<div class="max" />
 		<div class="max center-align">
-			<a href="/rendez-vous">
-				<button class="small-elevate"
-					><i class:fill={$page.url.pathname === '/rendez-vous'}>event</i><span
-						>Prendre rendez-vous</span
-					></button
-				></a
+			<button class="small-elevate" on:click={() => (isDialogActive = true)}
+				><i class:fill={isDialogActive}>event</i><span class="large-text"
+					>Prendre rendez-vous</span
+				></button
 			>
 		</div>
 		<div class="max" />
@@ -32,12 +34,14 @@
 	</nav>
 </header>
 
-<main class="responsive min">
+<main class="min">
 	<h1 class="center-align">Notre Doc</h1>
+
+	<Inscription form {isDialogActive} 
+	on:clickoutside={() => (isDialogActive = false)}/>
 
 	<slot />
 </main>
-
 
 <div
 	class="snackbar"
