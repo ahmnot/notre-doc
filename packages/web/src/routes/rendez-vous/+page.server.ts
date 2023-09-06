@@ -1,8 +1,5 @@
-import { zodSchemaStep1, zodSchemaStep2, validate } from '$lib/validation'
-import type { Actions } from "@sveltejs/kit"
+import type { PageServerLoad } from './$types';
 
-export const actions: Actions = {
-    step1: validate(zodSchemaStep1),
-    final: validate({ ...zodSchemaStep1, ...zodSchemaStep2 }),
-}
-
+export const load = (async () => {
+    return {};
+}) satisfies PageServerLoad;

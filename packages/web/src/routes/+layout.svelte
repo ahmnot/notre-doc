@@ -3,8 +3,6 @@
 	import { page } from '$app/stores';
 	import { snackbar } from '$lib/snackbar';
 
-
-
 	initContextClient({
 		url: import.meta.env.VITE_GRAPHQL_URL,
 		exchanges: [cacheExchange, fetchExchange]
@@ -14,16 +12,18 @@
 <header class="fill">
 	<nav>
 		<a class="circle transparent" href="/">
-			<i class="primary-text" class:fill={$page.url.pathname === '/' && !isDialogActive}>favorite</i>
+			<i class="primary-text" class:fill={$page.url.pathname === '/'}>favorite</i>
 		</a>
 		<!-- <h5 class="center-align">Notre Doc</h5> -->
 		<div class="max" />
 		<div class="max center-align">
-			<button class="small-elevate" on:click={() => (isDialogActive = true)}
-				><i class:fill={isDialogActive}>event</i><span class="large-text"
-					>Prendre rendez-vous</span
-				></button
-			>
+			<a href="/rendez-vous">
+				<button class="small-elevate"
+					><i class:fill={$page.url.pathname === '/rendez-vous'}>event</i><span class="large-text"
+						>Prendre rendez-vous</span
+					></button
+				>
+			</a>
 		</div>
 		<div class="max" />
 		<a class="circle" href="/admin">
@@ -32,10 +32,13 @@
 	</nav>
 </header>
 
-<main class="min">
+<main class="min responsive">
 	<h1 class="center-align">Notre Doc</h1>
-
-	<slot />
+	<nav>
+		<div class="max" />
+		<slot />
+		<div class="max" />
+	</nav>
 </main>
 
 <div

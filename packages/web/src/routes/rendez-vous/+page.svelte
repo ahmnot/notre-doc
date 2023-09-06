@@ -1,164 +1,134 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import type { SubmitFunction } from '@sveltejs/kit';
 	import type { ActionData } from './$types';
-
-	import { getContextClient } from '@urql/svelte';
-	import type { OperationResultStore } from '@urql/svelte';
-	import { typedMutationStore } from '@notre-doc/graphql/urql-svelte';
-
-	import { activateSnackbar } from '$lib/snackbar';
-
-	let client = getContextClient();
 
 	export let form: ActionData;
 
-	let formStep = 1;
+	let loading = false;
 
-	let resultatCreation: OperationResultStore;
+	let inputClasses = 'field label border medium-margin';
 
-	interface PatientForm {
-		nom: string;
-		prenom: string;
-		dateNaissance: string;
-		email: string;
-		telephone: string;
-	}
-
-	const createPatientBuilder = (vars: PatientForm) => {
-		return {
-			createPatient: {
-				__args: {
-					...vars
-				},
-				id: true
-			}
-		};
-	};
-
-	const executeCreatePatientMutation = typedMutationStore(client, createPatientBuilder);
-
-	const createPatient = async (vars: PatientForm) => {
-		resultatCreation = await executeCreatePatientMutation(vars);
-	};
-
+	let telephonemailFocus = false;
+	let passwordFocus = false;
 	let nomFocus = false;
 	let prenomFocus = false;
 	let dateNaissanceFocus = false;
-	let emailFocus = false;
-	let telephoneFocus = false;
 
-	let loading = false;
-
-	let inputClasses = 'field label border';
-
-	/**
-	 * this does something when the form submits.
-	 * It can be used to validate data before submission.
-	 * For example to see if the numero de secu is already taken.
-	 */
-	const createEnhance: SubmitFunction = ({ action }) => {
-		// this does something before the form submits.
-		const { search } = action;
-		loading = true;
-
-		nomFocus = false;
-		prenomFocus = false;
-		dateNaissanceFocus = false;
-		emailFocus = false;
-		telephoneFocus = false;
-
-		return async ({ result, update }) => {
-			// this does something after the form submits.
-			loading = false;
-
-			switch (result.type) {
-				case 'success':
-					if (result.data && search === '?/final') {
-						await createPatient(result.data.data as PatientForm);
-						activateSnackbar('Succès !', 'success');
-						await update();
-					}
-
-					if (search !== '?/final') {
-						formStep++;
-					}
-
-					break;
-				case 'failure':
-				case 'error':
-					console.error(result);
-					activateSnackbar('Échec.', 'error');
-					await update();
-					break;
-				default:
-					await update();
-			}
-		};
-	};
+	let formStep = 1;
 
 	function stepBack() {
-		formStep = 1;
-		emailFocus = true;
-		telephoneFocus = true;
+		formStep--;
+		telephonemailFocus = true;
 	}
 </script>
 
-<article class="fill">
-	<h5 class="center-align">Prise de rendez-vous</h5>
-	<p class="center-align">
-		<small style="opacity:0.45">Veuillez renseigner les champs suivants</small>
-	</p>
-	<form method="POST" use:enhance={createEnhance} novalidate>
-		<div style:display={formStep === 1 ? '' : 'none'}>
-			<div class={inputClasses} class:invalid={form?.errors?.telephone && !telephoneFocus}>
+<article class="max">
+	<h4 class="center-align">Prendre rendez-vous</h4>
+	<nav class="scroll">
+		<button class="circle small" on:click={() => (formStep = 1)} disabled={false}>1</button>
+		<div class="max divider" />
+
+		<button class="circle small" disabled={formStep < 2}>2</button>
+		<div class="max divider" />
+		<button class="circle small" disabled={formStep < 3}>3</button>
+	</nav>
+	<div class="small-space" />
+	<form method="POST" novalidate>
+		<div class="page" class:active={formStep === 1}>
+			<div
+				class={inputClasses + ' max'}
+				class:invalid={form?.errors?.telephonemail && !telephonemailFocus}
+			>
 				<input
-					value={form?.data?.telephone ?? ''}
-					name="telephone"
-					type="tel"
-					minlength={5}
-					maxlength={18}
+					value={form?.data?.telephonemail ?? ''}
+					name="telephonemail"
+					type="text"
 					disabled={loading}
-					on:focus={() => (telephoneFocus = true)}
+					on:focus={() => (telephonemailFocus = true)}
 				/>
-				<label for="telephone">Téléphone</label>
-				<i>phone</i>
-				{#if form?.errors?.telephone}
+				<label for="telephonemail">Adresse e-mail ou n° de téléphone</label>
+				{#if form?.errors?.telephonemail}
 					<span class="error">
-						{#if !telephoneFocus}
-							{form?.errors?.telephone}
+						{#if !telephonemailFocus}
+							{form?.errors?.telephonemail}
 						{/if}
 					</span>
 				{/if}
 			</div>
-			<div class={inputClasses} class:invalid={form?.errors?.email && !emailFocus}>
-				<input
-					value={form?.data?.email ?? ''}
-					name="email"
-					type="email"
-					disabled={loading}
-					on:focus={() => (emailFocus = true)}
-				/>
-				<label for="email">E-mail</label>
-				{#if form?.errors?.email}
-					<span class="error">
-						{#if !emailFocus}
-							{form?.errors?.email}
-						{/if}
-					</span>
-				{/if}
-			</div>
-			<div class="large-space" />
-			<div class="small-space" />
+
 			<nav>
 				<div class="max" />
-				<button class="right-align" formaction="?/step1">
+				<button type="button" class="right-align" on:click={() => formStep++}>
 					Suivant
 					<i>arrow_forward</i>
 				</button>
 			</nav>
 		</div>
-		<div style:display={formStep === 2 ? '' : 'none'}>
+
+		<div class="page right" class:active={formStep === 2}>
+			<h6 class="center-align">Vous avez déjà un compte ?</h6>
+			<div class={inputClasses} class:invalid={form?.errors?.telephonemail && !telephonemailFocus}>
+				<input
+					value={form?.data?.telephonemail ?? ''}
+					name="telephonemail"
+					type="text"
+					disabled={loading}
+					on:focus={() => (telephonemailFocus = true)}
+				/>
+				<label for="telephonemail">Adresse e-mail ou n° de téléphone</label>
+				{#if form?.errors?.telephonemail}
+					<span class="error">
+						{#if !telephonemailFocus}
+							{form?.errors?.telephonemail}
+						{/if}
+					</span>
+				{/if}
+			</div>
+			<div class={inputClasses + ''} class:invalid={form?.errors?.password && !passwordFocus}>
+				<input
+					value={form?.data?.password ?? ''}
+					name="password"
+					type="password"
+					disabled={loading}
+					on:focus={() => (passwordFocus = true)}
+				/>
+				<label for="password">Mot de passe</label>
+				<i>visibility</i>
+				{#if form?.errors?.password}
+					<span class="error">
+						{#if !passwordFocus}
+							{form?.errors?.password}
+						{/if}
+					</span>
+				{/if}
+			</div>
+			<label class="checkbox medium-margin no-margin-top">
+				<input type="checkbox" />
+				<span>Se souvenir de moi</span>
+			</label>
+			<button class="responsive" formaction="?/connexion"
+				><p class="large-text">Connexion</p></button
+			>
+			<p class="center-align">
+				<a class="link" href="">Code confidentiel oublié ?</a>
+			</p>
+			<h6 class="center-align">Première visite ?</h6>
+			<button type="button" class="responsive" on:click={() => formStep++}
+				><p class="large-text">S'inscrire</p>
+			</button>
+			<div class="small-space" />
+		</div>
+		<div style:display={formStep === 3 ? '' : 'none'}>
+			<p class="medium-margin large-text">Sexe à l'état civil</p>
+			<nav class="medium-margin">
+				<label class="radio">
+					<input type="radio" name="genre" />
+					<span>Homme</span>
+				</label>
+				<label class="radio">
+					<input type="radio" name="genre" />
+					<span>Femme</span>
+				</label>
+			</nav>
 			<div class={inputClasses} class:invalid={form?.errors?.nom && !nomFocus}>
 				<input
 					value={form?.data?.nom ?? ''}
@@ -212,13 +182,13 @@
 				{/if}
 			</div>
 			<nav>
-				<button type="button" class="circle transparent" on:click={stepBack}>
+				<button type="button" class="circle transparent" title="Retour" on:click={stepBack}>
 					<i>arrow_back</i>
 				</button>
 				<div class="max" />
 				<button class="right-align" formaction="?/final" type="submit">
-					Envoyer
-					<i>send</i>
+					Suivant
+					<i>arrow_forward</i>
 				</button>
 			</nav>
 		</div>
@@ -226,4 +196,7 @@
 </article>
 
 <style>
+	.no-margin-top {
+		margin-top: 0 !important;
+	}
 </style>
