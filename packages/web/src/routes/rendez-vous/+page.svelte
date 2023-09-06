@@ -7,6 +7,11 @@
 
 	let inputClasses = 'field label border medium-margin';
 
+	let passwordOrText = 'password';
+	let eye = 'visibility';
+
+	$: passwordOrText = eye === 'visibility' ? 'password' : 'text';
+
 	let telephonemailFocus = false;
 	let passwordFocus = false;
 	let nomFocus = false;
@@ -15,23 +20,31 @@
 
 	let formStep = 1;
 
+	let transition = 'right';
+
+	function choseStep(goingTo: number) {
+		const comingFrom = formStep;
+		if (goingTo + 1 === comingFrom) {
+			transition = 'left';
+		} else {
+			transition = '';
+		}
+		formStep = goingTo;
+	}
+
 	function stepBack() {
+		transition = 'left';
 		formStep--;
-		telephonemailFocus = true;
+	}
+
+	function stepForward() {
+		transition = 'right';
+		formStep++;
 	}
 </script>
 
 <article class="max">
 	<h4 class="center-align">Prendre rendez-vous</h4>
-	<nav class="scroll">
-		<button class="circle small" on:click={() => (formStep = 1)} disabled={false}>1</button>
-		<div class="max divider" />
-
-		<button class="circle small" disabled={formStep < 2}>2</button>
-		<div class="max divider" />
-		<button class="circle small" disabled={formStep < 3}>3</button>
-	</nav>
-	<div class="small-space" />
 	<form method="POST" novalidate>
 		<div class="page" class:active={formStep === 1}>
 			<div
@@ -45,7 +58,10 @@
 					disabled={loading}
 					on:focus={() => (telephonemailFocus = true)}
 				/>
-				<label for="telephonemail">Adresse e-mail ou n° de téléphone</label>
+				<label for="telephonemail">
+					<div class="l">Saisissez votre adresse e-mail ou n° de téléphone</div>
+					<div class="m s">Adresse e-mail ou n° de téléphone</div>
+				</label>
 				{#if form?.errors?.telephonemail}
 					<span class="error">
 						{#if !telephonemailFocus}
@@ -57,14 +73,15 @@
 
 			<nav>
 				<div class="max" />
-				<button type="button" class="right-align" on:click={() => formStep++}>
+				<button type="button" class="right-align" on:click={stepForward}>
 					Suivant
 					<i>arrow_forward</i>
 				</button>
 			</nav>
 		</div>
 
-		<div class="page right" class:active={formStep === 2}>
+		<div class="page {transition}" class:active={formStep === 2}>
+            <div class="small-space" />
 			<h6 class="center-align">Vous avez déjà un compte ?</h6>
 			<div class={inputClasses} class:invalid={form?.errors?.telephonemail && !telephonemailFocus}>
 				<input
@@ -87,12 +104,14 @@
 				<input
 					value={form?.data?.password ?? ''}
 					name="password"
-					type="password"
+					type={passwordOrText}
 					disabled={loading}
 					on:focus={() => (passwordFocus = true)}
 				/>
 				<label for="password">Mot de passe</label>
-				<i>visibility</i>
+				<a on:mousedown={() => (eye = 'visibility_off')} on:mouseup={() => (eye = 'visibility')}>
+					<i class="front">{eye}</i>
+				</a>
 				{#if form?.errors?.password}
 					<span class="error">
 						{#if !passwordFocus}
@@ -112,13 +131,24 @@
 				<a class="link" href="">Code confidentiel oublié ?</a>
 			</p>
 			<h6 class="center-align">Première visite ?</h6>
-			<button type="button" class="responsive" on:click={() => formStep++}
-				><p class="large-text">S'inscrire</p>
+			<button type="button" class="responsive border" on:click={stepForward}
+				><p class="large-text">Créer un compte</p>
 			</button>
 			<div class="small-space" />
 		</div>
-		<div style:display={formStep === 3 ? '' : 'none'}>
-			<p class="medium-margin large-text">Sexe à l'état civil</p>
+		<div class="page {transition}" class:active={formStep === 3}>
+			<nav class="scroll">
+				<button class="circle small" on:click={() => choseStep(3)} disabled={false}>1</button>
+				<div class="max divider" />
+
+				<button class="circle small" on:click={() => choseStep(4)} disabled={formStep < 4}>2</button
+				>
+				<div class="max divider" />
+				<button class="circle small" on:click={() => choseStep(5)} disabled={formStep < 5}>3</button
+				>
+			</nav>
+			<h6 class="center-align">Création d'un compte</h6>
+			<p class="medium-margin large-text">Sexe à l'état civil :</p>
 			<nav class="medium-margin">
 				<label class="radio">
 					<input type="radio" name="genre" />
