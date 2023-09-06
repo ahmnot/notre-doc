@@ -15,7 +15,7 @@
 	let prenomFocus = false;
 	let dateNaissanceFocus = false;
 
-	let formStep = 3;
+	let formStep = 1;
 
 	function stepBack() {
 		formStep--;

@@ -3,9 +3,7 @@
 	import { page } from '$app/stores';
 	import { snackbar } from '$lib/snackbar';
 
-	import Inscription from '$lib/components/Inscription.svelte';
 
-	let isDialogActive = false;
 
 	initContextClient({
 		url: import.meta.env.VITE_GRAPHQL_URL,
@@ -36,9 +34,6 @@
 
 <main class="min">
 	<h1 class="center-align">Notre Doc</h1>
-
-	<Inscription form {isDialogActive} 
-	on:clickoutside={() => (isDialogActive = false)}/>
 
 	<slot />
 </main>
