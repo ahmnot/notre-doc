@@ -32,7 +32,7 @@
 	</nav>
 </header>
 
-<main class="min responsive">
+<main>
 	<h1 class="center-align">Notre Doc</h1>
 	<nav>
 		<div class="max" />

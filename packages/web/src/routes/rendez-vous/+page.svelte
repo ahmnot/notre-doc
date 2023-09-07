@@ -20,7 +20,7 @@
     let emailFocus = false;
 	let telephoneFocus = false;
 
-	let formStep = 1;
+	let formStep = 5;
 
 	let isAccountKnown = true;
 
@@ -57,7 +57,7 @@
 	}
 </script>
 
-<article class="max">
+<article class="max surface-variant">
 	<h4 class="center-align">Prendre rendez-vous</h4>
 	<form method="POST" novalidate>
 		<div class="page" class:active={formStep === 1}>
@@ -93,11 +93,6 @@
 			</nav>
 		</div>
 		<div class="page {transition}" class:active={formStep === 2}>
-			<!-- <nav>
-                <div class="max"></div>
-                <div class="small-divider max"></div>
-                <div class="max"></div>
-            </nav> -->
 			<h6 class="h6-margin-top center-align">Vous avez déjà un compte ?</h6>
 			<div class={inputClasses} class:invalid={form?.errors?.telephonemail && !telephonemailFocus}>
 				<input
@@ -147,7 +142,7 @@
 				<a class="link" href="">Code confidentiel oublié ?</a>
 			</p>
 			<h6 class="center-align">Première visite ?</h6>
-			<button type="button" class="responsive border" on:click={stepForward}
+			<button type="button" class="responsive primary-container" on:click={stepForward}
 				><p class="large-text">Créer un compte</p>
 			</button>
 			<div class="small-space" />
@@ -269,7 +264,7 @@
 						<span>Non</span>
 					</label>
 				</nav>
-				<p class="medium-margin large-text">Comment pouvons-nous vous contacter ?</p>
+				<p class="medium-margin large-text">Comment vous contacter ?</p>
 				<div class={inputClasses + " prefix"} class:invalid={form?.errors?.telephone && !telephoneFocus}>
 					<i>phone</i>
 					<input
@@ -281,7 +276,7 @@
 						disabled={loading}
 						on:focus={() => (telephoneFocus = true)}
 					/>
-					<label for="telephone">Téléphone</label>
+					<label for="telephone">Par téléphone</label>
 					{#if form?.errors?.telephone}
 						<span class="error">
 							{#if !telephoneFocus}
@@ -299,7 +294,7 @@
 						disabled={loading}
 						on:focus={() => (emailFocus = true)}
 					/>
-					<label for="email">E-mail</label>
+					<label for="email">Par e-mail</label>
 					{#if form?.errors?.email}
 						<span class="error">
 							{#if !emailFocus}
@@ -318,6 +313,10 @@
 						<i>arrow_forward</i>
 					</button>
 				</nav>
+			</div>
+			<div class="page h6-margin-top {transition}" class:active={formStep === 5}>
+				<h6 class="center-align">Vérification</h6>
+				<p class="center-align"><i>info</i>Vous allez recevoir un code par ...</p>
 			</div>
 		</div>
 	</form>
