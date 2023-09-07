@@ -12,13 +12,13 @@
 <header class="fill">
 	<nav>
 		<a class="circle transparent" href="/">
-			<i class="primary-text" class:fill={$page.url.pathname === '/'}>favorite</i>
+			<i class="primary-text" title="Accueil" class:fill={$page.url.pathname === '/'}>favorite</i>
 		</a>
 		<!-- <h5 class="center-align">Notre Doc</h5> -->
 		<div class="max" />
 		<div class="max center-align">
 			<a href="/rendez-vous">
-				<button class="small-elevate"
+				<button class="small-elevate primary-container" title="Prendre rendez-vous"
 					><i class:fill={$page.url.pathname === '/rendez-vous'}>event</i><span class="large-text"
 						>Prendre rendez-vous</span
 					></button
@@ -26,7 +26,7 @@
 			</a>
 		</div>
 		<div class="max" />
-		<a class="circle" href="/admin">
+		<a class="circle" title="Administration" href="/admin">
 			<i class="primary-text" class:fill={$page.url.pathname === '/admin'}>key</i>
 		</a>
 	</nav>
@@ -35,9 +35,9 @@
 <main>
 	<h1 class="center-align">Notre Doc</h1>
 	<nav>
-		<div class="max" />
+		<div class="max l m" />
 		<slot />
-		<div class="max" />
+		<div class="max l m" />
 	</nav>
 </main>
 

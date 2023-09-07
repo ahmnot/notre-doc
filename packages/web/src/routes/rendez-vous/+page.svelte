@@ -20,7 +20,7 @@
     let emailFocus = false;
 	let telephoneFocus = false;
 
-	let formStep = 5;
+	let formStep = 1;
 
 	let isAccountKnown = true;
 
@@ -73,8 +73,8 @@
 					on:focus={() => (telephonemailFocus = true)}
 				/>
 				<label for="telephonemail">
-					<div class="l">Saisissez votre adresse e-mail ou n° de téléphone</div>
-					<div class="m s">Adresse e-mail ou n° de téléphone</div>
+					<div class="l s">Saisissez votre adresse e-mail ou n° de téléphone</div>
+					<div class="m">Adresse e-mail ou n° de téléphone</div>
 				</label>
 				{#if form?.errors?.telephonemail}
 					<span class="error">
