@@ -35,9 +35,9 @@
 <main>
 	<h1 class="center-align">Notre Doc</h1>
 	<nav>
-		<div class="max l m" />
+		<div class="max l" />
 		<slot />
-		<div class="max l m" />
+		<div class="max l" />
 	</nav>
 </main>
 

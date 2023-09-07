@@ -17,7 +17,7 @@
 	let nomFocus = false;
 	let prenomFocus = false;
 	let dateNaissanceFocus = false;
-    let emailFocus = false;
+	let emailFocus = false;
 	let telephoneFocus = false;
 
 	let formStep = 1;
@@ -72,10 +72,7 @@
 					disabled={loading}
 					on:focus={() => (telephonemailFocus = true)}
 				/>
-				<label for="telephonemail">
-					<div class="l s">Saisissez votre adresse e-mail ou n° de téléphone</div>
-					<div class="m">Adresse e-mail ou n° de téléphone</div>
-				</label>
+				<label for="telephonemail">Saisissez votre adresse e-mail ou n° de téléphone</label>
 				{#if form?.errors?.telephonemail}
 					<span class="error">
 						{#if !telephonemailFocus}
@@ -265,7 +262,10 @@
 					</label>
 				</nav>
 				<p class="medium-margin large-text">Comment vous contacter ?</p>
-				<div class={inputClasses + " prefix"} class:invalid={form?.errors?.telephone && !telephoneFocus}>
+				<div
+					class={inputClasses + ' prefix'}
+					class:invalid={form?.errors?.telephone && !telephoneFocus}
+				>
 					<i>phone</i>
 					<input
 						value={form?.data?.telephone ?? ''}
@@ -285,8 +285,8 @@
 						</span>
 					{/if}
 				</div>
-				<div class={inputClasses + " prefix"} class:invalid={form?.errors?.email && !emailFocus}>
-                    <i>email</i>
+				<div class={inputClasses + ' prefix'} class:invalid={form?.errors?.email && !emailFocus}>
+					<i>email</i>
 					<input
 						value={form?.data?.email ?? ''}
 						name="email"
