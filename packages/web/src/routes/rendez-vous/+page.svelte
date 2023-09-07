@@ -20,11 +20,13 @@
 	let emailFocus = false;
 	let telephoneFocus = false;
 
-	let formStep = 1;
+	let formStep = 5;
 
 	let isAccountKnown = true;
 
-	let transition = 'right';
+	let emailOrPhone = 'e-mail';
+
+	let transitionType = 'right';
 
 	function checkAccountKnown() {
 		if (isAccountKnown) {
@@ -37,22 +39,22 @@
 	function choseStep(goingTo: number) {
 		const comingFrom = formStep;
 		if (goingTo + 1 === comingFrom) {
-			transition = 'left';
+			transitionType = 'left';
 		} else if (goingTo > comingFrom) {
-			transition = 'right';
+			transitionType = 'right';
 		} else {
-			transition = '';
+			transitionType = '';
 		}
 		formStep = goingTo;
 	}
 
 	function stepBack() {
-		transition = 'left';
+		transitionType = 'left';
 		formStep--;
 	}
 
 	function stepForward() {
-		transition = 'right';
+		transitionType = 'right';
 		formStep++;
 	}
 </script>
@@ -89,7 +91,7 @@
 				</button>
 			</nav>
 		</div>
-		<div class="page {transition}" class:active={formStep === 2}>
+		<div class="page {transitionType}" class:active={formStep === 2}>
 			<h6 class="h6-margin-top center-align">Vous avez déjà un compte ?</h6>
 			<div class={inputClasses} class:invalid={form?.errors?.telephonemail && !telephonemailFocus}>
 				<input
@@ -145,7 +147,7 @@
 			<div class="small-space" />
 		</div>
 
-		<div class="page h6-margin-top {transition}" class:active={formStep >= 3}>
+		<div class="page h6-margin-top {transitionType}" class:active={formStep >= 3}>
 			<nav class="scroll" style:display={formStep >= 3 ? '' : 'none'}>
 				<button type="button" class="circle small" on:click={() => choseStep(3)} disabled={false}
 					>1</button
@@ -167,7 +169,7 @@
 				>
 			</nav>
 			<h6 class="center-align">Création d'un compte</h6>
-			<div class="page h6-margin-top {transition}" class:active={formStep === 3}>
+			<div class="page h6-margin-top {transitionType}" class:active={formStep === 3}>
 				<p class="medium-margin large-text">Sexe à l'état civil :</p>
 				<nav class="medium-margin">
 					<label class="radio">
@@ -249,7 +251,7 @@
 					</button>
 				</nav>
 			</div>
-			<div class="page h6-margin-top {transition}" class:active={formStep === 4}>
+			<div class="page h6-margin-top {transitionType}" class:active={formStep === 4}>
 				<p class="medium-margin large-text">Êtes-vous déjà venu ?</p>
 				<nav class="medium-margin">
 					<label class="radio">
@@ -314,9 +316,20 @@
 					</button>
 				</nav>
 			</div>
-			<div class="page h6-margin-top {transition}" class:active={formStep === 5}>
+			<div class="page h6-margin-top {transitionType}" class:active={formStep === 5}>
 				<h6 class="center-align">Vérification</h6>
-				<p class="center-align"><i>info</i>Vous allez recevoir un code par ...</p>
+				<nav>
+					<div class="max" />
+					<div class="tertiary-container max round">
+						<div class="small-space" />
+						<div class="center-align">
+							<i>info</i>
+							<p>Vous allez recevoir un code par {emailOrPhone}.</p>
+						</div>
+						<div class="small-space" />
+					</div>
+					<div class="max" />
+				</nav>
 			</div>
 		</div>
 	</form>
