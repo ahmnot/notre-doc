@@ -8,9 +8,9 @@
 	let inputClasses = 'field label border medium-margin';
 
 	let passwordOrText = 'password';
-	let eye = 'visibility';
+	let eyeIcon = 'visibility_off';
 
-	$: passwordOrText = eye === 'visibility' ? 'password' : 'text';
+	$: passwordOrText = eyeIcon === 'visibility_off' ? 'password' : 'text';
 
 	let telephonemailFocus = false;
 	let passwordFocus = false;
@@ -19,6 +19,7 @@
 	let dateNaissanceFocus = false;
 	let emailFocus = false;
 	let telephoneFocus = false;
+	let fournumberscodeFocus = false;
 
 	let formStep = 5;
 
@@ -119,8 +120,11 @@
 					on:focus={() => (passwordFocus = true)}
 				/>
 				<label for="password">Mot de passe</label>
-				<a on:mousedown={() => (eye = 'visibility_off')} on:mouseup={() => (eye = 'visibility')}>
-					<i class="front">{eye}</i>
+				<a
+					on:mousedown={() => (eyeIcon = 'visibility')}
+					on:mouseup={() => (eyeIcon = 'visibility_off')}
+				>
+					<i class="front">{eyeIcon}</i>
 				</a>
 				{#if form?.errors?.password}
 					<span class="error">
@@ -216,9 +220,10 @@
 					{/if}
 				</div>
 				<div
-					class={inputClasses}
+					class={inputClasses + " prefix"}
 					class:invalid={form?.errors?.dateNaissance && !dateNaissanceFocus}
 				>
+				<i>today</i>
 					<input
 						value={form?.data?.dateNaissance ?? ''}
 						name="dateNaissance"
@@ -227,7 +232,6 @@
 						on:focus={() => (dateNaissanceFocus = true)}
 					/>
 					<label for="dateNaissance">Date de naissance</label>
-					<i>today</i>
 					{#if form?.errors?.dateNaissance}
 						<span class="error">
 							{#if !dateNaissanceFocus}
@@ -325,6 +329,91 @@
 						<div class="center-align">
 							<i>info</i>
 							<p>Vous allez recevoir un code par {emailOrPhone}.</p>
+						</div>
+						<div class="small-space" />
+					</div>
+					<div class="max" />
+				</nav>
+				<nav>
+					<div class="max" />
+					<div
+						class={inputClasses + " max"}
+						class:invalid={form?.errors?.fournumberscode && !fournumberscodeFocus}
+					>
+						<input
+							value={form?.data?.fournumberscode ?? ''}
+							name="fournumberscode"
+							type="text"
+							minlength="4"
+							maxlength="4"
+							disabled={loading}
+							on:focus={() => (fournumberscodeFocus = true)}
+						/>
+						<label for="fournumberscode"
+							><div class="l m">Saisissez ici le code de vérification</div>
+							<div class="s">Code de vérification</div></label
+						>
+						<i>vpn_key</i>
+						{#if form?.errors?.fournumberscode}
+							<span class="error">
+								{#if !fournumberscodeFocus}
+									{form?.errors?.fournumberscode}
+								{/if}
+							</span>
+						{/if}
+					</div>
+					<div class="max" />
+				</nav>
+				<p class="medium-margin large-text">Puis, choisissez un mot de passe :</p>
+
+				<div class={inputClasses + ''} class:invalid={form?.errors?.password && !passwordFocus}>
+					<input
+						value={form?.data?.password ?? ''}
+						name="password"
+						type={passwordOrText}
+						disabled={loading}
+						on:focus={() => (passwordFocus = true)}
+					/>
+					<label for="password">Mot de passe choisi</label>
+					<a
+						on:mousedown={() => (eyeIcon = 'visibility')}
+						on:mouseup={() => (eyeIcon = 'visibility_off')}
+					>
+						<i class="front">{eyeIcon}</i>
+					</a>
+					{#if form?.errors?.password}
+						<span class="error">
+							{#if !passwordFocus}
+								{form?.errors?.password}
+							{/if}
+						</span>
+					{/if}
+				</div>
+				<div class="secondary-container max round">
+					<div class="small-space" />
+					<div class="center-align">
+						<i>error</i>
+						<p>Ce mot de passe doit contenir :</p>
+						<p>Une lettre <span class="bold">minuscule</span></p>
+						<p>Une lettre <span class="bold">majuscule</span></p>
+						<p>Un <span class="bold">nombre</span></p>
+						<p>Un <span class="bold">caractère spécial</span></p>
+						<p>Un minimum de <span class="bold">12 caractères</span></p>
+					</div>
+					<div class="small-space" />
+				</div>
+				<div class="small-space" />
+				<button type="button" class="responsive primary-container" on:click={stepForward}
+					><p class="large-text">Enregistrer mon mot de passe</p>
+				</button>
+				<nav>
+					<div class="max" />
+					<div class="tertiary-container max round">
+						<div class="small-space" />
+						<div class="center-align">
+							<i>info</i>
+							<p>Ce mot de passe vous permettra
+								de gérer<br> vos rendez-vous par internet.</p>
 						</div>
 						<div class="small-space" />
 					</div>
