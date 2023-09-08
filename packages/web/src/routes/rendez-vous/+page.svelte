@@ -171,9 +171,16 @@
 					on:click={() => choseStep(5)}
 					disabled={formStep < 5}>3</button
 				>
+				<div class="max divider" />
+				<button
+					type="button"
+					class="circle small"
+					on:click={() => choseStep(6)}
+					disabled={formStep < 6}>4</button
+				>
 			</nav>
-			<h6 class="center-align">Création d'un compte</h6>
 			<div class="page h6-margin-top {transitionType}" class:active={formStep === 3}>
+				<h6 class="center-align">Création d'un compte</h6>
 				<p class="medium-margin large-text">Sexe à l'état civil :</p>
 				<nav class="medium-margin">
 					<label class="radio">
@@ -220,10 +227,10 @@
 					{/if}
 				</div>
 				<div
-					class={inputClasses + " prefix"}
+					class={inputClasses + ' prefix'}
 					class:invalid={form?.errors?.dateNaissance && !dateNaissanceFocus}
 				>
-				<i>today</i>
+					<i>today</i>
 					<input
 						value={form?.data?.dateNaissance ?? ''}
 						name="dateNaissance"
@@ -256,17 +263,7 @@
 				</nav>
 			</div>
 			<div class="page h6-margin-top {transitionType}" class:active={formStep === 4}>
-				<p class="medium-margin large-text">Êtes-vous déjà venu ?</p>
-				<nav class="medium-margin">
-					<label class="radio">
-						<input type="radio" name="habitue" />
-						<span>Oui</span>
-					</label>
-					<label class="radio">
-						<input type="radio" name="habitue" />
-						<span>Non</span>
-					</label>
-				</nav>
+				<h6 class="center-align">Informations de contact</h6>
 				<p class="medium-margin large-text">Comment vous contacter ?</p>
 				<div
 					class={inputClasses + ' prefix'}
@@ -321,6 +318,72 @@
 				</nav>
 			</div>
 			<div class="page h6-margin-top {transitionType}" class:active={formStep === 5}>
+				<h6 class="center-align">Mot de passe sécurisé</h6>
+				<p class="medium-margin large-text">Choisissez un mot de passe :</p>
+				<div class={inputClasses + ''} class:invalid={form?.errors?.password && !passwordFocus}>
+					<input
+						value={form?.data?.password ?? ''}
+						name="password"
+						type={passwordOrText}
+						disabled={loading}
+						on:focus={() => (passwordFocus = true)}
+					/>
+					<label for="password">Mot de passe choisi</label>
+					<a
+						on:mousedown={() => (eyeIcon = 'visibility')}
+						on:mouseup={() => (eyeIcon = 'visibility_off')}
+					>
+						<i class="front">{eyeIcon}</i>
+					</a>
+					{#if form?.errors?.password}
+						<span class="error">
+							{#if !passwordFocus}
+								{form?.errors?.password}
+							{/if}
+						</span>
+					{/if}
+				</div>
+				<nav>
+					<div class="max" />
+					<div class="secondary-container max round">
+						<div class="small-space" />
+						<div class="center-align">
+							<i>error</i>
+							<p>Ce mot de passe doit contenir au moins :</p>
+							<p>Une lettre <span class="bold">minuscule</span></p>
+							<p>Une lettre <span class="bold">majuscule</span></p>
+							<p>Un <span class="bold">chiffre</span></p>
+							<p>Un <span class="bold">caractère spécial</span></p>
+							<p><span class="bold">12 caractères</span></p>
+						</div>
+						<div class="small-space" />
+					</div>
+					<div class="max" />
+				</nav>
+				<nav>
+					<div class="max" />
+					<div class="tertiary-container max round">
+						<div class="small-space" />
+						<div class="center-align">
+							<i>info</i>
+							<p>Ce mot de passe vous permettra de gérer<br /> vos rendez-vous par internet.</p>
+						</div>
+						<div class="small-space" />
+					</div>
+					<div class="max" />
+				</nav>
+				<nav>
+					<button type="button" class="circle transparent" title="Retour" on:click={stepBack}>
+						<i>arrow_back</i>
+					</button>
+					<div class="max" />
+					<button type="button" class="right-align" on:click={stepForward}>
+						Suivant
+						<i>arrow_forward</i>
+					</button>
+				</nav>
+			</div>
+			<div class="page h6-margin-top {transitionType}" class:active={formStep === 6}>
 				<h6 class="center-align">Vérification</h6>
 				<nav>
 					<div class="max" />
@@ -337,7 +400,7 @@
 				<nav>
 					<div class="max" />
 					<div
-						class={inputClasses + " max"}
+						class={inputClasses + ' max'}
 						class:invalid={form?.errors?.fournumberscode && !fournumberscodeFocus}
 					>
 						<input
@@ -364,61 +427,11 @@
 					</div>
 					<div class="max" />
 				</nav>
-				<p class="medium-margin large-text">Puis, choisissez un mot de passe :</p>
-
-				<div class={inputClasses + ''} class:invalid={form?.errors?.password && !passwordFocus}>
-					<input
-						value={form?.data?.password ?? ''}
-						name="password"
-						type={passwordOrText}
-						disabled={loading}
-						on:focus={() => (passwordFocus = true)}
-					/>
-					<label for="password">Mot de passe choisi</label>
-					<a
-						on:mousedown={() => (eyeIcon = 'visibility')}
-						on:mouseup={() => (eyeIcon = 'visibility_off')}
-					>
-						<i class="front">{eyeIcon}</i>
-					</a>
-					{#if form?.errors?.password}
-						<span class="error">
-							{#if !passwordFocus}
-								{form?.errors?.password}
-							{/if}
-						</span>
-					{/if}
-				</div>
-				<div class="secondary-container max round">
-					<div class="small-space" />
-					<div class="center-align">
-						<i>error</i>
-						<p>Ce mot de passe doit contenir :</p>
-						<p>Une lettre <span class="bold">minuscule</span></p>
-						<p>Une lettre <span class="bold">majuscule</span></p>
-						<p>Un <span class="bold">nombre</span></p>
-						<p>Un <span class="bold">caractère spécial</span></p>
-						<p>Un minimum de <span class="bold">12 caractères</span></p>
-					</div>
-					<div class="small-space" />
-				</div>
 				<div class="small-space" />
 				<button type="button" class="responsive primary-container" on:click={stepForward}
-					><p class="large-text">Enregistrer mon mot de passe</p>
+					><p class="large-text">Valider la création du compte</p>
 				</button>
-				<nav>
-					<div class="max" />
-					<div class="tertiary-container max round">
-						<div class="small-space" />
-						<div class="center-align">
-							<i>info</i>
-							<p>Ce mot de passe vous permettra
-								de gérer<br> vos rendez-vous par internet.</p>
-						</div>
-						<div class="small-space" />
-					</div>
-					<div class="max" />
-				</nav>
+
 			</div>
 		</div>
 	</form>
