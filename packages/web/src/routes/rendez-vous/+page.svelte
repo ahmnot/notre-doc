@@ -7,10 +7,16 @@
 
 	let inputClasses = 'field label border medium-margin';
 
-	let passwordOrText = 'password';
-	let eyeIcon = 'visibility_off';
+	let formStep = 1;
 
-	$: passwordOrText = eyeIcon === 'visibility_off' ? 'password' : 'text';
+	let emailOrPhone = 'e-mail';
+
+	let transitionType = 'right';
+
+	let passwordOrText = 'password';
+	let eyeIcon = 'visibility';
+
+	$: passwordOrText = eyeIcon === 'visibility' ? 'password' : 'text';
 
 	let telephonemailFocus = false;
 	let passwordFocus = false;
@@ -19,15 +25,34 @@
 	let dateNaissanceFocus = false;
 	let emailFocus = false;
 	let telephoneFocus = false;
+	let chosenPasswordFocus = false;
 	let fournumberscodeFocus = false;
-
-	let formStep = 5;
 
 	let isAccountKnown = true;
 
-	let emailOrPhone = 'e-mail';
+	let chosenPassword;
 
-	let transitionType = 'right';
+	$: chosenPassword = form?.data?.chosenPassword ?? '';
+
+	let isChosenPasswordOk = false;
+
+	$: isChosenPasswordOk =
+		hasMinuscule && hasMajuscule && hasChiffre && hasSpecialCharacter && hasTwelveCharacter;
+
+	let hasMinuscule = false;
+	let hasMajuscule = false;
+	let hasChiffre = false;
+	let hasSpecialCharacter = false;
+	let hasTwelveCharacter = false;
+
+	const handleChosenPasswordInput = (e: any) => {
+		const input = e.target.value;
+		hasMinuscule = input.toUpperCase() !== input;
+		hasMajuscule = input.toLowerCase() !== input;
+		hasChiffre = /\d/.test(input);
+		hasSpecialCharacter = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(input);
+		hasTwelveCharacter = input.length >= 12;
+	};
 
 	function checkAccountKnown() {
 		if (isAccountKnown) {
@@ -121,8 +146,8 @@
 				/>
 				<label for="password">Mot de passe</label>
 				<a
-					on:mousedown={() => (eyeIcon = 'visibility')}
-					on:mouseup={() => (eyeIcon = 'visibility_off')}
+					on:mousedown={() => (eyeIcon = 'visibility_off')}
+					on:mouseup={() => (eyeIcon = 'visibility')}
 				>
 					<i class="front">{eyeIcon}</i>
 				</a>
@@ -320,41 +345,65 @@
 			<div class="page h6-margin-top {transitionType}" class:active={formStep === 5}>
 				<h6 class="center-align">Mot de passe sécurisé</h6>
 				<p class="medium-margin large-text">Choisissez un mot de passe :</p>
-				<div class={inputClasses + ''} class:invalid={form?.errors?.password && !passwordFocus}>
+				<div
+					class={inputClasses + ''}
+					class:invalid={form?.errors?.chosenPassword && !chosenPasswordFocus}
+				>
 					<input
-						value={form?.data?.password ?? ''}
-						name="password"
+						value={form?.data?.chosenPassword ?? ''}
+						name="chosenPassword"
 						type={passwordOrText}
 						disabled={loading}
-						on:focus={() => (passwordFocus = true)}
+						on:focus={() => (chosenPasswordFocus = true)}
+						on:input={handleChosenPasswordInput}
 					/>
-					<label for="password">Mot de passe choisi</label>
+					<label for="chosenPassword">Mot de passe choisi</label>
 					<a
-						on:mousedown={() => (eyeIcon = 'visibility')}
-						on:mouseup={() => (eyeIcon = 'visibility_off')}
+						on:mousedown={() => (eyeIcon = 'visibility_off')}
+						on:mouseup={() => (eyeIcon = 'visibility')}
 					>
 						<i class="front">{eyeIcon}</i>
 					</a>
-					{#if form?.errors?.password}
+					{#if form?.errors?.chosenPassword}
 						<span class="error">
-							{#if !passwordFocus}
-								{form?.errors?.password}
+							{#if !chosenPasswordFocus}
+								{form?.errors?.chosenPassword}
 							{/if}
 						</span>
 					{/if}
 				</div>
 				<nav>
 					<div class="max" />
-					<div class="secondary-container max round">
+					<div
+						class={(isChosenPasswordOk ? 'primary-container' : 'error-container') + ' max round'}
+					>
 						<div class="small-space" />
 						<div class="center-align">
-							<i>error</i>
+							{#if isChosenPasswordOk}<i class="primary-text">check_circle</i>{:else}<i>error</i
+								>{/if}
 							<p>Ce mot de passe doit contenir au moins :</p>
-							<p>Une lettre <span class="bold">minuscule</span></p>
-							<p>Une lettre <span class="bold">majuscule</span></p>
-							<p>Un <span class="bold">chiffre</span></p>
-							<p>Un <span class="bold">caractère spécial</span></p>
-							<p><span class="bold">12 caractères</span></p>
+							<p class="no-margin">
+								Une lettre minuscule{#if hasMinuscule}<i class="primary-text">done</i>{:else}<i
+										>close</i
+									>{/if}
+							</p>
+							<p class="no-margin">
+								Une lettre majuscule{#if hasMajuscule}<i class="primary-text">done</i>{:else}<i
+										>close</i
+									>{/if}
+							</p>
+							<p class="no-margin">
+								Un chiffre{#if hasChiffre}<i class="primary-text">done</i>{:else}<i>close</i>{/if}
+							</p>
+							<p class="no-margin">
+								Un caractère spécial{#if hasSpecialCharacter}<i class="primary-text">done</i
+									>{:else}<i>close</i>{/if}
+							</p>
+							<p class="no-margin">
+								12 caractères{#if hasTwelveCharacter}<i class="primary-text">done</i>{:else}<i
+										>close</i
+									>{/if}
+							</p>
 						</div>
 						<div class="small-space" />
 					</div>
@@ -431,7 +480,6 @@
 				<button type="button" class="responsive primary-container" on:click={stepForward}
 					><p class="large-text">Valider la création du compte</p>
 				</button>
-
 			</div>
 		</div>
 	</form>
@@ -440,6 +488,10 @@
 <style>
 	.no-margin-top {
 		margin-top: 0 !important;
+	}
+
+	.page.active {
+		animation: var(--speed2) to-page ease;
 	}
 
 	.h6-margin-top {
