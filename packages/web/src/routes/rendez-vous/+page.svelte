@@ -46,7 +46,7 @@
 	let hasTwelveCharacter = false;
 
 	const handleChosenPasswordInput = (event: any) => {
-		const input = event.target.value.replaceAll(' ', '');
+		const input = event.target.value;
 		hasMinuscule = input.toUpperCase() !== input;
 		hasMajuscule = input.toLowerCase() !== input;
 		hasChiffre = /\d/.test(input);
@@ -85,7 +85,7 @@
 	}
 </script>
 
-<article class="max surface-variant">
+<article class="max fill">
 	<h4 class="center-align">Prendre rendez-vous</h4>
 	<form method="POST" novalidate>
 		<div class="page" class:active={formStep === 1}>
@@ -176,7 +176,7 @@
 			<div class="small-space" />
 		</div>
 
-		<div class="page h6-margin-top {transitionType}" class:active={formStep >= 3}>
+		<div class="page h6-margin-top" class:active={formStep >= 3}>
 			<nav class="scroll" style:display={formStep >= 3 ? '' : 'none'}>
 				<button type="button" class="circle small" on:click={() => choseStep(3)} disabled={false}
 					>1</button
