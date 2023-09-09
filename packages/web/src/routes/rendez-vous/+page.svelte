@@ -47,8 +47,8 @@
 
 	const handleChosenPasswordInput = (event: any) => {
 		const input = event.target.value;
-		hasMinuscule = input.toUpperCase() !== input;
-		hasMajuscule = input.toLowerCase() !== input;
+		hasMinuscule = /[a-z]+/.test(input);
+		hasMajuscule = /[A-Z]+/.test(input);
 		hasChiffre = /\d/.test(input);
 		hasSpecialCharacter = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(input);
 		hasTwelveCharacter = input.length >= 12;

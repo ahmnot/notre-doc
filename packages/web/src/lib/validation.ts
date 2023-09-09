@@ -4,6 +4,10 @@ import { z, type ZodRawShape } from 'zod'
 const nomRegex = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ-]+$/i
 const telephoneRegex = /^\+?0?0?[0-9][0-9]{5,15}$/g
 const numeroSecuRegex = /[12][0-9]{2}(0[1-9]|1[0-2])(2[AB]|[0-9]{2})[0-9]{3}[0-9]{3}([0-9]{2})/
+const lowercaseRegex = /[a-z]+/
+const uppercaseRegex = /[A-Z]+/
+const numberRegex = /\d/
+const specialCharacterRegex = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
 
 export const zodSchemaId = {
     id: z.string({ required_error: "Identifiant non fourni" })
@@ -28,24 +32,25 @@ export const zodSchemaEmail = {
         .email({ message: "E-mail invalide" }),
 }
 
-export const zodSchemaStep1 = {
-    ...zodSchemaTel,
-    ...zodSchemaEmail,
-}
-
-export const zodSchemaStep2 = {
+export const zodSchemaNom = {
     nom: z.string({ required_error: "Nom obligatoire" })
         .trim()
         .nonempty({ message: "Nom obligatoire" })
         .min(1, { message: "Trop court" })
         .max(55, { message: "Trop long" })
-        .regex(nomRegex, { message: "Nom invalide" }),
+        .regex(nomRegex, { message: "Nom invalide" })
+}
+
+export const zodSchemaPrenom = {
     prenom: z.string({ required_error: "Prénom obligatoire" })
         .trim()
         .nonempty({ message: "Prénom obligatoire" })
         .min(1, { message: "Trop court" })
         .max(14, { message: "Trop long" })
         .regex(nomRegex, { message: "Prénom invalide" }),
+}
+
+export const zodSchemaDateNaissance = {
     dateNaissance: z.string({ required_error: "Date obligatoire", invalid_type_error: "Date invalide" })
         .trim()
         .nonempty({ message: "Date obligatoire" })
@@ -61,6 +66,26 @@ export const zodSchemaSecu = {
         .max(15, { message: "N° trop court" })
         .regex(numeroSecuRegex, { message: "N° invalide" }).nullish()
         .or(z.literal("")),
+}
+
+export const zodSchemaChosenPassword = {
+    password: z.string({ required_error: "Mot de passe vide" })
+        .regex(lowercaseRegex, { message: "Il manque une minuscule" })
+        .regex(uppercaseRegex, { message: "Il manque une majuscule" })
+        .regex(numberRegex, { message: "Il manque un chiffre" })
+        .regex(specialCharacterRegex, { message: "Il manque un caractère spécial" })
+        .min(12, { message: "Mot de passe trop court" })
+}
+
+export const zodSchemaTelEmail = zodSchemaTel.telephone.or(zodSchemaEmail.email);
+
+export const zodSchemaStep1 = {
+    ...zodSchemaTel,
+    ...zodSchemaEmail,
+}
+
+export const zodSchemaStep2 = {
+    ...zodSchemaNom, ...zodSchemaPrenom, ...zodSchemaDateNaissance
 }
 
 export function validate(zodSchema: ZodRawShape) {
