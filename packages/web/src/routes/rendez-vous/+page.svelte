@@ -45,18 +45,12 @@
 	let hasSpecialCharacter = false;
 	let hasTwelveCharacter = false;
 
-    function handleKeydown(event: any) {
-		console.log(event)
-        if(event.code === 'Space') event.preventDefault()
-        if(event.ctrlKey && event.key.toLowerCase() === 'v') event.preventDefault()
-    }
-
 	const handleChosenPasswordInput = (event: any) => {
 		const input = event.target.value.replaceAll(' ', '');
 		hasMinuscule = input.toUpperCase() !== input;
 		hasMajuscule = input.toLowerCase() !== input;
 		hasChiffre = /\d/.test(input);
-		hasSpecialCharacter = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(input);
+		hasSpecialCharacter = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(input);
 		hasTwelveCharacter = input.length >= 12;
 	};
 
@@ -361,9 +355,7 @@
 						type={passwordOrText}
 						disabled={loading}
 						on:focus={() => (chosenPasswordFocus = true)}
-						on:keydown={handleKeydown}
 						on:input={handleChosenPasswordInput}
-						on:paste={() => (chosenPassword='')}
 					/>
 					<label for="chosenPassword">Mot de passe choisi</label>
 					<a
