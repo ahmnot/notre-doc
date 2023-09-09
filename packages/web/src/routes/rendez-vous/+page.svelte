@@ -175,7 +175,6 @@
 			</button>
 			<div class="small-space" />
 		</div>
-
 		<div class="page h6-margin-top" class:active={formStep >= 3}>
 			<nav class="scroll" style:display={formStep >= 3 ? '' : 'none'}>
 				<button type="button" class="circle small" on:click={() => choseStep(3)} disabled={false}
