@@ -30,7 +30,7 @@
 
 	let isAccountKnown = true;
 
-	let chosenPassword;
+	let chosenPassword: FormDataEntryValue;
 
 	$: chosenPassword = form?.data?.chosenPassword ?? '';
 
@@ -45,12 +45,18 @@
 	let hasSpecialCharacter = false;
 	let hasTwelveCharacter = false;
 
-	const handleChosenPasswordInput = (e: any) => {
-		const input = e.target.value;
+    function handleKeydown(event: any) {
+		console.log(event)
+        if(event.code === 'Space') event.preventDefault()
+        if(event.ctrlKey && event.key.toLowerCase() === 'v') event.preventDefault()
+    }
+
+	const handleChosenPasswordInput = (event: any) => {
+		const input = event.target.value.replaceAll(' ', '');
 		hasMinuscule = input.toUpperCase() !== input;
 		hasMajuscule = input.toLowerCase() !== input;
 		hasChiffre = /\d/.test(input);
-		hasSpecialCharacter = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(input);
+		hasSpecialCharacter = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(input);
 		hasTwelveCharacter = input.length >= 12;
 	};
 
@@ -350,12 +356,14 @@
 					class:invalid={form?.errors?.chosenPassword && !chosenPasswordFocus}
 				>
 					<input
-						value={form?.data?.chosenPassword ?? ''}
+						value={chosenPassword}
 						name="chosenPassword"
 						type={passwordOrText}
 						disabled={loading}
 						on:focus={() => (chosenPasswordFocus = true)}
+						on:keydown={handleKeydown}
 						on:input={handleChosenPasswordInput}
+						on:paste={() => (chosenPassword='')}
 					/>
 					<label for="chosenPassword">Mot de passe choisi</label>
 					<a
