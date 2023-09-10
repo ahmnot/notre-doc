@@ -1,20 +1,27 @@
 import {
-    zodSchemaTel,
-    zodSchemaEmail,
+    zodSchemaTelephoneEmail,
+    zodSchemaGenre,
     zodSchemaNom,
     zodSchemaPrenom,
     zodSchemaDateNaissance,
+    zodSchemaTel,
+    zodSchemaEmail,
     zodSchemaChosenPassword,
-    zodSchemaTelEmail,
     validate
 } from '$lib/validation'
 import type { Actions } from "@sveltejs/kit"
 
 export const actions: Actions = {
-    step1: validate({}),
+    step1: validate(zodSchemaTelephoneEmail),
+    connexion: validate({}),
     step2: validate({}),
-    step3: validate({}),
-    step4: validate({}),
+    step3: validate({
+        ...zodSchemaGenre,
+        ...zodSchemaNom,
+        ...zodSchemaPrenom,
+        ...zodSchemaDateNaissance
+    }),
+    step4: validate({ ...zodSchemaTel, ...zodSchemaEmail }),
     step5: validate({}),
-    step6: validate({})
+    step6: validate(zodSchemaChosenPassword)
 }
