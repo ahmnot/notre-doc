@@ -2,6 +2,7 @@ import { SSTConfig } from "sst";
 import { Api } from "./stacks/Api";
 import { Web } from "./stacks/Web";
 import { Database } from "./stacks/Database";
+import { Auth } from "./stacks/Auth";
 
 export default {
   config(_input) {
@@ -14,6 +15,7 @@ export default {
     app
       .stack(Database)
       .stack(Api)
-      .stack(Web);
+      .stack(Web)
+      .stack(Auth);
   }
 } satisfies SSTConfig;

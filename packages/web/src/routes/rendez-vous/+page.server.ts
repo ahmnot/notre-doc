@@ -23,5 +23,12 @@ export const actions: Actions = {
     }),
     step4: validate({ ...zodSchemaTel, ...zodSchemaEmail }),
     step5: validate(zodSchemaChosenPassword),
-    step6: validate({})
+    step6: validate({    
+        ...zodSchemaGenre,
+        ...zodSchemaNom,
+        ...zodSchemaPrenom,
+        ...zodSchemaDateNaissance,
+        ...zodSchemaTel,
+        ...zodSchemaEmail,
+        ...zodSchemaChosenPassword})
 }

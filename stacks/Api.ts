@@ -4,6 +4,7 @@ import { Database } from "./Database.js"
 export function Api({ stack }: StackContext) {
   const api = new ApiGateway(stack, "api", {
     defaults: {
+      authorizer: "iam",
       function: {
         bind: [use(Database)],
       },
