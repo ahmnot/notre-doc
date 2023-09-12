@@ -15,7 +15,7 @@ export default {
     app
       .stack(Database)
       .stack(Api)
-      .stack(Web)
-      .stack(Auth);
+      .stack(Auth)
+      .stack(Web);
   }
 } satisfies SSTConfig;

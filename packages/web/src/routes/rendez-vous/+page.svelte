@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Auth } from 'aws-amplify';
+
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { activateSnackbar } from '$lib/snackbar';
@@ -11,7 +13,7 @@
 
 	let inputClasses = 'field label border large-margin';
 
-	let formStep = 3;
+	let formStep = 2;
 
 	let emailOrPhone = 'e-mail';
 
@@ -88,13 +90,12 @@
 	}
 
 	function stepForward() {
-		resetFocus(true)
+		resetFocus(true);
 		transitionType = 'right';
 		formStep++;
 	}
 
 	function resetFocus(isNotHere: boolean) {
-		console.log('coucou');
 		telephonemailFocus = isNotHere;
 		telephonemail2Focus = isNotHere;
 		passwordFocus = isNotHere;
@@ -111,11 +112,10 @@
 	/**
 	 * this does something when the form submits.
 	 */
-	const rendezVousEnhance: SubmitFunction = ({ action }) => {
+	const createAccountEnhance: SubmitFunction = ({ action }) => {
 		// this does something before the form submits.
 		const { search } = action;
 		loading = true;
-
 
 		return async ({ result, update }) => {
 			// this does something after the form submits.
@@ -124,6 +124,21 @@
 
 			switch (result.type) {
 				case 'success':
+					if (result.data && search === '?/connexion') {
+						try {
+							await Auth.signIn(result.data.data.telephonemail2, result.data.data.password);
+							alert('Logged in');
+						} catch (error) {
+							console.error(error);
+							if (error instanceof Error) {
+								alert(error.message);
+							} else {
+								alert(String(error));
+							}
+						}
+						break;
+					}
+
 					if (result.data && search === '?/step6') {
 						// await createPatient(result.data.data as PatientForm);
 						activateSnackbar('Succès !', 'success');
@@ -171,7 +186,7 @@
 
 <article class="max fill">
 	<h4 class="center-align">Prendre rendez-vous</h4>
-	<form method="POST" use:enhance={rendezVousEnhance} novalidate>
+	<form method="POST" use:enhance={createAccountEnhance} novalidate>
 		<input name="step" type="number" style:display="none" bind:value={formStep} />
 		<div class="page" class:active={formStep === 1}>
 			<div
@@ -238,6 +253,7 @@
 				<label for="password">Mot de passe</label>
 				<!-- svelte-ignore a11y-invalid-attribute -->
 				<a
+					type="button"
 					href=""
 					aria-label="show-password"
 					on:mousedown={() => (eyeIcon = 'visibility_off')}
@@ -257,7 +273,7 @@
 				<input name="rememberMe" type="checkbox" />
 				<span>Se souvenir de moi</span>
 			</label>
-			<button formaction="connexion" class="responsive"><p class="large-text">Connexion</p></button>
+			<button formaction="?/connexion" class="responsive"><p class="large-text">Connexion</p></button>
 			<p class="center-align">
 				<!-- svelte-ignore a11y-invalid-attribute -->
 				<a class="link" href="">Code confidentiel oublié ?</a>
@@ -298,17 +314,20 @@
 			</nav>
 			<div class="page h6-margin-top {transitionType}" class:active={formStep === 3}>
 				<h6 class="center-align">Création d'un compte</h6>
-				<div class={"field border large-margin" + " small-margin-bottom"} class:invalid={form?.errors?.genre && !genreFocus}>
-					<p class="medium-margin no-margin-bottom no-margin-left large-text">Sexe à l'état civil :</p>
+				<div
+					class={'field border large-margin' + ' small-margin-bottom'}
+					class:invalid={form?.errors?.genre && !genreFocus}
+				>
+					<p class="medium-margin no-margin-bottom no-margin-left large-text">
+						Sexe à l'état civil :
+					</p>
 					<nav class="no-padding small-margin-top small-margin-bottom">
 						<label class="radio">
-							<input type="radio" name="genre" 
-							on:focus={() => (genreFocus = true)} />
+							<input type="radio" name="genre" on:focus={() => (genreFocus = true)} />
 							<span>Homme</span>
 						</label>
 						<label class="radio">
-							<input type="radio" name="genre"
-							on:focus={() => (genreFocus = true)} />
+							<input type="radio" name="genre" on:focus={() => (genreFocus = true)} />
 							<span>Femme</span>
 						</label>
 					</nav>
@@ -602,7 +621,7 @@
 	.no-padding {
 		padding: 0 0 !important;
 	}
-	
+
 	.small-margin-top {
 		margin-top: 0.5rem !important;
 	}
