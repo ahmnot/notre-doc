@@ -7,13 +7,15 @@ import {
     zodSchemaTel,
     zodSchemaEmail,
     zodSchemaChosenPassword,
-    validate
+    validate,
+    login
 } from '$lib/validation'
+
 import type { Actions } from "@sveltejs/kit"
 
 export const actions: Actions = {
     step1: validate(zodSchemaTelephoneEmail),
-    connexion: validate({}),
+    login: login(zodSchemaTelephoneEmail),
     step2: validate({}),
     step3: validate({
         ...zodSchemaGenre,

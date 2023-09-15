@@ -39,6 +39,8 @@
 	"type": "module",
 	"dependencies": {
 		"@urql/svelte": "^4.0.4",
+		"amazon-cognito-identity-js": "^6.3.6",
+		"aws-jwt-verify": "^4.0.0",
 		"d3-interpolate": "^3.0.1",
 		"graphql": "^16.8.0",
 		"svelte-email": "^0.0.4",

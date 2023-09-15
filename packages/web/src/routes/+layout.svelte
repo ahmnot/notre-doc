@@ -1,8 +1,12 @@
 <script lang="ts">
-
 	import { page } from '$app/stores';
 	import { snackbar } from '$lib/snackbar';
+	import { initContextClient, cacheExchange, fetchExchange } from '@urql/svelte';
 
+	initContextClient({
+		url: import.meta.env.VITE_GRAPHQL_URL,
+		exchanges: [cacheExchange, fetchExchange]
+	});
 </script>
 
 <header class="fill">
@@ -10,9 +14,8 @@
 		<a class="circle transparent" href="/">
 			<i class="primary-text" title="Accueil" class:fill={$page.url.pathname === '/'}>favorite</i>
 		</a>
-		<!-- <h5 class="center-align">Notre Doc</h5> -->
-		<div class="max" />
-		<div class="max center-align">
+
+		<div class="absolute middle center">
 			<a href="/rendez-vous">
 				<button class="small-elevate primary-container" title="Prendre rendez-vous"
 					><i class:fill={$page.url.pathname === '/rendez-vous'}>event</i><span class="large-text"
@@ -21,9 +24,12 @@
 				>
 			</a>
 		</div>
-		<div class="max" />
-		<a class="circle" title="Administration" href="/admin">
-			<i class="primary-text" class:fill={$page.url.pathname === '/admin'}>key</i>
+
+		<a class="absolute middle right" href="/compte-patient">
+			<button class="secondary-container" title="Connexion">
+				<i class:fill={$page.url.pathname === '/compte-patient'}>account_circle</i>
+				<span class="large-text">Connexion</span>
+			</button>
 		</a>
 	</nav>
 </header>

@@ -16,6 +16,7 @@ export function Auth({ stack, app }: StackContext) {
 
     // Show the auth resources in the output
     stack.addOutputs({
+        ApiEndpoint: api.url,
         Region: app.region,
         UserPoolId: auth.userPoolId,
         UserPoolClientId: auth.userPoolClientId,

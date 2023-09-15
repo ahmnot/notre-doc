@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { Auth } from 'aws-amplify';
 
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
@@ -13,7 +12,7 @@
 
 	let inputClasses = 'field label border large-margin';
 
-	let formStep = 2;
+	let formStep = 1;
 
 	let emailOrPhone = 'e-mail';
 
@@ -124,9 +123,9 @@
 
 			switch (result.type) {
 				case 'success':
-					if (result.data && search === '?/connexion') {
+					if (result.data && search === '?/login') {
 						try {
-							await Auth.signIn(result.data.data.telephonemail2, result.data.data.password);
+							// await Auth.signIn(result.data.data.telephonemail2, result.data.data.password);
 							alert('Logged in');
 						} catch (error) {
 							console.error(error);
@@ -273,7 +272,7 @@
 				<input name="rememberMe" type="checkbox" />
 				<span>Se souvenir de moi</span>
 			</label>
-			<button formaction="?/connexion" class="responsive"><p class="large-text">Connexion</p></button>
+			<button formaction="?/login" class="responsive"><p class="large-text">Connexion</p></button>
 			<p class="center-align">
 				<!-- svelte-ignore a11y-invalid-attribute -->
 				<a class="link" href="">Code confidentiel oublié ?</a>

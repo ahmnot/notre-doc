@@ -1,5 +1,7 @@
-import { fail, type RequestEvent } from '@sveltejs/kit'
+import { redirect, fail, type RequestEvent } from '@sveltejs/kit'
 import { z, type ZodRawShape } from 'zod'
+
+import { cognitoLogin } from './cognito'
 
 const nomRegex = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ-]+$/i
 const telephoneRegex = /^\+?0?0?[0-9][0-9]{7,18}$/g
@@ -18,31 +20,31 @@ export const zodSchemaId = {
 
 export const zodSchemaTel = {
     telephone: z.string({ required_error: "N° obligatoire" })
-    .trim()
-    .nonempty({ message: "N° obligatoire" })
-    .min(9, { message: "Trop court" })
-    .max(18, { message: "Trop long" })
-    .regex(telephoneRegex, { message: "N° invalide" }),
+        .trim()
+        .nonempty({ message: "N° obligatoire" })
+        .min(9, { message: "Trop court" })
+        .max(18, { message: "Trop long" })
+        .regex(telephoneRegex, { message: "N° invalide" }),
 }
 
 export const zodSchemaEmail = {
     email: z.string({ required_error: "E-mail obligatoire" })
-    .trim()
-    .nonempty({ message: "E-mail obligatoire" })
-    .email({ message: "E-mail invalide" })
+        .trim()
+        .nonempty({ message: "E-mail obligatoire" })
+        .email({ message: "E-mail invalide" })
 }
 
 export const zodSchemaTelephoneEmail = {
     telephonemail: z.string({ required_error: "E-mail ou n° obligatoire" })
-    .trim()
-    .nonempty({ message: "E-mail ou n° obligatoire" })
-    .email({ message: "E-mail invalide" })
-    .or(z.string({ required_error: "N° ou e-mail obligatoire" })
-    .trim()
-    .nonempty({ message: "N° ou e-mail obligatoire" })
-    .min(9, { message: "Trop court" })
-    .max(18, { message: "Trop long" })
-    .regex(telephoneRegex, { message: "N° invalide" }))
+        .trim()
+        .nonempty({ message: "E-mail ou n° obligatoire" })
+        .email({ message: "E-mail invalide" })
+        .or(z.string({ required_error: "N° ou e-mail obligatoire" })
+            .trim()
+            .nonempty({ message: "N° ou e-mail obligatoire" })
+            .min(9, { message: "Trop court" })
+            .max(18, { message: "Trop long" })
+            .regex(telephoneRegex, { message: "N° invalide" }))
 }
 
 export const zodSchemaGenre = {
@@ -111,7 +113,6 @@ export function validate(zodSchema: ZodRawShape) {
 
         const formData = await request.formData()
         const fields = Object.fromEntries(formData)
-		console.log(fields)
 
         // This validates the form.
         const validation = await z.object(zodSchema).spa(fields)
@@ -126,6 +127,45 @@ export function validate(zodSchema: ZodRawShape) {
         }
 
         return { success: true, data: fields }
+    }
+}
+
+export function login(zodSchema: ZodRawShape) {
+    return async ({ request, cookies }: RequestEvent) => {
+        let response;
+
+        try {
+            const formData = await request.formData()
+            const fields = Object.fromEntries(formData)
+
+            // This validates the form.
+            const validation = await z.object(zodSchema).spa(fields)
+
+            if (!validation.success) {
+                const flatFieldErrors = adjustErrors(validation.error.flatten().fieldErrors)
+
+                return fail(400, {
+                    data: fields,
+                    errors: flatFieldErrors
+                })
+            }
+
+            response = await cognitoLogin(
+                fields.telephonemail2.toString(),
+                fields.password.toString()
+            );
+
+        } catch (error: any) {
+            return fail(401, { error: error.message });
+        }
+
+        cookies.set('jwt', response.getAccessToken().getJwtToken(), {
+            path: '/',
+            httpOnly: true,
+            sameSite: 'strict',
+            maxAge: 60 * 60 * 24 * 30,
+        });
+        throw redirect(303, '/compte-patient');
     }
 }
 
