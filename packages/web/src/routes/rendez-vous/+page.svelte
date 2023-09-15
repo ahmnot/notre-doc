@@ -123,21 +123,6 @@
 
 			switch (result.type) {
 				case 'success':
-					if (result.data && search === '?/login') {
-						try {
-							// await Auth.signIn(result.data.data.telephonemail2, result.data.data.password);
-							alert('Logged in');
-						} catch (error) {
-							console.error(error);
-							if (error instanceof Error) {
-								alert(error.message);
-							} else {
-								alert(String(error));
-							}
-						}
-						break;
-					}
-
 					if (result.data && search === '?/step6') {
 						// await createPatient(result.data.data as PatientForm);
 						activateSnackbar('Succès !', 'success');
