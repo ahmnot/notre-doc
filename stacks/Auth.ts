@@ -6,7 +6,7 @@ export function Auth({ stack, app }: StackContext) {
 
     // Create a Cognito User Pool and Identity Pool
     const auth = new Cognito(stack, "Auth", {
-        login: ["email", "phone"],
+        login: ["email", "phone", "username"],
     });
 
     auth.attachPermissionsForAuthUsers(stack, [

@@ -2,7 +2,7 @@ import { fail, type RequestEvent } from '@sveltejs/kit'
 import { z, type ZodRawShape } from 'zod'
 
 const nomRegex = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ-]+$/i
-const telephoneRegex = /^\+?0?0?[0-9][0-9]{9,18}$/g
+const telephoneRegex = /^\+?0?0?[0-9][0-9]{7,18}$/g
 const numeroSecuRegex = /[12][0-9]{2}(0[1-9]|1[0-2])(2[AB]|[0-9]{2})[0-9]{3}[0-9]{3}([0-9]{2})/
 const lowercaseRegex = /[a-z]+/
 const uppercaseRegex = /[A-Z]+/
