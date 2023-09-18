@@ -1,7 +1,15 @@
 import { redirect, fail, type RequestEvent } from '@sveltejs/kit'
 import { z, type ZodRawShape } from 'zod'
 
-import { cognitoLogin } from './cognito'
+import {
+    cognitoLogin,
+    cognitoRegisterUserToUserPool,
+    cognitoConfirmRegistration,
+    userPool
+} from './cognito'
+
+import { CognitoUser } from 'amazon-cognito-identity-js';
+
 
 const nomRegex = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ-]+$/i
 const telephoneRegex = /^\+?0?0?[0-9][0-9]{7,18}$/g
@@ -168,6 +176,76 @@ export function login(zodSchema: ZodRawShape) {
         throw redirect(303, '/compte-patient');
     }
 }
+
+export function signUp(zodSchema: ZodRawShape) {
+    return async ({ request, cookies }: RequestEvent) => {
+        let response;
+        try {
+            const formData = await request.formData()
+            const fields = Object.fromEntries(formData)
+
+            // This validates the form.
+            const validation = await z.object(zodSchema).spa(fields)
+
+            if (!validation.success) {
+                const flatFieldErrors = adjustErrors(validation.error.flatten().fieldErrors)
+
+                return fail(400, {
+                    data: fields,
+                    errors: flatFieldErrors
+                })
+            }
+
+            response = await cognitoRegisterUserToUserPool(
+                fields.email.toString(),
+                fields.chosenPassword.toString()
+            );
+        } catch (error: any) {
+            return fail(400, { error: error.message });
+        }
+
+        cookies.set('username', response.user.getUsername(), {
+            path: '/',
+            httpOnly: true,
+            sameSite: 'strict',
+            maxAge: 60 * 60 * 24 * 30,
+        });
+
+        return { success: true }
+    }
+}
+
+export function confirmRegistration(zodSchema: ZodRawShape) {
+
+    return async ({ request, cookies }: RequestEvent) => {
+        try {
+            const formData = await request.formData();
+            const confirmationCode = formData.get('confirmationCode');
+            const username = cookies.get('username');
+
+            if (
+                typeof username !== 'string' ||
+                typeof confirmationCode !== 'string' ||
+                !username ||
+                !confirmationCode
+            ) {
+                return fail(400, { error: 'invalid' });
+            }
+
+            const myCognitoUser = new CognitoUser({
+                Username: username,
+                Pool: userPool,
+            });
+            await cognitoConfirmRegistration(myCognitoUser, confirmationCode);
+        } catch (e: any) {
+            console.error(e);
+            return { success: false, error: e.message };
+        }
+
+        throw redirect(303, '/login');
+    }
+}
+
 
 /**
  * This formats the final error messages

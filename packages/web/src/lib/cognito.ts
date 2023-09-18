@@ -5,12 +5,14 @@ import {
     CognitoUser,
     AuthenticationDetails,
     CognitoUserSession,
+    type ISignUpResult
 } from 'amazon-cognito-identity-js';
 
 const poolData = {
     UserPoolId: import.meta.env.VITE_USER_POOL_ID,
     ClientId: import.meta.env.VITE_USER_POOL_CLIENT_ID
 };
+
 export const userPool = new CognitoUserPool(poolData);
 
 export const verifier = CognitoJwtVerifier.create({
@@ -38,3 +40,40 @@ export const cognitoLogin = (email: string, password: string) => {
         });
     });
 };
+
+export function cognitoRegisterUserToUserPool(
+    email: string,
+    password: string
+): Promise<ISignUpResult> {
+    return new Promise((resolve, reject) => {
+        userPool.signUp(email, password, [], [], (err, result) => {
+            if (err) {
+                reject(err);
+            }
+            if (result) {
+                resolve(result);
+            }
+        });
+    });
+}
+
+export function cognitoConfirmRegistration(
+    cognitoUser: any,
+    confirmationCode: string
+) {
+    return new Promise<CognitoUserSession>((resolve, reject) => {
+        cognitoUser.confirmRegistration(
+            confirmationCode,
+            true,
+            (err: any, result: any) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                if (result) {
+                    resolve(result);
+                }
+            }
+        );
+    });
+}
