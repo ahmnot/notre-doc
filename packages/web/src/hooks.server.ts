@@ -6,7 +6,9 @@ export const handle: Handle = async ({ event, resolve }) => {
     try {
         const { headers } = event.request;
         const cookies = parse(headers.get('cookie') ?? '');
-        const payload = await verifier.verify(cookies.jwt);
+        const payload = await verifier.verify(cookies.jwt, {
+            clientId: import.meta.env.VITE_USER_POOL_CLIENT_ID
+          });
         event.locals.userId = payload.sub;
     } catch (e) {
         if (
