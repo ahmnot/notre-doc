@@ -8,13 +8,19 @@ export const handle: Handle = async ({ event, resolve }) => {
         const cookies = parse(headers.get('cookie') ?? '');
         const payload = await verifier.verify(cookies.jwt, {
             clientId: import.meta.env.VITE_USER_POOL_CLIENT_ID
-          });
+        });
         event.locals.userId = payload.sub;
     } catch (e) {
         if (
-            !['/auth/login', '/auth/sign-up', '/auth/confirm-registration'].includes(event.url.pathname)
+            ['/compte-patient',
+                // '/auth/sign-up',
+                // '/auth/confirm-registration'
+            ].includes(event.url.pathname)
         ) {
-            return new Response('Redirect', { status: 303, headers: { Location: '/auth/login' } });
+            return new Response('Redirect', {
+                status: 303,
+                headers: { Location: '/rendez-vous' }
+            });
         }
     }
     return await resolve(event);
