@@ -28,7 +28,13 @@
 		<a class="absolute middle right" href="/compte-patient">
 			<button class="secondary-container" title="Connexion">
 				<i class:fill={$page.url.pathname === '/compte-patient'}>account_circle</i>
-				<span class="large-text">Connexion</span>
+				<span class="large-text">
+					{#if !$page.data.userId}
+						Connexion
+					{:else}
+						Compte patient
+					{/if}
+				</span>
 			</button>
 		</a>
 	</nav>
@@ -36,9 +42,7 @@
 
 <main>
 	<h1 class="center-align">Notre Doc</h1>
-		<div class="max l" />
-		<slot />
-		<div class="max l" />
+	<slot />
 </main>
 
 <div

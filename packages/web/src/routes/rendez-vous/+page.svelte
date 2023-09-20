@@ -168,6 +168,7 @@
 </script>
 
 <nav>
+	<div class="max l" />
 	<article class="max fill">
 		<h4 class="center-align">Prendre rendez-vous</h4>
 		<form method="POST" use:enhance={createAccountEnhance} novalidate>
@@ -592,6 +593,8 @@
 			</div>
 		</form>
 	</article>
+
+	<div class="max l" />
 </nav>
 
 <style>

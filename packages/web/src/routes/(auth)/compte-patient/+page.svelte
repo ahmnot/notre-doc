@@ -219,7 +219,7 @@
 	}
 </script>
 
-<div>&nbsp;</div>
+<div class="small-space" />
 
 {#if $patientsTQS.fetching}
 	<p>Loading...</p>
@@ -278,6 +278,7 @@
 		</tbody>
 	</table>
 {/if}
+<div class="small-space" />
 
 <dialog
 	class="right"
@@ -407,6 +408,15 @@
 		</nav>
 	</form>
 </dialog>
+
+<footer>
+	<form method="POST" action="?/logout">
+		<button class="secondary-container absolute right">
+			Déconnexion
+			<i>logout</i>
+		</button>
+	</form>
+</footer>
 
 <style>
 </style>

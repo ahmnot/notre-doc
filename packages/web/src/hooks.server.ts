@@ -12,10 +12,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         event.locals.userId = payload.sub;
     } catch (e) {
         if (
-            ['/compte-patient',
-                // '/auth/sign-up',
-                // '/auth/confirm-registration'
-            ].includes(event.url.pathname)
+            ['/compte-patient'].includes(event.url.pathname)
         ) {
             return new Response('Redirect', {
                 status: 303,
