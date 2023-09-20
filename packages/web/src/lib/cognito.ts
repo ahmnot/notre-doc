@@ -58,7 +58,7 @@ export function cognitoRegisterUserToUserPool(
 }
 
 export function cognitoConfirmRegistration(
-    cognitoUser: any,
+    cognitoUser: CognitoUser,
     confirmationCode: string
 ) {
     return new Promise<CognitoUserSession>((resolve, reject) => {
