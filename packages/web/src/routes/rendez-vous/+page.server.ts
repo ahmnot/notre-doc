@@ -1,5 +1,6 @@
 import {
     zodSchemaTelephoneEmail,
+    zodSchemaPassword,
     zodSchemaGenre,
     zodSchemaNom,
     zodSchemaPrenom,
@@ -15,8 +16,11 @@ import {
 import type { Actions } from "@sveltejs/kit"
 
 export const actions: Actions = {
-    step1: validate(zodSchemaTelephoneEmail),
-    login: login(zodSchemaTelephoneEmail),
+    step1: validate(zodSchemaTelephoneEmail("telephonemail")),
+    login: login({
+        ...zodSchemaTelephoneEmail("telephonemail2"), 
+        ...zodSchemaPassword 
+    }),
     step2: validate({}),
     step3: validate({
         ...zodSchemaGenre,
@@ -26,12 +30,19 @@ export const actions: Actions = {
     }),
     step4: validate({ ...zodSchemaTel, ...zodSchemaEmail }),
     step5: signUp(zodSchemaChosenPassword),
-    step6: validate({    
+    step6: validate({
         ...zodSchemaGenre,
         ...zodSchemaNom,
         ...zodSchemaPrenom,
         ...zodSchemaDateNaissance,
         ...zodSchemaTel,
         ...zodSchemaEmail,
-        ...zodSchemaChosenPassword})
+        ...zodSchemaChosenPassword
+    })
 }
+
+// export const load: PageServerLoad = async ({ locals }) => {
+//     if (!locals.userId) {
+//         return { formStep: 2 }
+//     }
+// };

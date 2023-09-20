@@ -42,17 +42,24 @@ export const zodSchemaEmail = {
         .email({ message: "E-mail invalide" })
 }
 
-export const zodSchemaTelephoneEmail = {
-    telephonemail: z.string({ required_error: "E-mail ou n° obligatoire" })
-        .trim()
-        .nonempty({ message: "E-mail ou n° obligatoire" })
-        .email({ message: "E-mail invalide" })
-        .or(z.string({ required_error: "N° ou e-mail obligatoire" })
+export function zodSchemaTelephoneEmail(key: string) {
+    return {
+        [key]: z.string({ required_error: "E-mail ou n° obligatoire" })
             .trim()
-            .nonempty({ message: "N° ou e-mail obligatoire" })
-            .min(9, { message: "Trop court" })
-            .max(18, { message: "Trop long" })
-            .regex(telephoneRegex, { message: "N° invalide" }))
+            .nonempty({ message: "E-mail ou n° obligatoire" })
+            .email({ message: "E-mail invalide" })
+            .or(z.string({ required_error: "N° ou e-mail obligatoire" })
+                .trim()
+                .nonempty({ message: "N° ou e-mail obligatoire" })
+                .min(9, { message: "Trop court" })
+                .max(18, { message: "Trop long" })
+                .regex(telephoneRegex, { message: "N° invalide" }))
+    }
+}
+
+export const zodSchemaPassword = {
+    password: z.string({ required_error: "Mot de passe requis" })
+        .nonempty({ message: "Mot de passe requis" })
 }
 
 export const zodSchemaGenre = {
