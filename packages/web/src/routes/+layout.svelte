@@ -56,10 +56,14 @@
 	</nav>
 </header>
 
-<main>
+<main >
 	<h1 class="center-align">Notre Doc</h1>
 	<slot />
 </main>
+
+<footer>
+	<div class="background-pattern"></div>
+</footer>
 
 <div
 	class="snackbar"
@@ -80,4 +84,54 @@
 		width: auto !important;
 		position: static !important;
 	}
+
+	footer {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		z-index: -1;
+	}
+
+	.background-pattern::before {
+    content: "";
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: 
+        radial-gradient(circle at right, transparent, white 25%),
+		linear-gradient(to top, transparent, white);
+    z-index: 1;
+  }
+
+  .background-pattern::after {
+    content: "";
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    z-index: 0;
+
+    --s: 40px;
+    --_c: #0000 75%,#cde7ed 0;
+    --_g1: conic-gradient(at 10% 50%,var(--_c));
+    --_g2: conic-gradient(at 50% 10%,var(--_c));
+    background:
+        var(--_g1),
+        var(--_g1) calc(1*var(--s)) calc(3*var(--s)),
+        var(--_g1) calc(2*var(--s)) calc(1*var(--s)),
+        var(--_g1) calc(3*var(--s)) calc(4*var(--s)),
+        var(--_g1) calc(4*var(--s)) calc(2*var(--s)),
+        var(--_g2) 0                calc(4*var(--s)),
+        var(--_g2) calc(1*var(--s)) calc(2*var(--s)),
+        var(--_g2) calc(2*var(--s)) 0,
+        var(--_g2) calc(3*var(--s)) calc(3*var(--s)),
+        var(--_g2) calc(4*var(--s)) calc(1*var(--s)),
+        #ffffff;
+    background-size: calc(5*var(--s)) calc(5*var(--s));
+  }
+
+
 </style>
