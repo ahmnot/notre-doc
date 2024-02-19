@@ -7,6 +7,9 @@
 
 	export let form: ActionData;
 
+	let innerWidth = 0;
+	let innerHeight = 0;
+
 	let loading = false;
 
 	let inputClasses = 'field label border large-margin';
@@ -167,6 +170,8 @@
 	};
 </script>
 
+<svelte:window bind:innerWidth bind:innerHeight />
+
 <nav>
 	<div class="max l" />
 	<article class="max fill">
@@ -186,7 +191,14 @@
 						disabled={loading}
 						on:focus={() => (telephonemailFocus = true)}
 					/>
-					<label for="telephonemail">Saisissez votre adresse e-mail ou n° de téléphone</label>
+					<label for="telephonemail">
+						
+						{#if innerWidth > 510}
+							Saisissez votre adresse e-mail ou n° de téléphone
+						{:else}
+							E-mail ou tél
+						{/if}
+					</label>
 					{#if form?.errors?.telephonemail}
 						<span class="error">
 							{#if !telephonemailFocus}

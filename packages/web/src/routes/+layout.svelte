@@ -3,11 +3,16 @@
 	import { snackbar } from '$lib/snackbar';
 	import { initContextClient, cacheExchange, fetchExchange } from '@urql/svelte';
 
+	let innerWidth = 0;
+	let innerHeight = 0;
+
 	initContextClient({
 		url: import.meta.env.VITE_GRAPHQL_URL,
 		exchanges: [cacheExchange, fetchExchange]
 	});
 </script>
+
+<svelte:window bind:innerWidth bind:innerHeight />
 
 <header class="fill">
 	<nav>
@@ -18,9 +23,18 @@
 		<div class="absolute middle center">
 			<a href="/rendez-vous">
 				<button class="small-elevate primary-container" title="Prendre rendez-vous"
-					><i class:fill={$page.url.pathname === '/rendez-vous'}>event</i><span class="large-text"
-						>Prendre rendez-vous</span
-					></button
+					><i class:fill={$page.url.pathname === '/rendez-vous'}>event</i>
+					
+					{#if innerWidth > 400}
+					<span class="large-text">
+						{#if innerWidth > 510}
+							Prendre rendez-vous
+						{:else if innerWidth > 400}
+							Prendre rdv
+						{/if}
+					</span>
+					{/if}
+					</button
 				>
 			</a>
 		</div>
@@ -28,13 +42,15 @@
 		<a class="absolute middle right" href="/compte-patient">
 			<button class="secondary-container" title="Connexion">
 				<i class:fill={$page.url.pathname === '/compte-patient'}>account_circle</i>
-				<span class="large-text">
-					{#if !$page.data.userId}
-						Connexion
-					{:else}
-						Compte patient
-					{/if}
-				</span>
+				{#if innerWidth > 580}
+					<span class="large-text">
+						{#if !$page.data.userId}
+							Connexion
+						{:else}
+							Compte patient
+						{/if}
+					</span>
+				{/if}
 			</button>
 		</a>
 	</nav>
