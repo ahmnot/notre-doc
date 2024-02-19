@@ -100,7 +100,7 @@
     width: 100%;
     height: 50%;
     background: 
-        radial-gradient(circle at right, transparent, white 25%),
+        radial-gradient(circle at right, transparent, white 15%),
 		linear-gradient(to top, transparent, white);
     z-index: 1;
   }
